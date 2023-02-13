@@ -268,7 +268,6 @@ export default {
     },
     data() {
         return {
-            data: [{'id': 1, 'name': 'nesto pise'}, {'id': 2, 'name': 'nesto pise drugo'}],
             institutionsSerchData: [],
             type: 1,
             allCases: [],

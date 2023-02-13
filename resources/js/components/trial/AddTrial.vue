@@ -33,6 +33,16 @@
                                 <div class="container bg-personal-light">
                                     <div class="row">
                                         <div class="col-12"><br>
+                                            <div v-if="success"
+                                                 class="alert error-danger alert-success alert-dismissible fade show"
+                                                 role="alert">
+                                                <span><i class="fa fa-check-square" aria-hidden="true"></i> &nbsp; ROČIŠTE JE USPEŠNO DODAT</span>
+                                                <button @click.prevent="success = false" type="button" class="close"
+
+                                                >
+                                                    <span>&times;</span>
+                                                </button>
+                                            </div>
                                             <form action="" method="post" class="add-form-modal ">
                                                 <div class="form-group search-font-size-modal ">
                                                     <label>INSTITUCIJA</label>
@@ -141,6 +151,7 @@ export default {
             type: 5,
             lang: 'sr',
             users: [],
+            success: false,
             trialData: {
                 institution: '',
                 user: '',
@@ -179,6 +190,8 @@ export default {
     methods: {
         createTrial() {
             axios.post('/trial/create/trial' , this.trialData).then(({data}) => {
+                this.success = true;
+                this.$root.$emit("addNewTrialInArray", data);
                 this.trialData = {
                     institution: '',
                     user: '',

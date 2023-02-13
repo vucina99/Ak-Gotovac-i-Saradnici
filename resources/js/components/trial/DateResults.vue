@@ -32,6 +32,7 @@
                                                     :options="institutionsSerchData"
                                                     :id="'courts'"
                                                     label="name"
+                                                    v-model="search.institution"
                                                     placeholder="INSTITUCIJA" >
                                                 </v-select>
                                             </div>
@@ -40,17 +41,18 @@
                                             <div class="form-group search-font-size">
                                                 <label for="number_office">BROJ U KANCELARIJI</label>
                                                 <input type="text" name="number_court" id="number_office"
-                                                       class="form-control" placeholder="BROJ U KANCELARIJI">
+                                                       class="form-control" v-model="search.number_office" placeholder="BROJ U KANCELARIJI">
                                             </div>
 
                                             <div class="form-group search-font-size">
                                                 <label for="number_office">STRANKA 1</label>
 
                                                 <v-select
-                                                    :options="[]"
+                                                    :options="person_1_list"
                                                     :id="'prosecutor'"
-                                                    label="name"
-                                                    placeholder="STRANKA 1">
+                                                    label="prosecutor"
+                                                    placeholder="STRANKA 1"
+                                                    v-model="search.person_1" >
                                                 </v-select>
                                             </div>
 
@@ -58,9 +60,10 @@
                                                 <label for="number_office">STRANKA 2</label>
 
                                                 <v-select
-                                                    :options="[]"
-                                                    :id="'prosecuto2r'"
-                                                    label="name"
+                                                    :options="person_2_list"
+                                                    :id="'defendants'"
+                                                    v-model="search.person_2"
+                                                    label="defendants"
                                                     placeholder="STRANKA 2">
                                                 </v-select>
                                             </div>
@@ -68,13 +71,13 @@
                                             <div class="pb-3 search-font-size">
                                                 <label for="fail_day">VREME</label>
                                                 <div class="input-group custom-file-button">
-                                                    <date-picker v-model="date"  type="time"  format="HH:mm" id="fail_day" placeholder="VREME"></date-picker>
+                                                    <date-picker v-model="search.time"  type="time"  format="HH:mm" id="fail_day" placeholder="VREME"></date-picker>
                                                 </div>
                                             </div>
 
                                             <div class="pt-3">
                                                 <div class="w-100 ">
-                                                    <button class="btn btn-primary w-100">
+                                                    <button class="btn btn-primary w-100" @click.prevent="getTrials()">
                                                         PRETRAGA <i class="fa fa-search" aria-hidden="true"></i>
                                                     </button>
                                                 </div>
@@ -109,45 +112,53 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td @click.prevent="modalShowCase(2)"><i class="fa color-blue fa-arrow-circle-o-right" aria-hidden="true"></i></td>
-                                <td @click.prevent="modalShowTrial(2)">09:15</td>
-                                <td  @click.prevent="modalShowTrial(2)">12345</td>
-                                <td  @click.prevent="modalShowTrial(2)">Pera Perovicc</td>
-                                <td  @click.prevent="modalShowTrial(2)">Mikica Mikanovic</td>
-                                <td  @click.prevent="modalShowTrial(2)">Prvi ustavni sud u beogradu</td>
-                                <td @click.prevent="modalEditTrial(5)"><div class="w-100"> <i class="fa color-blue fa fa-pencil"  aria-hidden="true"></i></div></td>
+                            <tr v-for="(trial, index) in allTrial">
+                                <td @click.prevent="modalShowTrial(trial.id)"><i class="fa color-blue fa-arrow-circle-o-right" aria-hidden="true"></i></td>
+                                <td @click.prevent="modalShowTrial(trial.id)">{{ trial.time ? trial.time.slice(0,5) : '' }}</td>
+                                <td  @click.prevent="modalShowTrial(trial.id)">{{ trial.numberOffice }}</td>
+                                <td  @click.prevent="modalShowTrial(trial.id)">{{ trial.prosecutor }}</td>
+                                <td  @click.prevent="modalShowTrial(trial.id)">{{ trial.defendants }}</td>
+                                <td  @click.prevent="modalShowTrial(trial.id)">{{ trial.institution?.name }}</td>
+                                <td @click.prevent="modalEditTrial(trial.id)"><div class="w-100"> <i class="fa color-blue fa fa-pencil"  aria-hidden="true"></i></div></td>
                             </tr>
-                            <tr>
-                                <td @click.prevent="modalShowCase(2)"><i class="fa color-blue fa-arrow-circle-o-right" aria-hidden="true"></i></td>
-                                <td>09:15</td>
-                                <td>12345</td>
-                                <td>Pera Peric</td>
-                                <td>Mikica Mikanovic</td>
-                                <td>Prvi ustavni sud u beogradu</td>
-                                <td @click.prevent="modalEditTrial(5)"><div class="w-100"> <i class="fa color-blue fa fa-pencil"  aria-hidden="true"></i></div></td>
+                            <tr v-if="allTrial.length < 1" class="bg-light">
+
+                                <td  colspan="7" class="text-center">
+                                    <vue-simple-spinner></vue-simple-spinner>
+                                </td>
                             </tr>
-                            <tr>
-                                <td @click.prevent="modalShowCase(2)"><i class="fa color-blue fa-arrow-circle-o-right" aria-hidden="true"></i></td>
-                                <td>09:15</td>
-                                <td>12345</td>
-                                <td>Pera Peric</td>
-                                <td>Mikica Mikanovic</td>
-                                <td>Prvi ustavni sud u beogradu</td>
-                                <td @click.prevent="modalEditTrial(5)"><div class="w-100"> <i class="fa color-blue fa fa-pencil"  aria-hidden="true"></i></div></td>
-                            </tr>
-                            <tr>
-                                <td @click.prevent="modalShowCase(2)"><i class="fa color-blue fa-arrow-circle-o-right" aria-hidden="true"></i></td>
-                                <td>09:15</td>
-                                <td>12345</td>
-                                <td>Pera Peric</td>
-                                <td>Mikica Mikanovic</td>
-                                <td>Prvi ustavni sud u beogradu</td>
-                                <td @click.prevent="modalEditTrial(5)"><div class="w-100"> <i class="fa color-blue fa fa-pencil"  aria-hidden="true"></i></div></td>
+                            <tr v-if="!allTrial  " class="bg-light">
+
+                                <td  colspan="7"
+                                    class="text-center">
+                                    <span>NEMA PODATAKA ZA PRIKAZ</span></td>
+
                             </tr>
 
                             </tbody>
                         </table>
+                        <br>
+                        <nav aria-label="Page navigation example" v-if="paginateCount > 1 ">
+                            <ul class="pagination justify-content-center">
+                                <li v-if=" page !== 0" :class="[ page == 0 ? 'disabled' : '' ,  'page-item'  ]"
+                                    @click.prevent="getTrials(page - 1)">
+                                    <a class="page-link one" href="#" tabindex="-1"><i class="fa fa-chevron-left"
+                                                                                       aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                <li v-for="index in paginateCount" :key="index"
+                                    @click.prevent="getTrials(index-1)"
+                                    :class="[page == index-1 ? 'active' : '' ,'page-item']"><a
+                                    class="page-link number" href="#">{{ index }}</a></li>
+                                <li v-if=" page !== paginateCount - 1 "
+                                    :class="[ page == paginateCount - 1 ? 'disabled' : '' ,  'page-item'  ]"
+                                    @click.prevent="getTrials(page + 1)">
+                                    <a class="page-link one" href="#"><i class="fa fa-chevron-right"
+                                                                         aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -179,11 +190,45 @@ export default {
     data(){
         return {
             type : 1,
-            date: '',
             institutionsSerchData: [],
+            allTrial : [],
+            page: 0,
+            person_1_list: [],
+            person_2_list: [],
+            paginateCount: 0,
+            search: {
+                institution: '',
+                time: '',
+                number_office: '',
+                person_1: '',
+                person_2: ''
+            }
         }
     },
     methods : {
+        getTrials(page = 0) {
+            this.allCases = []
+
+            if (this.search.number_office.trim().length === 0) {
+                this.search.number_office = ''
+            }
+            if (page >= 0 && page <= this.paginateCount) {
+                this.page = page
+                axios.post('/trial/get/trials', {
+                    'search': this.search,
+                    'page': this.page,
+                    'selected_date' : this.date_selected
+                }).then(({data}) => {
+                    this.allTrial = data.data
+                    this.paginateCount = data.count
+                    if (this.allTrial.length < 1) {
+                        this.allTrial = false
+                    }
+                }).catch((error) => {
+                    alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora')
+                })
+            }
+        },
         backToCalendar(){
             window.location.href = "/trial";
         },
@@ -200,10 +245,28 @@ export default {
             }).catch((error) => {
                 alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora')
             })
-        }
+        },
+        getPersons() {
+            axios.post('/trial/get/persons', {'selected_date': this.date_selected}).then(({data}) => {
+
+                this.person_1_list = data.person_1_list;
+                this.person_2_list = data.person_2_list;
+            }).catch((error) => {
+                alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora')
+            })
+        },
     },
     created() {
+        this.getTrials();
         this.getInstitutionsForSearch();
+        this.getPersons()
+
+        this.$root.$on("addNewTrialInArray", (data) => {
+            if (this.allTrial == false) {
+                this.allTrial = []
+            }
+            this.allTrial.push(data)
+        })
     }
 }
 </script>

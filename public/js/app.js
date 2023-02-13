@@ -5882,13 +5882,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      data: [{
-        'id': 1,
-        'name': 'nesto pise'
-      }, {
-        'id': 2,
-        'name': 'nesto pise drugo'
-      }],
       institutionsSerchData: [],
       type: 1,
       allCases: [],
@@ -6161,6 +6154,7 @@ __webpack_require__.r(__webpack_exports__);
       type: 5,
       lang: 'sr',
       users: [],
+      success: false,
       trialData: {
         institution: '',
         user: '',
@@ -6210,6 +6204,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
       axios.post('/trial/create/trial', this.trialData).then(function (_ref) {
         var data = _ref.data;
+        _this.success = true;
+        _this.$root.$emit("addNewTrialInArray", data);
         _this.trialData = {
           institution: '',
           user: '',
@@ -6331,11 +6327,47 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       type: 1,
-      date: '',
-      institutionsSerchData: []
+      institutionsSerchData: [],
+      allTrial: [],
+      page: 0,
+      person_1_list: [],
+      person_2_list: [],
+      paginateCount: 0,
+      search: {
+        institution: '',
+        time: '',
+        number_office: '',
+        person_1: '',
+        person_2: ''
+      }
     };
   },
   methods: {
+    getTrials: function getTrials() {
+      var _this = this;
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      this.allCases = [];
+      if (this.search.number_office.trim().length === 0) {
+        this.search.number_office = '';
+      }
+      if (page >= 0 && page <= this.paginateCount) {
+        this.page = page;
+        axios.post('/trial/get/trials', {
+          'search': this.search,
+          'page': this.page,
+          'selected_date': this.date_selected
+        }).then(function (_ref) {
+          var data = _ref.data;
+          _this.allTrial = data.data;
+          _this.paginateCount = data.count;
+          if (_this.allTrial.length < 1) {
+            _this.allTrial = false;
+          }
+        })["catch"](function (error) {
+          alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora');
+        });
+      }
+    },
     backToCalendar: function backToCalendar() {
       window.location.href = "/trial";
     },
@@ -6350,17 +6382,38 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     getInstitutionsForSearch: function getInstitutionsForSearch() {
-      var _this = this;
-      axios.get('/trial/get/institutions').then(function (_ref) {
-        var data = _ref.data;
-        _this.institutionsSerchData = data;
+      var _this2 = this;
+      axios.get('/trial/get/institutions').then(function (_ref2) {
+        var data = _ref2.data;
+        _this2.institutionsSerchData = data;
+      })["catch"](function (error) {
+        alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora');
+      });
+    },
+    getPersons: function getPersons() {
+      var _this3 = this;
+      axios.post('/trial/get/persons', {
+        'selected_date': this.date_selected
+      }).then(function (_ref3) {
+        var data = _ref3.data;
+        _this3.person_1_list = data.person_1_list;
+        _this3.person_2_list = data.person_2_list;
       })["catch"](function (error) {
         alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora');
       });
     }
   },
   created: function created() {
+    var _this4 = this;
+    this.getTrials();
     this.getInstitutionsForSearch();
+    this.getPersons();
+    this.$root.$on("addNewTrialInArray", function (data) {
+      if (_this4.allTrial == false) {
+        _this4.allTrial = [];
+      }
+      _this4.allTrial.push(data);
+    });
   }
 });
 
@@ -8865,7 +8918,28 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col-12"
-  }, [_c("br"), _vm._v(" "), _c("form", {
+  }, [_c("br"), _vm._v(" "), _vm.success ? _c("div", {
+    staticClass: "alert error-danger alert-success alert-dismissible fade show",
+    attrs: {
+      role: "alert"
+    }
+  }, [_c("span", [_c("i", {
+    staticClass: "fa fa-check-square",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }), _vm._v("   ROČIŠTE JE USPEŠNO DODAT")]), _vm._v(" "), _c("button", {
+    staticClass: "close",
+    attrs: {
+      type: "button"
+    },
+    on: {
+      click: function click($event) {
+        $event.preventDefault();
+        _vm.success = false;
+      }
+    }
+  }, [_c("span", [_vm._v("×")])])]) : _vm._e(), _vm._v(" "), _c("form", {
     staticClass: "add-form-modal",
     attrs: {
       action: "",
@@ -9180,8 +9254,44 @@ var render = function render() {
       id: "courts",
       label: "name",
       placeholder: "INSTITUCIJA"
+    },
+    model: {
+      value: _vm.search.institution,
+      callback: function callback($$v) {
+        _vm.$set(_vm.search, "institution", $$v);
+      },
+      expression: "search.institution"
     }
-  })], 1) : _vm._e(), _vm._v(" "), _vm._m(1), _vm._v(" "), _c("div", {
+  })], 1) : _vm._e(), _vm._v(" "), _c("div", {
+    staticClass: "form-group search-font-size"
+  }, [_c("label", {
+    attrs: {
+      "for": "number_office"
+    }
+  }, [_vm._v("BROJ U KANCELARIJI")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.search.number_office,
+      expression: "search.number_office"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      name: "number_court",
+      id: "number_office",
+      placeholder: "BROJ U KANCELARIJI"
+    },
+    domProps: {
+      value: _vm.search.number_office
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.search, "number_office", $event.target.value);
+      }
+    }
+  })]), _vm._v(" "), _c("div", {
     staticClass: "form-group search-font-size"
   }, [_c("label", {
     attrs: {
@@ -9189,10 +9299,17 @@ var render = function render() {
     }
   }, [_vm._v("STRANKA 1")]), _vm._v(" "), _c("v-select", {
     attrs: {
-      options: [],
+      options: _vm.person_1_list,
       id: "prosecutor",
-      label: "name",
+      label: "prosecutor",
       placeholder: "STRANKA 1"
+    },
+    model: {
+      value: _vm.search.person_1,
+      callback: function callback($$v) {
+        _vm.$set(_vm.search, "person_1", $$v);
+      },
+      expression: "search.person_1"
     }
   })], 1), _vm._v(" "), _c("div", {
     staticClass: "form-group search-font-size"
@@ -9202,10 +9319,17 @@ var render = function render() {
     }
   }, [_vm._v("STRANKA 2")]), _vm._v(" "), _c("v-select", {
     attrs: {
-      options: [],
-      id: "prosecuto2r",
-      label: "name",
+      options: _vm.person_2_list,
+      id: "defendants",
+      label: "defendants",
       placeholder: "STRANKA 2"
+    },
+    model: {
+      value: _vm.search.person_2,
+      callback: function callback($$v) {
+        _vm.$set(_vm.search, "person_2", $$v);
+      },
+      expression: "search.person_2"
     }
   })], 1), _vm._v(" "), _c("div", {
     staticClass: "pb-3 search-font-size"
@@ -9223,15 +9347,30 @@ var render = function render() {
       placeholder: "VREME"
     },
     model: {
-      value: _vm.date,
+      value: _vm.search.time,
       callback: function callback($$v) {
-        _vm.date = $$v;
+        _vm.$set(_vm.search, "time", $$v);
       },
-      expression: "date"
+      expression: "search.time"
     }
   })], 1)]), _vm._v(" "), _c("div", {
     staticClass: "pt-3"
-  }, [_vm._m(2), _vm._v(" "), _c("div", {
+  }, [_c("div", {
+    staticClass: "w-100"
+  }, [_c("button", {
+    staticClass: "btn btn-primary w-100",
+    on: {
+      click: function click($event) {
+        $event.preventDefault();
+        return _vm.getTrials();
+      }
+    }
+  }, [_vm._v("\n                                                    PRETRAGA "), _c("i", {
+    staticClass: "fa fa-search",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  })])]), _vm._v(" "), _c("div", {
     staticClass: "w-100 mt-3"
   }, [_c("add-trial", {
     attrs: {
@@ -9244,118 +9383,111 @@ var render = function render() {
     staticClass: "table-responsive"
   }, [_c("table", {
     staticClass: "table table-hover table-text-size table-cursor"
-  }, [_vm._m(3), _vm._v(" "), _c("tbody", [_c("tr", [_c("td", {
-    on: {
-      click: function click($event) {
-        $event.preventDefault();
-        return _vm.modalShowCase(2);
+  }, [_vm._m(1), _vm._v(" "), _c("tbody", [_vm._l(_vm.allTrial, function (trial, index) {
+    var _trial$institution;
+    return _c("tr", [_c("td", {
+      on: {
+        click: function click($event) {
+          $event.preventDefault();
+          return _vm.modalShowTrial(trial.id);
+        }
       }
-    }
-  }, [_c("i", {
-    staticClass: "fa color-blue fa-arrow-circle-o-right",
+    }, [_c("i", {
+      staticClass: "fa color-blue fa-arrow-circle-o-right",
+      attrs: {
+        "aria-hidden": "true"
+      }
+    })]), _vm._v(" "), _c("td", {
+      on: {
+        click: function click($event) {
+          $event.preventDefault();
+          return _vm.modalShowTrial(trial.id);
+        }
+      }
+    }, [_vm._v(_vm._s(trial.time ? trial.time.slice(0, 5) : ""))]), _vm._v(" "), _c("td", {
+      on: {
+        click: function click($event) {
+          $event.preventDefault();
+          return _vm.modalShowTrial(trial.id);
+        }
+      }
+    }, [_vm._v(_vm._s(trial.numberOffice))]), _vm._v(" "), _c("td", {
+      on: {
+        click: function click($event) {
+          $event.preventDefault();
+          return _vm.modalShowTrial(trial.id);
+        }
+      }
+    }, [_vm._v(_vm._s(trial.prosecutor))]), _vm._v(" "), _c("td", {
+      on: {
+        click: function click($event) {
+          $event.preventDefault();
+          return _vm.modalShowTrial(trial.id);
+        }
+      }
+    }, [_vm._v(_vm._s(trial.defendants))]), _vm._v(" "), _c("td", {
+      on: {
+        click: function click($event) {
+          $event.preventDefault();
+          return _vm.modalShowTrial(trial.id);
+        }
+      }
+    }, [_vm._v(_vm._s((_trial$institution = trial.institution) === null || _trial$institution === void 0 ? void 0 : _trial$institution.name))]), _vm._v(" "), _c("td", {
+      on: {
+        click: function click($event) {
+          $event.preventDefault();
+          return _vm.modalEditTrial(trial.id);
+        }
+      }
+    }, [_vm._m(2, true)])]);
+  }), _vm._v(" "), _vm.allTrial.length < 1 ? _c("tr", {
+    staticClass: "bg-light"
+  }, [_c("td", {
+    staticClass: "text-center",
     attrs: {
-      "aria-hidden": "true"
+      colspan: "7"
     }
-  })]), _vm._v(" "), _c("td", {
-    on: {
-      click: function click($event) {
-        $event.preventDefault();
-        return _vm.modalShowTrial(2);
-      }
-    }
-  }, [_vm._v("09:15")]), _vm._v(" "), _c("td", {
-    on: {
-      click: function click($event) {
-        $event.preventDefault();
-        return _vm.modalShowTrial(2);
-      }
-    }
-  }, [_vm._v("12345")]), _vm._v(" "), _c("td", {
-    on: {
-      click: function click($event) {
-        $event.preventDefault();
-        return _vm.modalShowTrial(2);
-      }
-    }
-  }, [_vm._v("Pera Perovicc")]), _vm._v(" "), _c("td", {
-    on: {
-      click: function click($event) {
-        $event.preventDefault();
-        return _vm.modalShowTrial(2);
-      }
-    }
-  }, [_vm._v("Mikica Mikanovic")]), _vm._v(" "), _c("td", {
-    on: {
-      click: function click($event) {
-        $event.preventDefault();
-        return _vm.modalShowTrial(2);
-      }
-    }
-  }, [_vm._v("Prvi ustavni sud u beogradu")]), _vm._v(" "), _c("td", {
-    on: {
-      click: function click($event) {
-        $event.preventDefault();
-        return _vm.modalEditTrial(5);
-      }
-    }
-  }, [_vm._m(4)])]), _vm._v(" "), _c("tr", [_c("td", {
-    on: {
-      click: function click($event) {
-        $event.preventDefault();
-        return _vm.modalShowCase(2);
-      }
-    }
-  }, [_c("i", {
-    staticClass: "fa color-blue fa-arrow-circle-o-right",
+  }, [_c("vue-simple-spinner")], 1)]) : _vm._e(), _vm._v(" "), !_vm.allTrial ? _c("tr", {
+    staticClass: "bg-light"
+  }, [_vm._m(3)]) : _vm._e()], 2)]), _vm._v(" "), _c("br"), _vm._v(" "), _vm.paginateCount > 1 ? _c("nav", {
     attrs: {
-      "aria-hidden": "true"
+      "aria-label": "Page navigation example"
     }
-  })]), _vm._v(" "), _c("td", [_vm._v("09:15")]), _vm._v(" "), _c("td", [_vm._v("12345")]), _vm._v(" "), _c("td", [_vm._v("Pera Peric")]), _vm._v(" "), _c("td", [_vm._v("Mikica Mikanovic")]), _vm._v(" "), _c("td", [_vm._v("Prvi ustavni sud u beogradu")]), _vm._v(" "), _c("td", {
+  }, [_c("ul", {
+    staticClass: "pagination justify-content-center"
+  }, [_vm.page !== 0 ? _c("li", {
+    "class": [_vm.page == 0 ? "disabled" : "", "page-item"],
     on: {
       click: function click($event) {
         $event.preventDefault();
-        return _vm.modalEditTrial(5);
+        return _vm.getTrials(_vm.page - 1);
       }
     }
-  }, [_vm._m(5)])]), _vm._v(" "), _c("tr", [_c("td", {
+  }, [_vm._m(4)]) : _vm._e(), _vm._v(" "), _vm._l(_vm.paginateCount, function (index) {
+    return _c("li", {
+      key: index,
+      "class": [_vm.page == index - 1 ? "active" : "", "page-item"],
+      on: {
+        click: function click($event) {
+          $event.preventDefault();
+          return _vm.getTrials(index - 1);
+        }
+      }
+    }, [_c("a", {
+      staticClass: "page-link number",
+      attrs: {
+        href: "#"
+      }
+    }, [_vm._v(_vm._s(index))])]);
+  }), _vm._v(" "), _vm.page !== _vm.paginateCount - 1 ? _c("li", {
+    "class": [_vm.page == _vm.paginateCount - 1 ? "disabled" : "", "page-item"],
     on: {
       click: function click($event) {
         $event.preventDefault();
-        return _vm.modalShowCase(2);
+        return _vm.getTrials(_vm.page + 1);
       }
     }
-  }, [_c("i", {
-    staticClass: "fa color-blue fa-arrow-circle-o-right",
-    attrs: {
-      "aria-hidden": "true"
-    }
-  })]), _vm._v(" "), _c("td", [_vm._v("09:15")]), _vm._v(" "), _c("td", [_vm._v("12345")]), _vm._v(" "), _c("td", [_vm._v("Pera Peric")]), _vm._v(" "), _c("td", [_vm._v("Mikica Mikanovic")]), _vm._v(" "), _c("td", [_vm._v("Prvi ustavni sud u beogradu")]), _vm._v(" "), _c("td", {
-    on: {
-      click: function click($event) {
-        $event.preventDefault();
-        return _vm.modalEditTrial(5);
-      }
-    }
-  }, [_vm._m(6)])]), _vm._v(" "), _c("tr", [_c("td", {
-    on: {
-      click: function click($event) {
-        $event.preventDefault();
-        return _vm.modalShowCase(2);
-      }
-    }
-  }, [_c("i", {
-    staticClass: "fa color-blue fa-arrow-circle-o-right",
-    attrs: {
-      "aria-hidden": "true"
-    }
-  })]), _vm._v(" "), _c("td", [_vm._v("09:15")]), _vm._v(" "), _c("td", [_vm._v("12345")]), _vm._v(" "), _c("td", [_vm._v("Pera Peric")]), _vm._v(" "), _c("td", [_vm._v("Mikica Mikanovic")]), _vm._v(" "), _c("td", [_vm._v("Prvi ustavni sud u beogradu")]), _vm._v(" "), _c("td", {
-    on: {
-      click: function click($event) {
-        $event.preventDefault();
-        return _vm.modalEditTrial(5);
-      }
-    }
-  }, [_vm._m(7)])])])])])])])])])]);
+  }, [_vm._m(5)]) : _vm._e()], 2)]) : _vm._e()])])])])])]);
 };
 var staticRenderFns = [function () {
   var _vm = this,
@@ -9366,37 +9498,6 @@ var staticRenderFns = [function () {
       "aria-hidden": "true"
     }
   }), _vm._v(" NAZAD ")]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("div", {
-    staticClass: "form-group search-font-size"
-  }, [_c("label", {
-    attrs: {
-      "for": "number_office"
-    }
-  }, [_vm._v("BROJ U KANCELARIJI")]), _vm._v(" "), _c("input", {
-    staticClass: "form-control",
-    attrs: {
-      type: "text",
-      name: "number_court",
-      id: "number_office",
-      placeholder: "BROJ U KANCELARIJI"
-    }
-  })]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("div", {
-    staticClass: "w-100"
-  }, [_c("button", {
-    staticClass: "btn btn-primary w-100"
-  }, [_vm._v("\n                                                    PRETRAGA "), _c("i", {
-    staticClass: "fa fa-search",
-    attrs: {
-      "aria-hidden": "true"
-    }
-  })])]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
@@ -9417,10 +9518,23 @@ var staticRenderFns = [function () {
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
-  return _c("div", {
-    staticClass: "w-100"
+  return _c("td", {
+    staticClass: "text-center",
+    attrs: {
+      colspan: "7"
+    }
+  }, [_c("span", [_vm._v("NEMA PODATAKA ZA PRIKAZ")])]);
+}, function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("a", {
+    staticClass: "page-link one",
+    attrs: {
+      href: "#",
+      tabindex: "-1"
+    }
   }, [_c("i", {
-    staticClass: "fa color-blue fa fa-pencil",
+    staticClass: "fa fa-chevron-left",
     attrs: {
       "aria-hidden": "true"
     }
@@ -9428,21 +9542,13 @@ var staticRenderFns = [function () {
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
-  return _c("div", {
-    staticClass: "w-100"
-  }, [_c("i", {
-    staticClass: "fa color-blue fa fa-pencil",
+  return _c("a", {
+    staticClass: "page-link one",
     attrs: {
-      "aria-hidden": "true"
+      href: "#"
     }
-  })]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("div", {
-    staticClass: "w-100"
   }, [_c("i", {
-    staticClass: "fa color-blue fa fa-pencil",
+    staticClass: "fa fa-chevron-right",
     attrs: {
       "aria-hidden": "true"
     }
