@@ -1,0 +1,150 @@
+@media (max-width: 575.98px) {
+    .responsive-div-width {
+        width: 70%;
+    }
+
+    .options-first {
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+
+    .options-secound {
+        margin-top: 20px;
+        margin-bottom: 100px;
+    }
+
+    .table-text-size {
+        font-size: 11.5px;
+    }
+
+    .margin-top-table {
+        margin-top: 50px
+    }
+
+    .fc-toolbar-title {
+        font-size: 17px !important;
+    }
+
+    .fc .fc-scrollgrid-liquid {
+        height: 70vh !important;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .responsive-div-width {
+        width: 60%;
+    }
+
+    .options-first {
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+
+    .options-secound {
+        margin-top: 20px;
+        margin-bottom: 100px;
+    }
+
+    .table-text-size {
+        font-size: 11.5px;
+    }
+
+    .margin-top-table {
+        margin-top: 50px
+    }
+
+    .fc-toolbar-title {
+        font-size: 17px !important;
+    }
+
+    .fc .fc-scrollgrid-liquid {
+        height: 70vh !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .responsive-div-width {
+        width: 45%;
+    }
+
+    .options-first {
+        margin-top: 70px;
+        margin-bottom: 70px;
+    }
+
+    .options-secound {
+        margin-top: 20px;
+        margin-bottom: 100px;
+    }
+
+    .options-first-lg {
+        margin-top: 70px;
+        margin-bottom: 70px;
+    }
+
+    .table-text-size {
+        font-size: 12.5px;
+    }
+
+    .margin-top-table {
+        margin-top: 50px
+    }
+
+    .fc-toolbar-title {
+        font-size: 20px !important;
+    }
+
+    .fc .fc-scrollgrid-liquid {
+        height: 75vh !important;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .responsive-div-width {
+        width: 37%;
+    }
+
+    .options-first-lg {
+        margin-top: 80px;
+        margin-bottom: 80px;
+    }
+
+    .table-text-size {
+        font-size: 12.5px;
+    }
+
+    .fc-toolbar-title {
+        font-size: 23px !important;
+    }
+
+    .fc .fc-scrollgrid-liquid {
+        height: 65vh !important;
+    }
+
+    .fc .fc-scrollgrid-liquid {
+        height: 75vh !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .responsive-div-width {
+        width: 35%;
+    }
+
+    .options-first-lg {
+        margin-top: 80px;
+        margin-bottom: 80px;
+    }
+
+    .table-text-size {
+        font-size: 13px;
+    }
+
+    .fc-toolbar-title {
+        font-size: 25px !important;
+    }
+
+    .fc .fc-scrollgrid-liquid {
+        height: 80vh !important;
+    }
+}

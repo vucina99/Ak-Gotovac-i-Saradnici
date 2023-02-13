@@ -1,0 +1,171 @@
+*{
+    margin:0px;
+    padding: 0px;
+}
+body{
+    font-family: 'Open Sans', sans-serif;
+}
+.color-blue{
+    color: rgba(0,51,102,255);
+}
+.bg-personal-light{
+    background-color: #f2f2f2
+}
+
+.text-personal-light{
+    color: #f2f2f2
+}
+.bg-blue{
+    background-color: rgba(0,51,102,255);
+}
+.border-blue{
+    border-bottom: 0.5px solid rgba(0,51,102,255);
+}
+.border-blue-full{
+    border: 0.5px solid rgba(0,51,102,255);
+}
+
+.border-light-full{
+    border: 0.5px solid #ffffff;
+}
+.nav-link{
+    font-size: 13px;
+}
+#gotovac-logo{
+    width: 250px;
+}
+.navbar-toggler-icon i {
+    font-size: 31px;
+}
+
+.navbar-toggler:focus {
+    outline : none;
+}
+main {
+    min-height: 92vh
+}
+footer {
+    background-color: rgba(0,51,102,255);
+    border-top: 0.5px solid #ffffff;
+
+}
+footer p{
+    font-size: 13px;
+}
+.setHeight{
+    min-height: 92vh;
+}
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+    background-color: rgba(0,51,102,255) !important;
+    border-color: rgba(0,51,102,255) !important ;
+}
+.withoutStricke{
+    text-decoration: none !important;
+}
+.small-text{
+    font-size: 13px;
+}
+.down-margin{
+    margin-top:6.8px;
+}
+.border-blue button {
+    font-size: 13.5px;
+}
+.border-blue label {
+    font-size: 14px;
+}
+.options{
+    padding: 150px 0px ;
+    background-color: rgba(0,51,102,255);
+    color:#f2f2f2 ;
+    transition: 0.8s ease;
+    width: 100%;
+    cursor: pointer;
+}
+.options:hover{
+    background-color:#f2f2f2 ;
+    color:rgba(0,51,102,255) ;
+    border: 1px solid rgba(0,51,102,255);
+    transition: 1s ease;
+}
+
+.table-text-size tr th{
+    text-align: center;
+
+}
+.table-text-size tr td{
+    border-right: 1px solid #f2f2f2 !important;
+    text-align: center;
+}
+.search-font-size label{
+    font-size: 11px;
+    margin-left: 12px;
+}
+.search-font-size input{
+    font-size: 12px !important;
+}
+.search-font-size ::placeholder{
+    font-size: 11px;
+}
+
+.add-form-modal ::placeholder {
+    font-size: 11.5px;
+}
+.add-form-modal label{
+    font-size: 11.5px;
+    margin-left: 12px;
+}
+.add-form-modal input{
+    font-size: 11.5px ;
+}
+.search-font-size-modal label{
+    font-size: 11.5px;
+}
+.search-font-size-modal input{
+    font-size: 11.5px !important;
+}
+.search-font-size-modal ::placeholder{
+    font-size: 11.5px;
+}
+
+.vs__search{
+    padding:0.1rem  0.75rem !important;
+}
+
+.vs__dropdown-menu{
+    font-size: 12px !important;
+}
+.vs__dropdown-menu li {
+   padding:4.5px 0px 4.5px 12px !important;
+}
+
+
+.vs__selected{
+    font-size: 12px !important;
+    padding-left: 7.5px !important;
+}
+.choose a{
+    text-decoration: none;
+}
+.table-cursor td{
+    cursor: pointer;
+}
+.table-cursor th{
+    cursor: default;
+}
+.fa-arrow-circle-o-right{
+    font-size: 15px;
+}
+.type-div-size{
+    width: 33.33%;
+    cursor: pointer;
+}
+.type-div-size:hover{
+    width: 33.33%;
+    background-color: rgba(0,51,102,255);
+    color: #ffffff;
+}
+.type-div-size span{
+    font-size: 13px;
+}
+
