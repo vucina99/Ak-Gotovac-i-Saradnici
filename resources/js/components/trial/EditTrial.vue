@@ -1,6 +1,7 @@
 <template>
     <div>
-        <modal :name="'edit-trial-modal'" @before-open="beforeOpenEdit" :shiftY="0.1" :scrollable="true" :adaptive="true" :resizable="true" height="auto">
+        <modal :name="'edit-trial-modal'" @before-open="beforeOpenEdit" :shiftY="0.1" :scrollable="true"
+               :adaptive="true" :resizable="true" height="auto">
             <div class="container">
                 <div class="row">
                     <div class="col-12 mt-4  d-flex justify-content-end w-100 ">
@@ -30,25 +31,25 @@
                                 <div class="container bg-personal-light">
                                     <div class="row">
                                         <div class="col-12"><br>
-                                            <form action=""  method="post" class="add-form-modal ">
-                                                <div class="form-group search-font-size-modal " >
-                                                    <label >SUD</label>
+                                            <form action="" method="post" class="add-form-modal ">
+                                                <div class="form-group search-font-size-modal ">
+                                                    <label>SUD</label>
                                                     <v-select
                                                         :options="data"
                                                         :id="'courts'"
                                                         label="name"
-                                                        placeholder="SUD" >
+                                                        placeholder="SUD">
                                                     </v-select>
                                                 </div>
 
-                                                <div class="form-group search-font-size-modal " >
-                                                    <label >ZADUŽENI</label>
+                                                <div class="form-group search-font-size-modal ">
+                                                    <label>ZADUŽENI</label>
                                                     <v-select
                                                         :options="data"
                                                         :id="'responsible'"
                                                         label="name"
                                                         placeholder="ZADUŽENI"
-                                                        >
+                                                    >
                                                     </v-select>
                                                 </div>
 
@@ -58,16 +59,16 @@
                                                            placeholder="BROJ U KANCELARIJI">
                                                 </div>
 
-                                                <div class="form-group " >
+                                                <div class="form-group ">
 
                                                     <label for="client1">STRANKA 1</label>
 
                                                     <input type="text" class="form-control" id="client1"
                                                            placeholder="STRANKA 1">
                                                 </div>
-                                                <div class="form-group " >
+                                                <div class="form-group ">
 
-                                                    <label  for="client2">STRANKA 2</label>
+                                                    <label for="client2">STRANKA 2</label>
 
                                                     <input type="text" class="form-control" id="client2"
                                                            placeholder="STRANKA 2">
@@ -75,19 +76,22 @@
                                                 <div class="pb-3">
                                                     <label for="time">VREME</label>
                                                     <div class="input-group custom-file-button">
-                                                        <date-picker v-model="date" id="time" type="time"  format="HH:mm"  placeholder="VREME"></date-picker>
+                                                        <date-picker v-model="date" id="time" type="time" format="HH:mm"
+                                                                     placeholder="VREME"></date-picker>
 
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label for="notes">BELEŠKA</label>
-                                                    <vue-editor id="notes" :editorToolbar="customToolbar" v-model="content"></vue-editor>
+                                                    <vue-editor id="notes" :editorToolbar="customToolbar"
+                                                                v-model="content"></vue-editor>
                                                 </div>
 
 
                                                 <div class="pb-4 pt-4">
-                                                    <button class="btn btn-primary w-100"> IZMENI ROČIŠTE &nbsp; <i class="fa fa-spinner" aria-hidden="true"></i>
+                                                    <button class="btn btn-primary w-100"> IZMENI ROČIŠTE &nbsp; <i
+                                                        class="fa fa-spinner" aria-hidden="true"></i>
                                                     </button>
                                                 </div>
                                             </form>
@@ -116,12 +120,12 @@ import DatePicker from 'vue2-datepicker';
 
 export default {
     name: "EditTrial",
-    props:['date_selected' ],
+    props: ['date_selected'],
     data() {
         return {
             data: [],
             content: '',
-            type :5,
+            type: 5,
             date: '',
             lang: 'sr',
             customToolbar: [
@@ -184,7 +188,8 @@ export default {
         }
     }
 }
-.input-group-text{
+
+.input-group-text {
     font-size: 12px;
 }
 

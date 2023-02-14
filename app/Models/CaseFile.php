@@ -17,16 +17,17 @@ class CaseFile extends Model
         'upload_date',
     ];
 
-    public function removeFile($caseFileFromID){
+    public function removeFile($caseFileFromID)
+    {
         // Define the path to the file you want to delete
-        $path = public_path('files/'.$caseFileFromID->name);
+        $path = public_path('files/' . $caseFileFromID->name);
 
         // Check if the file exists
         if (File::exists($path)) {
             // Delete the file
             File::delete($path);
-            return response('{}' , 204);
+            return response('{}', 204);
         }
-        return response('{}' , 404);
+        return response('{}', 404);
     }
 }

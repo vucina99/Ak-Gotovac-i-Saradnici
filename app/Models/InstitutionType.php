@@ -13,12 +13,15 @@ class InstitutionType extends Model
         'name'
     ];
 
-    public function institutions(){
-        return $this->hasMany(Institution::class );
+    public function institutions()
+    {
+        return $this->hasMany(Institution::class);
     }
-    public function getType(){
+
+    public function getType()
+    {
         $types = InstitutionType::orderBy('name')->get();
 
         return $types;
-   }
+    }
 }

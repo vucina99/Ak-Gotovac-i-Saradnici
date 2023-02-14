@@ -54,7 +54,7 @@ class AdminController extends Controller
     {
         $user = $this->user->deleteUser($id);
         if ($user->status() == 204) {
-            return response('{}' , 204);
+            return response('{}', 204);
         }
         return response('nesto nije u redu', 404);
     }

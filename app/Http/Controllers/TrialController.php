@@ -47,14 +47,15 @@ class TrialController extends Controller
         return response($getUsers, 200);
     }
 
-    public function createTrial(Request $request){
+    public function createTrial(Request $request)
+    {
         $createTrial = $this->trial->createTrial($request);
 
         if ($createTrial->status() !== 201) {
             return response()->json('Došlo je do greške', 400);
         }
 
-        return response( new TrialResource( $createTrial->original) , $createTrial->status());
+        return response(new TrialResource($createTrial->original), $createTrial->status());
     }
 
 
@@ -64,13 +65,13 @@ class TrialController extends Controller
         $case_type_id = $request->caseType;
         $search = (object)$request->search;
         $page = $request->page;
-        $trial = _Trial::where('date' , $request->selected_date);
+        $trial = _Trial::where('date', $request->selected_date);
         $count = ceil($trial->count() / $numberData);
         if ($search->institution !== '' && $search->institution !== null) {
             $trial = $trial->where('institution_id', $search->institution['id']);
         }
         if ($search->time !== '' && $search->time !== null) {
-            $time = date('H:i', strtotime(Carbon::parse( $search->time)->addHour()) ) ;
+            $time = date('H:i', strtotime(Carbon::parse($search->time)->addHour()));
             $trial = $trial->where('time', $time);
         }
         if ($search->number_office !== '' && $search->number_office !== null) {

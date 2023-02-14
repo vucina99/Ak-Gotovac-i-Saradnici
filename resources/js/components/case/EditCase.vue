@@ -198,15 +198,17 @@
                                                 </table>
 
                                                 <div class="pb-1 pt-4">
-                                                    <button class="btn btn-primary w-100" @click.prevent="editCase()"> IZMENI SLUČAJ &nbsp; <i
+                                                    <button class="btn btn-primary w-100" @click.prevent="editCase()">
+                                                        IZMENI SLUČAJ &nbsp; <i
                                                         class="fa fa-spinner" aria-hidden="true"></i>
                                                     </button>
                                                 </div>
 
 
                                                 <div class="pb-4 pt-4">
-                                                    <button class="btn btn-danger w-100" @click.prevent="deleteCase()"> OBRIŠI CEO SLUČAJ &nbsp; <i
-                                                        class="fa fa-trash" aria-hidden="true" ></i>
+                                                    <button class="btn btn-danger w-100" @click.prevent="deleteCase()">
+                                                        OBRIŠI CEO SLUČAJ &nbsp; <i
+                                                        class="fa fa-trash" aria-hidden="true"></i>
                                                     </button>
                                                 </div>
                                             </form>
@@ -242,7 +244,7 @@ export default {
             caseID: '',
             caseData: null,
             fileData: [],
-            caseIndex : -1,
+            caseIndex: -1,
             success: false,
             customToolbar: [
                 [{header: [false, 1, 2, 3, 4, 5, 6]}],
@@ -267,7 +269,7 @@ export default {
 
     },
     methods: {
-        deleteCase(){
+        deleteCase() {
 
 
             this.$confirm({
@@ -302,7 +304,6 @@ export default {
                                     }
                                 }
                             })
-
 
 
                         }).catch((error) => {
@@ -353,7 +354,7 @@ export default {
             })
 
             this.getCase();
-            this.$root.$emit('addEditedCaseInArray', {'caseData' : this.caseData , 'caseIndex' :  this.caseIndex});
+            this.$root.$emit('addEditedCaseInArray', {'caseData': this.caseData, 'caseIndex': this.caseIndex});
         },
         removeFile(fileId, index) {
 

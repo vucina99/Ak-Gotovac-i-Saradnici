@@ -13,12 +13,14 @@ class CaseType extends Model
         'name'
     ];
 
-    public function getCaseTypes(){
+    public function getCaseTypes()
+    {
         $caseType = CaseType::all();
         return $caseType;
     }
 
-    public function cases(){
-        return $this->hasMany(_Case::class  , 'institution_id');
+    public function cases()
+    {
+        return $this->hasMany(_Case::class, 'institution_id');
     }
 }

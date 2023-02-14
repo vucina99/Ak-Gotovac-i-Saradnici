@@ -98,7 +98,8 @@
                                                 <div class="pb-3">
                                                     <label for="time">VREME</label>
                                                     <div class="input-group custom-file-button">
-                                                        <date-picker v-model="trialData.time" :language="lang" id="time" type="time"
+                                                        <date-picker v-model="trialData.time" :language="lang" id="time"
+                                                                     type="time"
                                                                      format="HH:mm" placeholder="VREME"></date-picker>
 
                                                     </div>
@@ -159,7 +160,7 @@ export default {
                 number_institution: '',
                 person_1: '',
                 person_2: '',
-                date : this.date_selected,
+                date: this.date_selected,
                 time: '',
                 note: ''
             },
@@ -189,7 +190,7 @@ export default {
     },
     methods: {
         createTrial() {
-            axios.post('/trial/create/trial' , this.trialData).then(({data}) => {
+            axios.post('/trial/create/trial', this.trialData).then(({data}) => {
                 this.success = true;
                 this.$root.$emit("addNewTrialInArray", data);
                 this.trialData = {
@@ -197,7 +198,7 @@ export default {
                     user: '',
                     number_office: '',
                     number_institution: '',
-                    date : this.date_selected,
+                    date: this.date_selected,
                     person_1: '',
                     person_2: '',
                     time: '',

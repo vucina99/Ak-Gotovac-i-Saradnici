@@ -14,7 +14,7 @@
                                         <span>DATUM : {{ date_selected }}</span>
                                     </div>
                                     <div @click="backToCalendar()"
-                                        class="type-div-size type-div-size-back bg-blue text-light pt-2 pb-2 d-flex align-items-center justify-content-center border-light-full">
+                                         class="type-div-size type-div-size-back bg-blue text-light pt-2 pb-2 d-flex align-items-center justify-content-center border-light-full">
                                         <span><i class="fa fa-chevron-circle-left" aria-hidden="true"></i> NAZAD </span>
                                     </div>
                                 </div>
@@ -27,13 +27,13 @@
 
                                         <form action="">
                                             <div class="form-group search-font-size" v-if="type !== 6">
-                                                <label >INSTITUCIJA</label>
+                                                <label>INSTITUCIJA</label>
                                                 <v-select
                                                     :options="institutionsSerchData"
                                                     :id="'courts'"
                                                     label="name"
                                                     v-model="search.institution"
-                                                    placeholder="INSTITUCIJA" >
+                                                    placeholder="INSTITUCIJA">
                                                 </v-select>
                                             </div>
 
@@ -41,7 +41,8 @@
                                             <div class="form-group search-font-size">
                                                 <label for="number_office">BROJ U KANCELARIJI</label>
                                                 <input type="text" name="number_court" id="number_office"
-                                                       class="form-control" v-model="search.number_office" placeholder="BROJ U KANCELARIJI">
+                                                       class="form-control" v-model="search.number_office"
+                                                       placeholder="BROJ U KANCELARIJI">
                                             </div>
 
                                             <div class="form-group search-font-size">
@@ -52,7 +53,7 @@
                                                     :id="'prosecutor'"
                                                     label="prosecutor"
                                                     placeholder="STRANKA 1"
-                                                    v-model="search.person_1" >
+                                                    v-model="search.person_1">
                                                 </v-select>
                                             </div>
 
@@ -71,7 +72,8 @@
                                             <div class="pb-3 search-font-size">
                                                 <label for="fail_day">VREME</label>
                                                 <div class="input-group custom-file-button">
-                                                    <date-picker v-model="search.time"  type="time"  format="HH:mm" id="fail_day" placeholder="VREME"></date-picker>
+                                                    <date-picker v-model="search.time" type="time" format="HH:mm"
+                                                                 id="fail_day" placeholder="VREME"></date-picker>
                                                 </div>
                                             </div>
 
@@ -82,7 +84,8 @@
                                                     </button>
                                                 </div>
                                                 <div class="w-100 mt-3  ">
-                                                    <add-trial :date_selected="date_selected" :institutions_serchData="institutionsSerchData"></add-trial>
+                                                    <add-trial :date_selected="date_selected"
+                                                               :institutions_serchData="institutionsSerchData"></add-trial>
                                                 </div>
                                             </div>
 
@@ -96,74 +99,80 @@
                     </div>
                     <div class="col-lg-8 col-sm-12 margin-top-table">
 
-                    <div class="table-responsive">
+                        <div class="table-responsive">
 
-                        <table class="table  table-hover table-text-size table-cursor">
-                            <thead class="bg-blue text-personal-light">
-                            <tr>
-                                <th></th>
-                                <th>VREME</th>
-                                <th>BROJ U KANCELARIJI</th>
-                                <th>STRANKA 1</th>
-                                <th>STRANKA 2</th>
-                                <th>SUD</th>
-                                <th>IZMENI</th>
+                            <table class="table  table-hover table-text-size table-cursor">
+                                <thead class="bg-blue text-personal-light">
+                                <tr>
+                                    <th></th>
+                                    <th>VREME</th>
+                                    <th>BROJ U KANCELARIJI</th>
+                                    <th>STRANKA 1</th>
+                                    <th>STRANKA 2</th>
+                                    <th>SUD</th>
+                                    <th>IZMENI</th>
 
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="(trial, index) in allTrial">
-                                <td @click.prevent="modalShowTrial(trial.id)"><i class="fa color-blue fa-arrow-circle-o-right" aria-hidden="true"></i></td>
-                                <td @click.prevent="modalShowTrial(trial.id)">{{ trial.time ? trial.time.slice(0,5) : '' }}</td>
-                                <td  @click.prevent="modalShowTrial(trial.id)">{{ trial.numberOffice }}</td>
-                                <td  @click.prevent="modalShowTrial(trial.id)">{{ trial.prosecutor }}</td>
-                                <td  @click.prevent="modalShowTrial(trial.id)">{{ trial.defendants }}</td>
-                                <td  @click.prevent="modalShowTrial(trial.id)">{{ trial.institution?.name }}</td>
-                                <td @click.prevent="modalEditTrial(trial.id)"><div class="w-100"> <i class="fa color-blue fa fa-pencil"  aria-hidden="true"></i></div></td>
-                            </tr>
-                            <tr v-if="allTrial.length < 1" class="bg-light">
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="(trial, index) in allTrial">
+                                    <td @click.prevent="modalShowTrial(trial.id)"><i
+                                        class="fa color-blue fa-arrow-circle-o-right" aria-hidden="true"></i></td>
+                                    <td @click.prevent="modalShowTrial(trial.id)">
+                                        {{ trial.time ? trial.time.slice(0, 5) : '' }}
+                                    </td>
+                                    <td @click.prevent="modalShowTrial(trial.id)">{{ trial.numberOffice }}</td>
+                                    <td @click.prevent="modalShowTrial(trial.id)">{{ trial.prosecutor }}</td>
+                                    <td @click.prevent="modalShowTrial(trial.id)">{{ trial.defendants }}</td>
+                                    <td @click.prevent="modalShowTrial(trial.id)">{{ trial.institution?.name }}</td>
+                                    <td @click.prevent="modalEditTrial(trial.id)">
+                                        <div class="w-100"><i class="fa color-blue fa fa-pencil" aria-hidden="true"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr v-if="allTrial.length < 1" class="bg-light">
 
-                                <td  colspan="7" class="text-center">
-                                    <vue-simple-spinner></vue-simple-spinner>
-                                </td>
-                            </tr>
-                            <tr v-if="!allTrial  " class="bg-light">
+                                    <td colspan="7" class="text-center">
+                                        <vue-simple-spinner></vue-simple-spinner>
+                                    </td>
+                                </tr>
+                                <tr v-if="!allTrial  " class="bg-light">
 
-                                <td  colspan="7"
-                                    class="text-center">
-                                    <span>NEMA PODATAKA ZA PRIKAZ</span></td>
+                                    <td colspan="7"
+                                        class="text-center">
+                                        <span>NEMA PODATAKA ZA PRIKAZ</span></td>
 
-                            </tr>
+                                </tr>
 
-                            </tbody>
-                        </table>
-                        <br>
-                        <nav aria-label="Page navigation example" v-if="paginateCount > 1 ">
-                            <ul class="pagination justify-content-center">
-                                <li v-if=" page !== 0" :class="[ page == 0 ? 'disabled' : '' ,  'page-item'  ]"
-                                    @click.prevent="getTrials(page - 1)">
-                                    <a class="page-link one" href="#" tabindex="-1"><i class="fa fa-chevron-left"
-                                                                                       aria-hidden="true"></i>
-                                    </a>
-                                </li>
-                                <li v-for="index in paginateCount" :key="index"
-                                    @click.prevent="getTrials(index-1)"
-                                    :class="[page == index-1 ? 'active' : '' ,'page-item']"><a
-                                    class="page-link number" href="#">{{ index }}</a></li>
-                                <li v-if=" page !== paginateCount - 1 "
-                                    :class="[ page == paginateCount - 1 ? 'disabled' : '' ,  'page-item'  ]"
-                                    @click.prevent="getTrials(page + 1)">
-                                    <a class="page-link one" href="#"><i class="fa fa-chevron-right"
-                                                                         aria-hidden="true"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
+                                </tbody>
+                            </table>
+                            <br>
+                            <nav aria-label="Page navigation example" v-if="paginateCount > 1 ">
+                                <ul class="pagination justify-content-center">
+                                    <li v-if=" page !== 0" :class="[ page == 0 ? 'disabled' : '' ,  'page-item'  ]"
+                                        @click.prevent="getTrials(page - 1)">
+                                        <a class="page-link one" href="#" tabindex="-1"><i class="fa fa-chevron-left"
+                                                                                           aria-hidden="true"></i>
+                                        </a>
+                                    </li>
+                                    <li v-for="index in paginateCount" :key="index"
+                                        @click.prevent="getTrials(index-1)"
+                                        :class="[page == index-1 ? 'active' : '' ,'page-item']"><a
+                                        class="page-link number" href="#">{{ index }}</a></li>
+                                    <li v-if=" page !== paginateCount - 1 "
+                                        :class="[ page == paginateCount - 1 ? 'disabled' : '' ,  'page-item'  ]"
+                                        @click.prevent="getTrials(page + 1)">
+                                        <a class="page-link one" href="#"><i class="fa fa-chevron-right"
+                                                                             aria-hidden="true"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </template>
 
@@ -178,20 +187,20 @@ import ShowTrial from "./ShowTrial";
 
 export default {
     name: "DateResults",
-    props:['date_selected'],
+    props: ['date_selected'],
     components: {
         'v-select': vSelect,
         DatePicker,
-        'add-trial' : AddTrial,
-        'edit-trial' : EditTrial,
-        'show-trial' : ShowTrial
+        'add-trial': AddTrial,
+        'edit-trial': EditTrial,
+        'show-trial': ShowTrial
     },
 
-    data(){
+    data() {
         return {
-            type : 1,
+            type: 1,
             institutionsSerchData: [],
-            allTrial : [],
+            allTrial: [],
             page: 0,
             person_1_list: [],
             person_2_list: [],
@@ -205,7 +214,7 @@ export default {
             }
         }
     },
-    methods : {
+    methods: {
         getTrials(page = 0) {
             this.allCases = []
 
@@ -217,7 +226,7 @@ export default {
                 axios.post('/trial/get/trials', {
                     'search': this.search,
                     'page': this.page,
-                    'selected_date' : this.date_selected
+                    'selected_date': this.date_selected
                 }).then(({data}) => {
                     this.allTrial = data.data
                     this.paginateCount = data.count
@@ -229,15 +238,15 @@ export default {
                 })
             }
         },
-        backToCalendar(){
+        backToCalendar() {
             window.location.href = "/trial";
         },
         modalShowTrial(data) {
 
-            this.$modal.show('show-trial-modal' , {'propType'  :data} );
+            this.$modal.show('show-trial-modal', {'propType': data});
         },
         modalEditTrial(data) {
-            this.$modal.show('edit-trial-modal', {'propType'  :data} );
+            this.$modal.show('edit-trial-modal', {'propType': data});
         },
         getInstitutionsForSearch() {
             axios.get('/trial/get/institutions').then(({data}) => {

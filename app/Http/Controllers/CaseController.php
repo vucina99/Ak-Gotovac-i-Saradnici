@@ -89,7 +89,7 @@ class CaseController extends Controller
         if ($createCase->status() !== 200) {
             return response()->json('Došlo je do greške', 400);
         }
-        return response(new CaseResource($createCase->original) , 201);
+        return response(new CaseResource($createCase->original), 201);
     }
 
     public function filesUpload(Request $request)

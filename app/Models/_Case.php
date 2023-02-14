@@ -36,7 +36,7 @@ class _Case extends Model
 
     public function case_files()
     {
-        return $this->hasMany(CaseFile::class , "case_id");
+        return $this->hasMany(CaseFile::class, "case_id");
     }
 
     public function createCase($request)
@@ -70,7 +70,7 @@ class _Case extends Model
         return response(['case' => new CaseResource($case), 'caseFiles' => CaseFileResource::collection($caseFiles)], 200);
     }
 
-    public function editCase($case , $request)
+    public function editCase($case, $request)
     {
         $institutionID = null;
         if ($request->institution && $request->institution !== null && $request->institution !== '') {
@@ -91,8 +91,9 @@ class _Case extends Model
         return response($case, 200);
     }
 
-    public function deleteCase($case){
+    public function deleteCase($case)
+    {
         $case->delete();
-        return response('{}' ,204);
+        return response('{}', 204);
     }
 }

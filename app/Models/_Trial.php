@@ -24,7 +24,7 @@ class _Trial extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class );
+        return $this->belongsTo(User::class);
     }
 
     public function institution()
@@ -32,7 +32,8 @@ class _Trial extends Model
         return $this->belongsTo(Institution::class);
     }
 
-    public function createTrial($request){
+    public function createTrial($request)
+    {
         $institutionID = null;
         $userID = null;
         if ($request->institution && $request->institution !== null && $request->institution !== '') {
@@ -44,14 +45,14 @@ class _Trial extends Model
 
         $trial = _Trial::create([
             'number_office' => $request->number_office,
-            'number_institution'  => $request->number_institution,
-            'user_id'  => $userID,
-            'prosecutor'  => $request->person_1,
-            'defendants'  => $request->person_2,
-            'institution_id'  => $institutionID,
-            'note'  => $request->note,
-            'date'  => $request->date,
-            'time'  =>  $request->time ? date('H:i', strtotime(Carbon::parse( $request->time)->addHour()) ) : null,
+            'number_institution' => $request->number_institution,
+            'user_id' => $userID,
+            'prosecutor' => $request->person_1,
+            'defendants' => $request->person_2,
+            'institution_id' => $institutionID,
+            'note' => $request->note,
+            'date' => $request->date,
+            'time' => $request->time ? date('H:i', strtotime(Carbon::parse($request->time)->addHour())) : null,
         ]);
 
         return response($trial->refresh(), 201);
