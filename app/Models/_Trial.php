@@ -58,4 +58,28 @@ class _Trial extends Model
         return response($trial->refresh(), 201);
     }
 
+    public function edit($trial , $request){
+        $institutionID = null;
+        $userID = null;
+        if ($request->institution && $request->institution !== null && $request->institution !== '') {
+            $institutionID = $request->institution['id'];
+        }
+        if ($request->user && $request->user !== null && $request->user !== '') {
+            $userID = $request->user['id'];
+        }
+
+        $trial->update([
+            'number_office' => $request->numberOffice,
+            'number_institution' => $request->numberInstitution,
+            'user_id' => $userID,
+            'prosecutor' => $request->prosecutor,
+            'defendants' => $request->defendants,
+            'institution_id' => $institutionID,
+            'note' => $request->note,
+            'date' => $request->date,
+            'time' => $request->time ? date('H:i', strtotime(Carbon::parse($request->time)->addHour())) : null,
+        ]);
+
+        return $trial;
+    }
 }

@@ -6,7 +6,7 @@
                     <div class="col-lg-4 col-sm-12">
                         <div class="choose-type">
                             <show-trial :date_selected="date_selected"></show-trial>
-                            <edit-trial :date_selected="date_selected"></edit-trial>
+                            <edit-trial :date_selected="date_selected"  :institutions_serchData="institutionsSerchData"></edit-trial>
                             <div class="container">
                                 <div class="row">
                                     <div
@@ -109,23 +109,25 @@
                                     <th>BROJ U KANCELARIJI</th>
                                     <th>STRANKA 1</th>
                                     <th>STRANKA 2</th>
-                                    <th>SUD</th>
+                                    <th>INSTITUCIJA</th>
+                                    <th>ZAPOSLENI</th>
                                     <th>IZMENI</th>
 
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr v-for="(trial, index) in allTrial">
-                                    <td @click.prevent="modalShowTrial(trial.id)"><i
+                                    <td @click.prevent="modalShowTrial(trial)"><i
                                         class="fa color-blue fa-arrow-circle-o-right" aria-hidden="true"></i></td>
-                                    <td @click.prevent="modalShowTrial(trial.id)">
+                                    <td @click.prevent="modalShowTrial(trial)">
                                         {{ trial.time ? trial.time.slice(0, 5) : '' }}
                                     </td>
-                                    <td @click.prevent="modalShowTrial(trial.id)">{{ trial.numberOffice }}</td>
-                                    <td @click.prevent="modalShowTrial(trial.id)">{{ trial.prosecutor }}</td>
-                                    <td @click.prevent="modalShowTrial(trial.id)">{{ trial.defendants }}</td>
-                                    <td @click.prevent="modalShowTrial(trial.id)">{{ trial.institution?.name }}</td>
-                                    <td @click.prevent="modalEditTrial(trial.id)">
+                                    <td @click.prevent="modalShowTrial(trial)">{{ trial.numberOffice }}</td>
+                                    <td @click.prevent="modalShowTrial(trial)">{{ trial.prosecutor }}</td>
+                                    <td @click.prevent="modalShowTrial(trial)">{{ trial.defendants }}</td>
+                                    <td @click.prevent="modalShowTrial(trial)">{{ trial.institution?.name }}</td>
+                                    <td @click.prevent="modalShowTrial(trial)">{{ trial.user?.name }}</td>
+                                    <td @click.prevent="modalEditTrial(trial, index)">
                                         <div class="w-100"><i class="fa color-blue fa fa-pencil" aria-hidden="true"></i>
                                         </div>
                                     </td>
@@ -243,10 +245,10 @@ export default {
         },
         modalShowTrial(data) {
 
-            this.$modal.show('show-trial-modal', {'propType': data});
+            this.$modal.show('show-trial-modal', {'data': data});
         },
-        modalEditTrial(data) {
-            this.$modal.show('edit-trial-modal', {'propType': data});
+        modalEditTrial(data , index) {
+            this.$modal.show('edit-trial-modal', {'data': data , 'index' : index});
         },
         getInstitutionsForSearch() {
             axios.get('/trial/get/institutions').then(({data}) => {
@@ -269,6 +271,25 @@ export default {
         this.getTrials();
         this.getInstitutionsForSearch();
         this.getPersons()
+
+        this.$root.$on("addEditedTrialInArray", (data) => {
+            if (typeof this.allTrial[data.trialIndex] !== "undefined") {
+                this.allTrial = this.allTrial.map((x, indexMap) => (data.trialIndex === indexMap) ? data.trialData : x)
+                this.getInstitutionsForSearch();
+                this.getPersons()
+
+            }
+        })
+
+        this.$root.$on("removeTrialFromArray", (trialIndex) => {
+            if (typeof this.allTrial[trialIndex] !== "undefined") {
+
+                this.allTrial.splice(trialIndex, 1);
+                if( this.allTrial.length < 1){
+                    this.allTrial = false;
+                }
+            }
+        })
 
         this.$root.$on("addNewTrialInArray", (data) => {
             if (this.allTrial == false) {

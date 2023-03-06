@@ -31,23 +31,42 @@
                                 <div class="container bg-personal-light">
                                     <div class="row">
                                         <div class="col-12"><br>
-                                            <form action="" method="post" class="add-form-modal ">
+
+                                            <vue-confirm-dialog></vue-confirm-dialog>
+                                            <div class="w-100" v-if="data == null">
+                                                <vue-simple-spinner></vue-simple-spinner>
+                                            </div>
+                                            <div v-if="success"
+                                                 class="alert error-danger alert-success alert-dismissible fade show"
+                                                 role="alert">
+                                                <span><i class="fa fa-check-square" aria-hidden="true"></i> &nbsp; SLUĆAJ JE USPEŠNO DODAT</span>
+                                                <button @click.prevent="success = false" type="button" class="close"
+
+                                                >
+                                                    <span>&times;</span>
+                                                </button>
+                                            </div>
+
+                                            <form action="" method="post" class="add-form-modal " v-if="data !== null">
                                                 <div class="form-group search-font-size-modal ">
                                                     <label>SUD</label>
                                                     <v-select
-                                                        :options="data"
+                                                        :options="institutions_serchData"
                                                         :id="'courts'"
                                                         label="name"
-                                                        placeholder="SUD">
+                                                        placeholder="SUD"
+                                                        v-model="data.institution"
+                                                    >
                                                     </v-select>
                                                 </div>
 
                                                 <div class="form-group search-font-size-modal ">
                                                     <label>ZADUŽENI</label>
                                                     <v-select
-                                                        :options="data"
+                                                        :options="users"
                                                         :id="'responsible'"
                                                         label="name"
+                                                        v-model="data.user"
                                                         placeholder="ZADUŽENI"
                                                     >
                                                     </v-select>
@@ -55,28 +74,42 @@
 
                                                 <div class="form-group">
                                                     <label for="number_court">BROJ U KANCELARIJI</label>
-                                                    <input type="text" class="form-control" id="number_court"
+                                                    <input type="text" class="form-control"
+                                                           id="number_court"
+                                                           v-model="data.numberOffice"
                                                            placeholder="BROJ U KANCELARIJI">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="number_institutions">BROJ U INSTITUCIJI</label>
+                                                    <input type="text" class="form-control" id="number_institutions"
+                                                           placeholder="BROJ U KANCELARIJI"
+                                                           v-model="data.numberInstitution">
                                                 </div>
 
                                                 <div class="form-group ">
 
                                                     <label for="client1">STRANKA 1</label>
 
-                                                    <input type="text" class="form-control" id="client1"
+                                                    <input type="text" class="form-control"
+                                                           id="client1"
+                                                           v-model="data.prosecutor"
                                                            placeholder="STRANKA 1">
                                                 </div>
                                                 <div class="form-group ">
 
                                                     <label for="client2">STRANKA 2</label>
 
-                                                    <input type="text" class="form-control" id="client2"
+                                                    <input type="text" class="form-control"
+                                                           id="client2"
+                                                           v-model="data.defendants"
                                                            placeholder="STRANKA 2">
                                                 </div>
                                                 <div class="pb-3">
                                                     <label for="time">VREME</label>
                                                     <div class="input-group custom-file-button">
-                                                        <date-picker v-model="date" id="time" type="time" format="HH:mm"
+                                                        <date-picker v-model="data.time" id="time"
+                                                                     type="time" format="HH:mm"
                                                                      placeholder="VREME"></date-picker>
 
                                                     </div>
@@ -84,14 +117,20 @@
 
                                                 <div class="form-group">
                                                     <label for="notes">BELEŠKA</label>
-                                                    <vue-editor id="notes" :editorToolbar="customToolbar"
-                                                                v-model="content"></vue-editor>
+                                                    <vue-editor id="notes"
+                                                                :editorToolbar="customToolbar"
+                                                                v-model="data.note"></vue-editor>
+                                                </div>
+                                                <div class="pb-4 pt-4">
+                                                    <button class="btn btn-primary w-100" @click.prevent="editTrial()"> IZMENI ROČIŠTE &nbsp; <i
+                                                        class="fa fa-spinner" aria-hidden="true"></i>
+                                                    </button>
                                                 </div>
 
-
-                                                <div class="pb-4 pt-4">
-                                                    <button class="btn btn-primary w-100"> IZMENI ROČIŠTE &nbsp; <i
-                                                        class="fa fa-spinner" aria-hidden="true"></i>
+                                                <div>
+                                                    <button class="btn btn-danger w-100" @click.prevent="deleteTrial()">
+                                                        OBRIŠI ROČIŠTE &nbsp; <i
+                                                        class="fa fa-trash" aria-hidden="true"></i>
                                                     </button>
                                                 </div>
                                             </form>
@@ -120,14 +159,15 @@ import DatePicker from 'vue2-datepicker';
 
 export default {
     name: "EditTrial",
-    props: ['date_selected'],
+    props: ['date_selected' , 'institutions_serchData'],
     data() {
         return {
-            data: [],
-            content: '',
-            type: 5,
+            data: null,
+            trialIndex: -1,
             date: '',
             lang: 'sr',
+            success: false,
+            users : [],
             customToolbar: [
                 [{header: [false, 1, 2, 3, 4, 5, 6]}],
                 ["bold", "italic", "underline", "strike"],
@@ -150,14 +190,87 @@ export default {
 
     },
     methods: {
+        deleteTrial(){
+
+
+
+
+
+            this.$confirm({
+                message: 'DA LI STE SIGURNI DA ŽELITE DA OBRIŠETE ROČIŠTE?',
+                button: {
+                    no: 'NE',
+                    yes: 'DA'
+                },
+                /**
+                 * Callback Function
+                 * @param {Boolean} confirm
+                 */
+                callback: confirm => {
+                    if (confirm) {
+                        axios.delete('/trial/delete/trial/' + this.data.id ).then(({data}) => {
+
+
+                            this.$confirm({
+                                message: 'USPEŠNO BRISANJE',
+                                button: {
+                                    yes: 'OK'
+                                },
+                                /**
+                                 * Callback Function
+                                 * @param {Boolean} confirm
+                                 */
+                                callback: confirm => {
+                                    if (confirm) {
+                                        this.$root.$emit('removeTrialFromArray', this.trialIndex);
+
+                                        this.closeModal();
+                                    }
+                                }
+                            })
+
+
+                        }).catch((error) => {
+                            alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora')
+                        })
+                    }
+                }
+            })
+
+
+
+        },
+        editTrial(){
+            axios.patch('/trial/edit/trial/' + this.data.id, this.data).then(({data}) => {
+                this.success = true;
+                this.$root.$emit('addEditedTrialInArray', {'trialData': data, 'trialIndex': this.trialIndex});
+
+            }).catch((error) => {
+                alert('POKUŠAJTE POSLE, DOŠLO JE DO GREŠKE')
+            })
+
+        },
+        getUsers() {
+            axios.get('/trial/get/users').then(({data}) => {
+                this.users = data;
+            }).catch((error) => {
+                alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora')
+            })
+
+        },
         beforeOpenEdit(event) {
-            this.type = event.params.propType;
+            this.data = JSON.parse(JSON.stringify(event.params.data)) ;
+            this.trialIndex = event.params.index
+            this.data.time = new Date(this.data.date + ' ' + this.data.time) ;
 
         },
 
         closeModal() {
             this.$modal.hide('edit-trial-modal');
         }
+    },
+    created() {
+        this.getUsers();
     }
 }
 </script>

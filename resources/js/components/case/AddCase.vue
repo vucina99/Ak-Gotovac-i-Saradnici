@@ -290,6 +290,20 @@ export default {
             })
         },
         modalShow() {
+            this.success = false
+            this.dataCase = {
+                'institutions': '',
+                'number_court': '',
+                'number_office': '',
+                'prosecutor': '',
+                'defendants': '',
+                'fail_day': '',
+                'marks': '',
+                'notes': '',
+                'case_type_id': this.type,
+
+
+            }
             this.$modal.show('add-case-modal');
         },
         closeModal() {

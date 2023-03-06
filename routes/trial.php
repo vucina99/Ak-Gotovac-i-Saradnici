@@ -9,6 +9,8 @@ Route::group(['prefix' => 'trial'], function () {
     Route::post('/create/trial', [TrialController::class, 'createTrial']);
     Route::post('/get/trials', [TrialController::class, 'getTrials']);
     Route::post('/get/persons', [TrialController::class, 'getPersons']);
+    Route::patch('/edit/trial/{id}', [TrialController::class, 'updateTrial']);
+    Route::delete('/delete/trial/{id}', [TrialController::class, 'deleteTrial']);
 
 
 });

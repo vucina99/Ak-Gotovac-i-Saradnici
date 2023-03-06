@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Http\Resources\CaseFileResource;
 use App\Http\Resources\CaseResource;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
@@ -53,7 +54,7 @@ class _Case extends Model
             'institution_id' => $institutionID,
             'note' => $request->notes,
             'mark' => $request->marks,
-            'fail_day' => $request->fail_day,
+            'fail_day' => Carbon::parse($request->fail_day)->format('Y-m-d'),
             'case_type_id' => $request->case_type_id
         ]);
 

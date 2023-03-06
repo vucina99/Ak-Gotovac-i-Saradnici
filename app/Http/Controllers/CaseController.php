@@ -59,9 +59,9 @@ class CaseController extends Controller
         if ($search->person_2 !== '' && $search->person_2 !== null) {
             $cases = $cases->where('defendants', 'LIKE', '%' . $search->person_2['defendants'] . '%');
         }
-
+        $count = ceil($cases->count() / $numberData);
         $cases = $cases->skip($page * $numberData)->take($numberData)->get();
-        $count = ceil(_Case::where('case_type_id', $case_type_id)->count() / $numberData);
+
         return response(['data' => CaseResource::collection($cases), 'count' => $count]);
     }
 

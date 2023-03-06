@@ -36,10 +36,11 @@
                                                 <div class="form-group search-font-size-modal ">
                                                     <label>SUD</label>
                                                     <v-select
-                                                        :options="data"
+                                                        :options="[]"
                                                         :id="'courts'"
                                                         label="name"
                                                         placeholder="SUD"
+                                                        v-model="data.institution"
                                                         :disabled="true">
                                                     </v-select>
                                                 </div>
@@ -47,9 +48,10 @@
                                                 <div class="form-group search-font-size-modal ">
                                                     <label>ZADUŽENI</label>
                                                     <v-select
-                                                        :options="data"
+                                                        :options="[]"
                                                         :id="'responsible'"
                                                         label="name"
+                                                        v-model="data.user"
                                                         placeholder="ZADUŽENI"
                                                         :disabled="true">
                                                     </v-select>
@@ -59,7 +61,16 @@
                                                     <label for="number_court">BROJ U KANCELARIJI</label>
                                                     <input type="text" :disabled="true" class="form-control"
                                                            id="number_court"
+                                                           v-model="data.numberOffice"
                                                            placeholder="BROJ U KANCELARIJI">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="number_institutions">BROJ U INSTITUCIJI</label>
+                                                    <input type="text" class="form-control" id="number_institutions"
+                                                           placeholder="BROJ U KANCELARIJI"
+                                                           disabled
+                                                           v-model="data.numberInstitution">
                                                 </div>
 
                                                 <div class="form-group ">
@@ -68,6 +79,7 @@
 
                                                     <input type="text" :disabled="true" class="form-control"
                                                            id="client1"
+                                                           v-model="data.prosecutor"
                                                            placeholder="STRANKA 1">
                                                 </div>
                                                 <div class="form-group ">
@@ -76,12 +88,13 @@
 
                                                     <input type="text" :disabled="true" class="form-control"
                                                            id="client2"
+                                                           v-model="data.defendants"
                                                            placeholder="STRANKA 2">
                                                 </div>
                                                 <div class="pb-3">
                                                     <label for="time">VREME</label>
                                                     <div class="input-group custom-file-button">
-                                                        <date-picker :disabled="true" v-model="date" id="time"
+                                                        <date-picker :disabled="true" v-model="data.time" id="time"
                                                                      type="time" format="HH:mm"
                                                                      placeholder="VREME"></date-picker>
 
@@ -92,7 +105,7 @@
                                                     <label for="notes">BELEŠKA</label>
                                                     <vue-editor id="notes" :disabled="true"
                                                                 :editorToolbar="customToolbar"
-                                                                v-model="content"></vue-editor>
+                                                                v-model="data.note"></vue-editor>
                                                 </div>
 
                                             </form>
@@ -155,8 +168,8 @@ export default {
             this.$modal.show('show-trial-modal');
         },
         beforeOpenShow(event) {
-            this.type = event.params.propType;
-            console.log(event.params.propType);
+            this.data = JSON.parse(JSON.stringify(event.params.data)) ;
+            this.data.time = new Date(this.data.date + ' ' + this.data.time) ;
         },
         closeModal() {
             this.$modal.hide('show-trial-modal');

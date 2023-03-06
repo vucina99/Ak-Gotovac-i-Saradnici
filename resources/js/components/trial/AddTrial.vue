@@ -75,7 +75,7 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label for="number_institutions">BROJ U KANCELARIJI</label>
+                                                    <label for="number_institutions">BROJ U INSTITUCIJI</label>
                                                     <input type="text" class="form-control" id="number_institutions"
                                                            placeholder="BROJ U KANCELARIJI"
                                                            v-model="trialData.number_institution">
@@ -209,6 +209,18 @@ export default {
             })
         },
         modalShow() {
+            this.success = false
+            this.trialData = {
+                institution: '',
+                user: '',
+                number_office: '',
+                number_institution: '',
+                person_1: '',
+                person_2: '',
+                date: this.date_selected,
+                time: '',
+                note: ''
+            },
             this.$modal.show('add-trial-modal');
         },
         closeModal() {

@@ -5654,6 +5654,18 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     modalShow: function modalShow() {
+      this.success = false;
+      this.dataCase = {
+        'institutions': '',
+        'number_court': '',
+        'number_office': '',
+        'prosecutor': '',
+        'defendants': '',
+        'fail_day': '',
+        'marks': '',
+        'notes': '',
+        'case_type_id': this.type
+      };
       this.$modal.show('add-case-modal');
     },
     closeModal: function closeModal() {
@@ -6034,11 +6046,16 @@ __webpack_require__.r(__webpack_exports__);
         _this5.allCases = _this5.allCases.map(function (x, indexMap) {
           return data.caseIndex === indexMap ? data.caseData : x;
         });
+        _this5.getInstitutionsForSearch();
+        _this5.getPersons();
       }
     });
     this.$root.$on("removeCaseFromArray", function (caseIndex) {
       if (typeof _this5.allCases[caseIndex] !== "undefined") {
         _this5.allCases.splice(caseIndex, 1);
+        if (_this5.allCases.length < 1) {
+          _this5.allCases = false;
+        }
       }
     });
   }
@@ -6222,7 +6239,18 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     modalShow: function modalShow() {
-      this.$modal.show('add-trial-modal');
+      this.success = false;
+      this.trialData = {
+        institution: '',
+        user: '',
+        number_office: '',
+        number_institution: '',
+        person_1: '',
+        person_2: '',
+        date: this.date_selected,
+        time: '',
+        note: ''
+      }, this.$modal.show('add-trial-modal');
     },
     closeModal: function closeModal() {
       this.$modal.hide('add-trial-modal');
@@ -6373,12 +6401,13 @@ __webpack_require__.r(__webpack_exports__);
     },
     modalShowTrial: function modalShowTrial(data) {
       this.$modal.show('show-trial-modal', {
-        'propType': data
+        'data': data
       });
     },
-    modalEditTrial: function modalEditTrial(data) {
+    modalEditTrial: function modalEditTrial(data, index) {
       this.$modal.show('edit-trial-modal', {
-        'propType': data
+        'data': data,
+        'index': index
       });
     },
     getInstitutionsForSearch: function getInstitutionsForSearch() {
@@ -6408,6 +6437,23 @@ __webpack_require__.r(__webpack_exports__);
     this.getTrials();
     this.getInstitutionsForSearch();
     this.getPersons();
+    this.$root.$on("addEditedTrialInArray", function (data) {
+      if (typeof _this4.allTrial[data.trialIndex] !== "undefined") {
+        _this4.allTrial = _this4.allTrial.map(function (x, indexMap) {
+          return data.trialIndex === indexMap ? data.trialData : x;
+        });
+        _this4.getInstitutionsForSearch();
+        _this4.getPersons();
+      }
+    });
+    this.$root.$on("removeTrialFromArray", function (trialIndex) {
+      if (typeof _this4.allTrial[trialIndex] !== "undefined") {
+        _this4.allTrial.splice(trialIndex, 1);
+        if (_this4.allTrial.length < 1) {
+          _this4.allTrial = false;
+        }
+      }
+    });
     this.$root.$on("addNewTrialInArray", function (data) {
       if (_this4.allTrial == false) {
         _this4.allTrial = [];
@@ -6439,14 +6485,15 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "EditTrial",
-  props: ['date_selected'],
+  props: ['date_selected', 'institutions_serchData'],
   data: function data() {
     return {
-      data: [],
-      content: '',
-      type: 5,
+      data: null,
+      trialIndex: -1,
       date: '',
       lang: 'sr',
+      success: false,
+      users: [],
       customToolbar: [[{
         header: [false, 1, 2, 3, 4, 5, 6]
       }], ["bold", "italic", "underline", "strike"], [{
@@ -6478,12 +6525,78 @@ __webpack_require__.r(__webpack_exports__);
     DatePicker: vue2_datepicker__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   methods: {
+    deleteTrial: function deleteTrial() {
+      var _this = this;
+      this.$confirm({
+        message: 'DA LI STE SIGURNI DA ŽELITE DA OBRIŠETE ROČIŠTE?',
+        button: {
+          no: 'NE',
+          yes: 'DA'
+        },
+        /**
+         * Callback Function
+         * @param {Boolean} confirm
+         */
+        callback: function callback(confirm) {
+          if (confirm) {
+            axios["delete"]('/trial/delete/trial/' + _this.data.id).then(function (_ref) {
+              var data = _ref.data;
+              _this.$confirm({
+                message: 'USPEŠNO BRISANJE',
+                button: {
+                  yes: 'OK'
+                },
+                /**
+                 * Callback Function
+                 * @param {Boolean} confirm
+                 */
+                callback: function callback(confirm) {
+                  if (confirm) {
+                    _this.$root.$emit('removeTrialFromArray', _this.trialIndex);
+                    _this.closeModal();
+                  }
+                }
+              });
+            })["catch"](function (error) {
+              alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora');
+            });
+          }
+        }
+      });
+    },
+    editTrial: function editTrial() {
+      var _this2 = this;
+      axios.patch('/trial/edit/trial/' + this.data.id, this.data).then(function (_ref2) {
+        var data = _ref2.data;
+        _this2.success = true;
+        _this2.$root.$emit('addEditedTrialInArray', {
+          'trialData': data,
+          'trialIndex': _this2.trialIndex
+        });
+      })["catch"](function (error) {
+        alert('POKUŠAJTE POSLE, DOŠLO JE DO GREŠKE');
+      });
+    },
+    getUsers: function getUsers() {
+      var _this3 = this;
+      axios.get('/trial/get/users').then(function (_ref3) {
+        var data = _ref3.data;
+        _this3.users = data;
+      })["catch"](function (error) {
+        alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora');
+      });
+    },
     beforeOpenEdit: function beforeOpenEdit(event) {
-      this.type = event.params.propType;
+      this.data = JSON.parse(JSON.stringify(event.params.data));
+      this.trialIndex = event.params.index;
+      this.data.time = new Date(this.data.date + ' ' + this.data.time);
     },
     closeModal: function closeModal() {
       this.$modal.hide('edit-trial-modal');
     }
+  },
+  created: function created() {
+    this.getUsers();
   }
 });
 
@@ -6552,8 +6665,8 @@ __webpack_require__.r(__webpack_exports__);
       this.$modal.show('show-trial-modal');
     },
     beforeOpenShow: function beforeOpenShow(event) {
-      this.type = event.params.propType;
-      console.log(event.params.propType);
+      this.data = JSON.parse(JSON.stringify(event.params.data));
+      this.data.time = new Date(this.data.date + ' ' + this.data.time);
     },
     closeModal: function closeModal() {
       this.$modal.hide('show-trial-modal');
@@ -7971,7 +8084,7 @@ var render = function render() {
         return _vm.editCase();
       }
     }
-  }, [_vm._v(" IZMENI SLUČAJ   "), _c("i", {
+  }, [_vm._v("\n                                                    IZMENI SLUČAJ   "), _c("i", {
     staticClass: "fa fa-spinner",
     attrs: {
       "aria-hidden": "true"
@@ -7986,7 +8099,7 @@ var render = function render() {
         return _vm.deleteCase();
       }
     }
-  }, [_vm._v(" OBRIŠI CEO SLUČAJ   "), _c("i", {
+  }, [_vm._v("\n                                                    OBRIŠI CEO SLUČAJ   "), _c("i", {
     staticClass: "fa fa-trash",
     attrs: {
       "aria-hidden": "true"
@@ -9011,7 +9124,7 @@ var render = function render() {
     attrs: {
       "for": "number_institutions"
     }
-  }, [_vm._v("BROJ U KANCELARIJI")]), _vm._v(" "), _c("input", {
+  }, [_vm._v("BROJ U INSTITUCIJI")]), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -9219,7 +9332,8 @@ var render = function render() {
     }
   }), _vm._v(" "), _c("edit-trial", {
     attrs: {
-      date_selected: _vm.date_selected
+      date_selected: _vm.date_selected,
+      institutions_serchData: _vm.institutionsSerchData
     }
   }), _vm._v(" "), _c("div", {
     staticClass: "container"
@@ -9384,12 +9498,12 @@ var render = function render() {
   }, [_c("table", {
     staticClass: "table table-hover table-text-size table-cursor"
   }, [_vm._m(1), _vm._v(" "), _c("tbody", [_vm._l(_vm.allTrial, function (trial, index) {
-    var _trial$institution;
+    var _trial$institution, _trial$user;
     return _c("tr", [_c("td", {
       on: {
         click: function click($event) {
           $event.preventDefault();
-          return _vm.modalShowTrial(trial.id);
+          return _vm.modalShowTrial(trial);
         }
       }
     }, [_c("i", {
@@ -9401,42 +9515,49 @@ var render = function render() {
       on: {
         click: function click($event) {
           $event.preventDefault();
-          return _vm.modalShowTrial(trial.id);
+          return _vm.modalShowTrial(trial);
         }
       }
-    }, [_vm._v(_vm._s(trial.time ? trial.time.slice(0, 5) : ""))]), _vm._v(" "), _c("td", {
+    }, [_vm._v("\n                                    " + _vm._s(trial.time ? trial.time.slice(0, 5) : "") + "\n                                ")]), _vm._v(" "), _c("td", {
       on: {
         click: function click($event) {
           $event.preventDefault();
-          return _vm.modalShowTrial(trial.id);
+          return _vm.modalShowTrial(trial);
         }
       }
     }, [_vm._v(_vm._s(trial.numberOffice))]), _vm._v(" "), _c("td", {
       on: {
         click: function click($event) {
           $event.preventDefault();
-          return _vm.modalShowTrial(trial.id);
+          return _vm.modalShowTrial(trial);
         }
       }
     }, [_vm._v(_vm._s(trial.prosecutor))]), _vm._v(" "), _c("td", {
       on: {
         click: function click($event) {
           $event.preventDefault();
-          return _vm.modalShowTrial(trial.id);
+          return _vm.modalShowTrial(trial);
         }
       }
     }, [_vm._v(_vm._s(trial.defendants))]), _vm._v(" "), _c("td", {
       on: {
         click: function click($event) {
           $event.preventDefault();
-          return _vm.modalShowTrial(trial.id);
+          return _vm.modalShowTrial(trial);
         }
       }
     }, [_vm._v(_vm._s((_trial$institution = trial.institution) === null || _trial$institution === void 0 ? void 0 : _trial$institution.name))]), _vm._v(" "), _c("td", {
       on: {
         click: function click($event) {
           $event.preventDefault();
-          return _vm.modalEditTrial(trial.id);
+          return _vm.modalShowTrial(trial);
+        }
+      }
+    }, [_vm._v(_vm._s((_trial$user = trial.user) === null || _trial$user === void 0 ? void 0 : _trial$user.name))]), _vm._v(" "), _c("td", {
+      on: {
+        click: function click($event) {
+          $event.preventDefault();
+          return _vm.modalEditTrial(trial, index);
         }
       }
     }, [_vm._m(2, true)])]);
@@ -9503,7 +9624,7 @@ var staticRenderFns = [function () {
     _c = _vm._self._c;
   return _c("thead", {
     staticClass: "bg-blue text-personal-light"
-  }, [_c("tr", [_c("th"), _vm._v(" "), _c("th", [_vm._v("VREME")]), _vm._v(" "), _c("th", [_vm._v("BROJ U KANCELARIJI")]), _vm._v(" "), _c("th", [_vm._v("STRANKA 1")]), _vm._v(" "), _c("th", [_vm._v("STRANKA 2")]), _vm._v(" "), _c("th", [_vm._v("SUD")]), _vm._v(" "), _c("th", [_vm._v("IZMENI")])])]);
+  }, [_c("tr", [_c("th"), _vm._v(" "), _c("th", [_vm._v("VREME")]), _vm._v(" "), _c("th", [_vm._v("BROJ U KANCELARIJI")]), _vm._v(" "), _c("th", [_vm._v("STRANKA 1")]), _vm._v(" "), _c("th", [_vm._v("STRANKA 2")]), _vm._v(" "), _c("th", [_vm._v("INSTITUCIJA")]), _vm._v(" "), _c("th", [_vm._v("ZAPOSLENI")]), _vm._v(" "), _c("th", [_vm._v("IZMENI")])])]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
@@ -9628,7 +9749,30 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col-12"
-  }, [_c("br"), _vm._v(" "), _c("form", {
+  }, [_c("br"), _vm._v(" "), _c("vue-confirm-dialog"), _vm._v(" "), _vm.data == null ? _c("div", {
+    staticClass: "w-100"
+  }, [_c("vue-simple-spinner")], 1) : _vm._e(), _vm._v(" "), _vm.success ? _c("div", {
+    staticClass: "alert error-danger alert-success alert-dismissible fade show",
+    attrs: {
+      role: "alert"
+    }
+  }, [_c("span", [_c("i", {
+    staticClass: "fa fa-check-square",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }), _vm._v("   SLUĆAJ JE USPEŠNO DODAT")]), _vm._v(" "), _c("button", {
+    staticClass: "close",
+    attrs: {
+      type: "button"
+    },
+    on: {
+      click: function click($event) {
+        $event.preventDefault();
+        _vm.success = false;
+      }
+    }
+  }, [_c("span", [_vm._v("×")])])]) : _vm._e(), _vm._v(" "), _vm.data !== null ? _c("form", {
     staticClass: "add-form-modal",
     attrs: {
       action: "",
@@ -9638,19 +9782,33 @@ var render = function render() {
     staticClass: "form-group search-font-size-modal"
   }, [_c("label", [_vm._v("SUD")]), _vm._v(" "), _c("v-select", {
     attrs: {
-      options: _vm.data,
+      options: _vm.institutions_serchData,
       id: "courts",
       label: "name",
       placeholder: "SUD"
+    },
+    model: {
+      value: _vm.data.institution,
+      callback: function callback($$v) {
+        _vm.$set(_vm.data, "institution", $$v);
+      },
+      expression: "data.institution"
     }
   })], 1), _vm._v(" "), _c("div", {
     staticClass: "form-group search-font-size-modal"
   }, [_c("label", [_vm._v("ZADUŽENI")]), _vm._v(" "), _c("v-select", {
     attrs: {
-      options: _vm.data,
+      options: _vm.users,
       id: "responsible",
       label: "name",
       placeholder: "ZADUŽENI"
+    },
+    model: {
+      value: _vm.data.user,
+      callback: function callback($$v) {
+        _vm.$set(_vm.data, "user", $$v);
+      },
+      expression: "data.user"
     }
   })], 1), _vm._v(" "), _c("div", {
     staticClass: "form-group"
@@ -9659,11 +9817,54 @@ var render = function render() {
       "for": "number_court"
     }
   }, [_vm._v("BROJ U KANCELARIJI")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.data.numberOffice,
+      expression: "data.numberOffice"
+    }],
     staticClass: "form-control",
     attrs: {
       type: "text",
       id: "number_court",
       placeholder: "BROJ U KANCELARIJI"
+    },
+    domProps: {
+      value: _vm.data.numberOffice
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.data, "numberOffice", $event.target.value);
+      }
+    }
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "form-group"
+  }, [_c("label", {
+    attrs: {
+      "for": "number_institutions"
+    }
+  }, [_vm._v("BROJ U INSTITUCIJI")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.data.numberInstitution,
+      expression: "data.numberInstitution"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      id: "number_institutions",
+      placeholder: "BROJ U KANCELARIJI"
+    },
+    domProps: {
+      value: _vm.data.numberInstitution
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.data, "numberInstitution", $event.target.value);
+      }
     }
   })]), _vm._v(" "), _c("div", {
     staticClass: "form-group"
@@ -9672,11 +9873,26 @@ var render = function render() {
       "for": "client1"
     }
   }, [_vm._v("STRANKA 1")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.data.prosecutor,
+      expression: "data.prosecutor"
+    }],
     staticClass: "form-control",
     attrs: {
       type: "text",
       id: "client1",
       placeholder: "STRANKA 1"
+    },
+    domProps: {
+      value: _vm.data.prosecutor
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.data, "prosecutor", $event.target.value);
+      }
     }
   })]), _vm._v(" "), _c("div", {
     staticClass: "form-group"
@@ -9685,11 +9901,26 @@ var render = function render() {
       "for": "client2"
     }
   }, [_vm._v("STRANKA 2")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.data.defendants,
+      expression: "data.defendants"
+    }],
     staticClass: "form-control",
     attrs: {
       type: "text",
       id: "client2",
       placeholder: "STRANKA 2"
+    },
+    domProps: {
+      value: _vm.data.defendants
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.data, "defendants", $event.target.value);
+      }
     }
   })]), _vm._v(" "), _c("div", {
     staticClass: "pb-3"
@@ -9707,11 +9938,11 @@ var render = function render() {
       placeholder: "VREME"
     },
     model: {
-      value: _vm.date,
+      value: _vm.data.time,
       callback: function callback($$v) {
-        _vm.date = $$v;
+        _vm.$set(_vm.data, "time", $$v);
       },
-      expression: "date"
+      expression: "data.time"
     }
   })], 1)]), _vm._v(" "), _c("div", {
     staticClass: "form-group"
@@ -9725,22 +9956,41 @@ var render = function render() {
       editorToolbar: _vm.customToolbar
     },
     model: {
-      value: _vm.content,
+      value: _vm.data.note,
       callback: function callback($$v) {
-        _vm.content = $$v;
+        _vm.$set(_vm.data, "note", $$v);
       },
-      expression: "content"
+      expression: "data.note"
     }
   })], 1), _vm._v(" "), _c("div", {
     staticClass: "pb-4 pt-4"
   }, [_c("button", {
-    staticClass: "btn btn-primary w-100"
+    staticClass: "btn btn-primary w-100",
+    on: {
+      click: function click($event) {
+        $event.preventDefault();
+        return _vm.editTrial();
+      }
+    }
   }, [_vm._v(" IZMENI ROČIŠTE   "), _c("i", {
     staticClass: "fa fa-spinner",
     attrs: {
       "aria-hidden": "true"
     }
-  })])])])])])])])])])])]), _vm._v(" "), _c("br"), _c("br")])], 1);
+  })])]), _vm._v(" "), _c("div", [_c("button", {
+    staticClass: "btn btn-danger w-100",
+    on: {
+      click: function click($event) {
+        $event.preventDefault();
+        return _vm.deleteTrial();
+      }
+    }
+  }, [_vm._v("\n                                                    OBRIŠI ROČIŠTE   "), _c("i", {
+    staticClass: "fa fa-trash",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  })])])]) : _vm._e()], 1)])])])])])])]), _vm._v(" "), _c("br"), _c("br")])], 1);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -9827,21 +10077,35 @@ var render = function render() {
     staticClass: "form-group search-font-size-modal"
   }, [_c("label", [_vm._v("SUD")]), _vm._v(" "), _c("v-select", {
     attrs: {
-      options: _vm.data,
+      options: [],
       id: "courts",
       label: "name",
       placeholder: "SUD",
       disabled: true
+    },
+    model: {
+      value: _vm.data.institution,
+      callback: function callback($$v) {
+        _vm.$set(_vm.data, "institution", $$v);
+      },
+      expression: "data.institution"
     }
   })], 1), _vm._v(" "), _c("div", {
     staticClass: "form-group search-font-size-modal"
   }, [_c("label", [_vm._v("ZADUŽENI")]), _vm._v(" "), _c("v-select", {
     attrs: {
-      options: _vm.data,
+      options: [],
       id: "responsible",
       label: "name",
       placeholder: "ZADUŽENI",
       disabled: true
+    },
+    model: {
+      value: _vm.data.user,
+      callback: function callback($$v) {
+        _vm.$set(_vm.data, "user", $$v);
+      },
+      expression: "data.user"
     }
   })], 1), _vm._v(" "), _c("div", {
     staticClass: "form-group"
@@ -9850,12 +10114,56 @@ var render = function render() {
       "for": "number_court"
     }
   }, [_vm._v("BROJ U KANCELARIJI")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.data.numberOffice,
+      expression: "data.numberOffice"
+    }],
     staticClass: "form-control",
     attrs: {
       type: "text",
       disabled: true,
       id: "number_court",
       placeholder: "BROJ U KANCELARIJI"
+    },
+    domProps: {
+      value: _vm.data.numberOffice
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.data, "numberOffice", $event.target.value);
+      }
+    }
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "form-group"
+  }, [_c("label", {
+    attrs: {
+      "for": "number_institutions"
+    }
+  }, [_vm._v("BROJ U INSTITUCIJI")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.data.numberInstitution,
+      expression: "data.numberInstitution"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      id: "number_institutions",
+      placeholder: "BROJ U KANCELARIJI",
+      disabled: ""
+    },
+    domProps: {
+      value: _vm.data.numberInstitution
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.data, "numberInstitution", $event.target.value);
+      }
     }
   })]), _vm._v(" "), _c("div", {
     staticClass: "form-group"
@@ -9864,12 +10172,27 @@ var render = function render() {
       "for": "client1"
     }
   }, [_vm._v("STRANKA 1")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.data.prosecutor,
+      expression: "data.prosecutor"
+    }],
     staticClass: "form-control",
     attrs: {
       type: "text",
       disabled: true,
       id: "client1",
       placeholder: "STRANKA 1"
+    },
+    domProps: {
+      value: _vm.data.prosecutor
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.data, "prosecutor", $event.target.value);
+      }
     }
   })]), _vm._v(" "), _c("div", {
     staticClass: "form-group"
@@ -9878,12 +10201,27 @@ var render = function render() {
       "for": "client2"
     }
   }, [_vm._v("STRANKA 2")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.data.defendants,
+      expression: "data.defendants"
+    }],
     staticClass: "form-control",
     attrs: {
       type: "text",
       disabled: true,
       id: "client2",
       placeholder: "STRANKA 2"
+    },
+    domProps: {
+      value: _vm.data.defendants
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.data, "defendants", $event.target.value);
+      }
     }
   })]), _vm._v(" "), _c("div", {
     staticClass: "pb-3"
@@ -9902,11 +10240,11 @@ var render = function render() {
       placeholder: "VREME"
     },
     model: {
-      value: _vm.date,
+      value: _vm.data.time,
       callback: function callback($$v) {
-        _vm.date = $$v;
+        _vm.$set(_vm.data, "time", $$v);
       },
-      expression: "date"
+      expression: "data.time"
     }
   })], 1)]), _vm._v(" "), _c("div", {
     staticClass: "form-group"
@@ -9921,11 +10259,11 @@ var render = function render() {
       editorToolbar: _vm.customToolbar
     },
     model: {
-      value: _vm.content,
+      value: _vm.data.note,
       callback: function callback($$v) {
-        _vm.content = $$v;
+        _vm.$set(_vm.data, "note", $$v);
       },
-      expression: "content"
+      expression: "data.note"
     }
   })], 1)])])])])])])])])]), _vm._v(" "), _c("br"), _c("br")])], 1);
 };

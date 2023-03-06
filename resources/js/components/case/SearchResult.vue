@@ -404,7 +404,8 @@ export default {
         this.$root.$on("addEditedCaseInArray", (data) => {
             if (typeof this.allCases[data.caseIndex] !== "undefined") {
                 this.allCases = this.allCases.map((x, indexMap) => (data.caseIndex === indexMap) ? data.caseData : x)
-
+                this.getInstitutionsForSearch();
+                this.getPersons();
             }
         })
 
@@ -412,7 +413,9 @@ export default {
             if (typeof this.allCases[caseIndex] !== "undefined") {
 
                 this.allCases.splice(caseIndex, 1);
-
+                if( this.allCases.length < 1){
+                    this.allCases = false;
+                }
             }
         })
     }

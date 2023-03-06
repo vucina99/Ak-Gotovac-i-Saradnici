@@ -66,7 +66,6 @@ class TrialController extends Controller
         $search = (object)$request->search;
         $page = $request->page;
         $trial = _Trial::where('date', $request->selected_date);
-        $count = ceil($trial->count() / $numberData);
         if ($search->institution !== '' && $search->institution !== null) {
             $trial = $trial->where('institution_id', $search->institution['id']);
         }
@@ -83,7 +82,7 @@ class TrialController extends Controller
         if ($search->person_2 !== '' && $search->person_2 !== null) {
             $trial = $trial->where('defendants', 'LIKE', '%' . $search->person_2['defendants'] . '%');
         }
-
+        $count = ceil($trial->count() / $numberData);
         $trial = $trial->skip($page * $numberData)->take($numberData)->get();
         return response(['data' => TrialResource::collection($trial), 'count' => $count]);
     }
@@ -92,11 +91,33 @@ class TrialController extends Controller
     public function getPersons(Request $request)
     {
         $tirals = _Trial::where('date', $request->selected_date);
-
-
         $person_1_list = (array)$tirals->select('prosecutor')->where("prosecutor", "!=", null)->distinct('prosecutor')->get()->toArray();
         $person_2_list = (array)$tirals->select('defendants')->where("defendants", "!=", null)->distinct('defendants')->get()->toArray();
         return response(['person_1_list' => $person_1_list, 'person_2_list' => $person_2_list]);
     }
 
+    public function updateTrial(Request $request, $id){
+        $trial = _Trial::find($id);
+
+        if(!$trial){
+            return response('slucaj ne postoji' , 404);
+        }
+
+       $editedTrial =  $this->trial->edit($trial, $request);
+
+        return response(new TrialResource($editedTrial), 200);
+    }
+
+
+    public function deleteTrial($id){
+        $trial = _Trial::find($id);
+
+        if(!$trial){
+            return response('slucaj ne postoji' , 404);
+        }
+
+        $trial->delete();
+
+        return response('{}' , 204);
+    }
 }
