@@ -178,8 +178,8 @@
                                 <td @click.prevent="modalShowCase(data.id)"><i
                                     class="fa color-blue fa-arrow-circle-o-right"
                                     aria-hidden="true"></i></td>
-                                <td @click.prevent="modalShowCase(data.id)">{{ data.numberInstitution }}</td>
                                 <td @click.prevent="modalShowCase(data.id)">{{ data.numberOffice }}</td>
+                                <td @click.prevent="modalShowCase(data.id)">{{ data.numberInstitution }}</td>
                                 <td @click.prevent="modalShowCase(data.id)">{{ data.prosecutor }}</td>
                                 <td v-if="type == 1 || type == 2 || type == 4 || type == 5  "
                                     @click.prevent="modalShowCase(data.id)">{{ data.defendants }}
@@ -221,28 +221,31 @@
                             </tbody>
                         </table>
 
-                        <br>
-                        <nav aria-label="Page navigation example" v-if="paginateCount > 1 ">
-                            <ul class="pagination justify-content-center">
-                                <li v-if=" page !== 0" :class="[ page == 0 ? 'disabled' : '' ,  'page-item'  ]"
-                                    @click.prevent="getCase(page - 1)">
-                                    <a class="page-link one" href="#" tabindex="-1"><i class="fa fa-chevron-left"
-                                                                                       aria-hidden="true"></i>
-                                    </a>
-                                </li>
-                                <li v-for="index in paginateCount" :key="index"
-                                    @click.prevent="getCase(index-1)"
-                                    :class="[page == index-1 ? 'active' : '' ,'page-item']"><a
-                                    class="page-link number" href="#">{{ index }}</a></li>
-                                <li v-if=" page !== paginateCount - 1 "
-                                    :class="[ page == paginateCount - 1 ? 'disabled' : '' ,  'page-item'  ]"
-                                    @click.prevent="getCase(page + 1)">
-                                    <a class="page-link one" href="#"><i class="fa fa-chevron-right"
-                                                                         aria-hidden="true"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
+
+                    </div>
+                    <br>
+                    <div class="paginationScroll" >
+                    <nav aria-label="Page navigation example" class="w-100" v-if="paginateCount > 1 ">
+                        <ul class="pagination ">
+                            <li v-if=" page !== 0" :class="[ page == 0 ? 'disabled' : '' ,  'page-item'  ]"
+                                @click.prevent="getCase(page - 1)">
+                                <a class="page-link one" href="#" tabindex="-1"><i class="fa fa-chevron-left"
+                                                                                   aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            <li v-for="index in paginateCount" :key="index"
+                                @click.prevent="getCase(index-1)"
+                                :class="[page == index-1 ? 'active' : '' ,'page-item']"><a
+                                class="page-link number" href="#">{{ index }}</a></li>
+                            <li v-if=" page !== paginateCount - 1 "
+                                :class="[ page == paginateCount - 1 ? 'disabled' : '' ,  'page-item'  ]"
+                                @click.prevent="getCase(page + 1)">
+                                <a class="page-link one" href="#"><i class="fa fa-chevron-right"
+                                                                     aria-hidden="true"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
                     </div>
                 </div>
             </div>

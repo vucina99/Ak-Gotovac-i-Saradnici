@@ -52,7 +52,7 @@ class _Trial extends Model
             'institution_id' => $institutionID,
             'note' => $request->note,
             'date' => $request->date,
-            'time' => $request->time ? date('H:i', strtotime(Carbon::parse($request->time)->addHour())) : null,
+            'time' => $request->time ? date('H:i', strtotime(Carbon::parse($request->time)->addHours(2))) : null,
         ]);
 
         return response($trial->refresh(), 201);
@@ -77,7 +77,7 @@ class _Trial extends Model
             'institution_id' => $institutionID,
             'note' => $request->note,
             'date' => $request->date,
-            'time' => $request->time ? date('H:i', strtotime(Carbon::parse($request->time)->addHour())) : null,
+            'time' => $request->time ? date('H:i', strtotime(Carbon::parse($request->time)->addHours(2))) : null,
         ]);
 
         return $trial;

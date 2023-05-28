@@ -7413,8 +7413,8 @@ var render = function render() {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: _vm.dataCase.number_court,
-      expression: "dataCase.number_court"
+      value: _vm.dataCase.number_office,
+      expression: "dataCase.number_office"
     }],
     staticClass: "form-control",
     attrs: {
@@ -7423,12 +7423,12 @@ var render = function render() {
       placeholder: "BROJ U KANCELARIJI"
     },
     domProps: {
-      value: _vm.dataCase.number_court
+      value: _vm.dataCase.number_office
     },
     on: {
       input: function input($event) {
         if ($event.target.composing) return;
-        _vm.$set(_vm.dataCase, "number_court", $event.target.value);
+        _vm.$set(_vm.dataCase, "number_office", $event.target.value);
       }
     }
   })]), _vm._v(" "), _c("div", {
@@ -7461,8 +7461,8 @@ var render = function render() {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: _vm.dataCase.number_office,
-      expression: "dataCase.number_office"
+      value: _vm.dataCase.number_court,
+      expression: "dataCase.number_court "
     }],
     staticClass: "form-control",
     attrs: {
@@ -7471,12 +7471,12 @@ var render = function render() {
       placeholder: _vm.type == 1 ? "BROJ U SUDU" : _vm.type == 2 ? "BROJ U SUDU/TUŽILAŠTVU" : _vm.type == 3 ? "BROJ U SUDU" : _vm.type == 4 ? "BROJ  U SUDU  /  KOD IZVRŠITELJA " : _vm.type == 5 ? "BROJ U OSIGURANJU" : _vm.type == 6 ? "SLUŽBENI BROJ" : ""
     },
     domProps: {
-      value: _vm.dataCase.number_office
+      value: _vm.dataCase.number_court
     },
     on: {
       input: function input($event) {
         if ($event.target.composing) return;
-        _vm.$set(_vm.dataCase, "number_office", $event.target.value);
+        _vm.$set(_vm.dataCase, "number_court", $event.target.value);
       }
     }
   })]), _vm._v(" "), _c("div", {
@@ -8433,14 +8433,14 @@ var render = function render() {
           return _vm.modalShowCase(data.id);
         }
       }
-    }, [_vm._v(_vm._s(data.numberInstitution))]), _vm._v(" "), _c("td", {
+    }, [_vm._v(_vm._s(data.numberOffice))]), _vm._v(" "), _c("td", {
       on: {
         click: function click($event) {
           $event.preventDefault();
           return _vm.modalShowCase(data.id);
         }
       }
-    }, [_vm._v(_vm._s(data.numberOffice))]), _vm._v(" "), _c("td", {
+    }, [_vm._v(_vm._s(data.numberInstitution))]), _vm._v(" "), _c("td", {
       on: {
         click: function click($event) {
           $event.preventDefault();
@@ -8503,12 +8503,15 @@ var render = function render() {
     attrs: {
       colspan: "5"
     }
-  }, [_c("span", [_vm._v("NEMA PODATAKA ZA PRIKAZ")])]) : _vm._e()]) : _vm._e()], 2)]), _vm._v(" "), _c("br"), _vm._v(" "), _vm.paginateCount > 1 ? _c("nav", {
+  }, [_c("span", [_vm._v("NEMA PODATAKA ZA PRIKAZ")])]) : _vm._e()]) : _vm._e()], 2)])]), _vm._v(" "), _c("br"), _vm._v(" "), _c("div", {
+    staticClass: "paginationScroll"
+  }, [_vm.paginateCount > 1 ? _c("nav", {
+    staticClass: "w-100",
     attrs: {
       "aria-label": "Page navigation example"
     }
   }, [_c("ul", {
-    staticClass: "pagination justify-content-center"
+    staticClass: "pagination"
   }, [_vm.page !== 0 ? _c("li", {
     "class": [_vm.page == 0 ? "disabled" : "", "page-item"],
     on: {
@@ -9135,7 +9138,7 @@ var render = function render() {
     attrs: {
       type: "text",
       id: "number_institutions",
-      placeholder: "BROJ U KANCELARIJI"
+      placeholder: "BROJ U INSTITUCIJI"
     },
     domProps: {
       value: _vm.trialData.number_institution
@@ -9525,7 +9528,7 @@ var render = function render() {
           return _vm.modalShowTrial(trial);
         }
       }
-    }, [_vm._v(_vm._s(trial.numberOffice))]), _vm._v(" "), _c("td", {
+    }, [_vm._v(_vm._s((_trial$institution = trial.institution) === null || _trial$institution === void 0 ? void 0 : _trial$institution.name))]), _vm._v(" "), _c("td", {
       on: {
         click: function click($event) {
           $event.preventDefault();
@@ -9546,7 +9549,7 @@ var render = function render() {
           return _vm.modalShowTrial(trial);
         }
       }
-    }, [_vm._v(_vm._s((_trial$institution = trial.institution) === null || _trial$institution === void 0 ? void 0 : _trial$institution.name))]), _vm._v(" "), _c("td", {
+    }, [_vm._v(_vm._s(trial.numberOffice))]), _vm._v(" "), _c("td", {
       on: {
         click: function click($event) {
           $event.preventDefault();
@@ -9566,16 +9569,19 @@ var render = function render() {
   }, [_c("td", {
     staticClass: "text-center",
     attrs: {
-      colspan: "7"
+      colspan: "8"
     }
   }, [_c("vue-simple-spinner")], 1)]) : _vm._e(), _vm._v(" "), !_vm.allTrial ? _c("tr", {
     staticClass: "bg-light"
-  }, [_vm._m(3)]) : _vm._e()], 2)]), _vm._v(" "), _c("br"), _vm._v(" "), _vm.paginateCount > 1 ? _c("nav", {
+  }, [_vm._m(3)]) : _vm._e()], 2)]), _vm._v(" "), _c("br")]), _vm._v(" "), _c("div", {
+    staticClass: "paginationScroll"
+  }, [_vm.paginateCount > 1 ? _c("nav", {
+    staticClass: "w-100",
     attrs: {
       "aria-label": "Page navigation example"
     }
   }, [_c("ul", {
-    staticClass: "pagination justify-content-center"
+    staticClass: "pagination"
   }, [_vm.page !== 0 ? _c("li", {
     "class": [_vm.page == 0 ? "disabled" : "", "page-item"],
     on: {
@@ -9624,7 +9630,7 @@ var staticRenderFns = [function () {
     _c = _vm._self._c;
   return _c("thead", {
     staticClass: "bg-blue text-personal-light"
-  }, [_c("tr", [_c("th"), _vm._v(" "), _c("th", [_vm._v("VREME")]), _vm._v(" "), _c("th", [_vm._v("BROJ U KANCELARIJI")]), _vm._v(" "), _c("th", [_vm._v("STRANKA 1")]), _vm._v(" "), _c("th", [_vm._v("STRANKA 2")]), _vm._v(" "), _c("th", [_vm._v("INSTITUCIJA")]), _vm._v(" "), _c("th", [_vm._v("ZAPOSLENI")]), _vm._v(" "), _c("th", [_vm._v("IZMENI")])])]);
+  }, [_c("tr", [_c("th"), _vm._v(" "), _c("th", [_vm._v("VREME")]), _vm._v(" "), _c("th", [_vm._v("INSTITUCIJA")]), _vm._v(" "), _c("th", [_vm._v("STRANKA 1")]), _vm._v(" "), _c("th", [_vm._v("STRANKA 2")]), _vm._v(" "), _c("th", [_vm._v("BROJ U KANCELARIJI")]), _vm._v(" "), _c("th", [_vm._v("ZAPOSLENI")]), _vm._v(" "), _c("th", [_vm._v("IZMENI")])])]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
@@ -9642,7 +9648,7 @@ var staticRenderFns = [function () {
   return _c("td", {
     staticClass: "text-center",
     attrs: {
-      colspan: "7"
+      colspan: "8"
     }
   }, [_c("span", [_vm._v("NEMA PODATAKA ZA PRIKAZ")])]);
 }, function () {
@@ -17864,7 +17870,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "*{\n    margin:0px;\n    padding: 0px;\n}\nbody{\n    font-family: 'Open Sans', sans-serif;\n}\n.color-blue{\n    color: rgba(0,51,102,255);\n}\n.bg-personal-light{\n    background-color: #f2f2f2\n}\n\n.text-personal-light{\n    color: #f2f2f2\n}\n.bg-blue{\n    background-color: rgba(0,51,102,255);\n}\n.border-blue{\n    border-bottom: 0.5px solid rgba(0,51,102,255);\n}\n.border-blue-full{\n    border: 0.5px solid rgba(0,51,102,255);\n}\n\n.border-light-full{\n    border: 1px solid #ffffff;\n}\n.nav-link{\n    font-size: 13px;\n}\n#gotovac-logo{\n    width: 250px;\n}\n.navbar-toggler-icon i {\n    font-size: 31px;\n}\n\n.navbar-toggler:focus {\n    outline : none;\n}\nmain {\n    min-height: 92vh\n}\nfooter {\n    background-color: rgba(0,51,102,255);\n    border-top: 0.5px solid #ffffff;\n\n}\nfooter p{\n    font-size: 13px;\n}\n.setHeight{\n    min-height: 92vh;\n}\n.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {\n    background-color: rgba(0,51,102,255) !important;\n    border-color: rgba(0,51,102,255) !important ;\n}\n.withoutStricke{\n    text-decoration: none !important;\n}\n.small-text{\n    font-size: 13px;\n}\n.file-small-text{\n    font-size: 18px !important;\n}\n.down-margin{\n    margin-top:6.8px;\n}\n\n.border-blue button {\n    font-size: 13.5px;\n}\n.border-blue label {\n    font-size: 14px;\n}\n.options{\n    padding: 150px 0px ;\n    background-color: rgba(0,51,102,255);\n    color:#f2f2f2 ;\n    transition: 0.8s ease;\n    width: 100%;\n    cursor: pointer;\n}\n.options:hover{\n    background-color:#f2f2f2 ;\n    color:rgba(0,51,102,255) ;\n    border: 1px solid rgba(0,51,102,255);\n    transition: 1s ease;\n}\n\n.table-text-size tr th{\n    text-align: center;\n    vertical-align: middle;\n}\n.table-text-size tr td{\n    border-right: 1px solid #f2f2f2 !important;\n    text-align: center;\n    vertical-align: middle;\n}\n.search-font-size label{\n    font-size: 11px;\n    margin-left: 12px;\n}\n.search-font-size input{\n    font-size: 12px !important;\n}\n.type{\n    font-size: 11px !important;\n}\n.search-font-size ::placeholder{\n    font-size: 11px;\n}\n\n.add-form-modal ::placeholder {\n    font-size: 12px;\n}\n.add-form-modal label{\n    font-size: 12px;\n    margin-left: 12px;\n}\n.add-form-modal input{\n    font-size: 12px ;\n}\n.search-font-size-modal label{\n    font-size: 12px;\n}\n.search-font-size-modal input{\n    font-size: 12px !important;\n}\n.search-font-size-modal ::placeholder{\n    font-size: 12px;\n}\n.activation{ overflow: auto; }\n.vs__search{\n    padding:0.1rem  0.75rem !important;\n}\n\n.vs__dropdown-menu{\n    font-size: 12px !important;\n    border-top:  1.5px solid #f2f2f2 !important;\n}\n.vs__dropdown-menu li {\n   padding:4.5px 0px 4.5px 12px !important;\n}\n\n\n.vs__selected{\n    font-size: 12px !important;\n    padding-left: 7.5px !important;\n}\n.choose a{\n    text-decoration: none;\n}\n.table-cursor td{\n    cursor: pointer;\n}\n.table-cursor th{\n    cursor: default;\n}\n.fa-arrow-circle-o-right{\n    font-size: 15px;\n}\n.type-div-size{\n    width: 33.33%;\n    cursor: pointer;\n}\n.type-div-size:hover{\n    width: 33.33%;\n    /*background-color: rgba(0,51,102,255);*/\n    /*color: #ffffff;*/\n}\n\n.type-div-size span{\n    font-size: 13px;\n}\n.vm--modal {\n    height: auto !important;\n    overflow-x: auto;\n}\n.ql-editor p {\n    font-style: normal;\n    font-size: 12px;\n}\n.ql-editor , .ql-toolbar  {\n    background-color: #ffffff;\n}\n.fa-times{\n    cursor: pointer;\n}\n.vs__no-options{\n    color: #ffffff !important;\n}\n.mx-datepicker{\n    width: 100% !important;\n}\n.mx-calendar , .mx-calendar-panel-date{\n    width: 310px !important;\n}\n.mx-table-date div{\n    font-size: 14px !important;\n}\n.mx-input{\n    padding: .375rem .75rem !important;\n}\n.bg-white{\n   background-color: #ffffff;\n}\n.border-right-black tr td{\n    border-right: 2px solid #f2f2f2 !important;\n}\n.fc-header-toolbar , .fc-toolbar {\n    background-color:rgba(0,51,102,255) !important;\n    padding: 0px !important;\n    margin: 0px !important\n}\n.fc-col-header .fc-scrollgrid-sync-inner{\n    background-color: rgba(0,51,102,255) !important;\n    color: #ffffff !important;\n    padding: 11px 0px;\n}\n.fc .fc-daygrid-day.fc-day-today {\n    background-color: #f2f2f2 !important;\n    text-transform: uppercase;\n}\n.fc-toolbar-title{\n    color: #ffffff !important;\n    padding: 10px 0px;\n    padding-left: 10px;\n    text-transform: uppercase;\n}\n.fc-button , .fc-button-primary{\n    background-color: #f2f2f2 !important;\n    color: rgba(0,51,102,255) !important;\n    text-transform: uppercase !important;\n\n}\n.fc-col-header-cell-cushion{\n    text-transform: uppercase !important;\n}\n.fc-scrollgrid-sync-table .fc-scrollgrid-sync-inner:hover{\n    background-color: #bfbfbf !important;\n    color: #ffffff !important;\n    cursor: pointer;\n}\n.type-div-size-back{\n    width: 100% !important;\n    cursor: pointer;\n}\n.type-div-size-back span{\n    font-size: 14px !important;\n}\n.error-danger{\n    text-transform: uppercase;\n    font-size:11px;\n}\n.page-item .number  {\n    color: rgba(0,51,102,255) !important;\n}\n.page-item.active .number  {\n    background-color: rgba(0,51,102,255) !important;\n    color: #ffffff !important;\n}\n\n.page-item:first-child .one{\n    color: rgba(0,51,102,255) !important;\n}\n.page-item:last-child .one{\n    color: rgba(0,51,102,255) !important;\n}\n.page-item .page-link{\n    padding: 0.7rem 0.85rem;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "*{\n    margin:0px;\n    padding: 0px;\n}\nbody{\n    font-family: 'Open Sans', sans-serif;\n}\n.color-blue{\n    color: rgba(0,51,102,255);\n}\n.bg-personal-light{\n    background-color: #f2f2f2\n}\n\n.text-personal-light{\n    color: #f2f2f2\n}\n.bg-blue{\n    background-color: rgba(0,51,102,255);\n}\n.border-blue{\n    border-bottom: 0.5px solid rgba(0,51,102,255);\n}\n.border-blue-full{\n    border: 0.5px solid rgba(0,51,102,255);\n}\n\n.border-light-full{\n    border: 1px solid #ffffff;\n}\n.nav-link{\n    font-size: 13px;\n}\n#gotovac-logo{\n    width: 250px;\n}\n.navbar-toggler-icon i {\n    font-size: 31px;\n}\n\n.navbar-toggler:focus {\n    outline : none;\n}\nmain {\n    min-height: 92vh\n}\nfooter {\n    background-color: rgba(0,51,102,255);\n    border-top: 0.5px solid #ffffff;\n\n}\nfooter p{\n    font-size: 13px;\n}\n.setHeight{\n    min-height: 92vh;\n}\n.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {\n    background-color: rgba(0,51,102,255) !important;\n    border-color: rgba(0,51,102,255) !important ;\n}\n.withoutStricke{\n    text-decoration: none !important;\n}\n.small-text{\n    font-size: 13px;\n}\n.file-small-text{\n    font-size: 18px !important;\n}\n.down-margin{\n    margin-top:6.8px;\n}\n\n.border-blue button {\n    font-size: 13.5px;\n}\n.border-blue label {\n    font-size: 14px;\n}\n.options{\n    padding: 150px 0px ;\n    background-color: rgba(0,51,102,255);\n    color:#f2f2f2 ;\n    transition: 0.8s ease;\n    width: 100%;\n    cursor: pointer;\n}\n.options:hover{\n    background-color:#f2f2f2 ;\n    color:rgba(0,51,102,255) ;\n    border: 1px solid rgba(0,51,102,255);\n    transition: 1s ease;\n}\n\n.table-text-size tr th{\n    text-align: center;\n    vertical-align: middle;\n}\n.table-text-size tr td{\n    border-right: 1px solid #f2f2f2 !important;\n    text-align: center;\n    vertical-align: middle;\n}\n.search-font-size label{\n    font-size: 11px;\n    margin-left: 12px;\n}\n.search-font-size input{\n    font-size: 12px !important;\n}\n.type{\n    font-size: 11px !important;\n}\n.search-font-size ::placeholder{\n    font-size: 11px;\n}\n\n.add-form-modal ::placeholder {\n    font-size: 12px;\n}\n.add-form-modal label{\n    font-size: 12px;\n    margin-left: 12px;\n}\n.add-form-modal input{\n    font-size: 12px ;\n}\n.search-font-size-modal label{\n    font-size: 12px;\n}\n.search-font-size-modal input{\n    font-size: 12px !important;\n}\n.search-font-size-modal ::placeholder{\n    font-size: 12px;\n}\n.activation{ overflow: auto; }\n.vs__search{\n    padding:0.1rem  0.75rem !important;\n}\n\n.vs__dropdown-menu{\n    font-size: 12px !important;\n    border-top:  1.5px solid #f2f2f2 !important;\n}\n.vs__dropdown-menu li {\n   padding:4.5px 0px 4.5px 12px !important;\n}\n\n\n.vs__selected{\n    font-size: 12px !important;\n    padding-left: 7.5px !important;\n}\n.choose a{\n    text-decoration: none;\n}\n.table-cursor td{\n    cursor: pointer;\n}\n.table-cursor th{\n    cursor: default;\n}\n.fa-arrow-circle-o-right{\n    font-size: 15px;\n}\n.type-div-size{\n    width: 33.33%;\n    cursor: pointer;\n}\n.type-div-size:hover{\n    width: 33.33%;\n    /*background-color: rgba(0,51,102,255);*/\n    /*color: #ffffff;*/\n}\n\n.type-div-size span{\n    font-size: 13px;\n}\n.vm--modal {\n    height: auto !important;\n    overflow-x: auto;\n}\n.ql-editor p {\n    font-style: normal;\n    font-size: 12px;\n}\n.ql-editor , .ql-toolbar  {\n    background-color: #ffffff;\n}\n.fa-times{\n    cursor: pointer;\n}\n.vs__no-options{\n    color: #ffffff !important;\n}\n.mx-datepicker{\n    width: 100% !important;\n}\n.mx-calendar , .mx-calendar-panel-date{\n    width: 310px !important;\n}\n.mx-table-date div{\n    font-size: 14px !important;\n}\n.mx-input{\n    padding: .375rem .75rem !important;\n}\n.bg-white{\n   background-color: #ffffff;\n}\n.border-right-black tr td{\n    border-right: 2px solid #f2f2f2 !important;\n}\n.fc-header-toolbar , .fc-toolbar {\n    background-color:rgba(0,51,102,255) !important;\n    padding: 0px !important;\n    margin: 0px !important\n}\n.fc-col-header .fc-scrollgrid-sync-inner{\n    background-color: rgba(0,51,102,255) !important;\n    color: #ffffff !important;\n    padding: 11px 0px;\n}\n.fc .fc-daygrid-day.fc-day-today {\n    background-color: #f2f2f2 !important;\n    text-transform: uppercase;\n}\n.fc-toolbar-title{\n    color: #ffffff !important;\n    padding: 10px 0px;\n    padding-left: 10px;\n    text-transform: uppercase;\n}\n.fc-button , .fc-button-primary{\n    background-color: #f2f2f2 !important;\n    color: rgba(0,51,102,255) !important;\n    text-transform: uppercase !important;\n\n}\n.fc-col-header-cell-cushion{\n    text-transform: uppercase !important;\n}\n.fc-scrollgrid-sync-table .fc-scrollgrid-sync-inner:hover{\n    background-color: #bfbfbf !important;\n    color: #ffffff !important;\n    cursor: pointer;\n}\n.type-div-size-back{\n    width: 100% !important;\n    cursor: pointer;\n}\n.type-div-size-back span{\n    font-size: 14px !important;\n}\n.error-danger{\n    text-transform: uppercase;\n    font-size:11px;\n}\n.page-item .number  {\n    color: rgba(0,51,102,255) !important;\n}\n.page-item.active .number  {\n    background-color: rgba(0,51,102,255) !important;\n    color: #ffffff !important;\n}\n\n.page-item:first-child .one{\n    color: rgba(0,51,102,255) !important;\n}\n.page-item:last-child .one{\n    color: rgba(0,51,102,255) !important;\n}\n.page-item .page-link{\n    padding: 0.7rem 0.85rem;\n}\n\n\n.paginationScroll {\n    overflow-x: auto;\n    white-space: nowrap;\n}\n\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -18116,7 +18122,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "*{\n    margin:0px;\n    padding: 0px;\n}\nbody{\n    font-family: 'Open Sans', sans-serif;\n}\n.color-blue{\n    color: rgba(0,51,102,255);\n}\n.bg-personal-light{\n    background-color: #f2f2f2\n}\n\n.text-personal-light{\n    color: #f2f2f2\n}\n.bg-blue{\n    background-color: rgba(0,51,102,255);\n}\n.border-blue{\n    border-bottom: 0.5px solid rgba(0,51,102,255);\n}\n.border-blue-full{\n    border: 0.5px solid rgba(0,51,102,255);\n}\n\n.border-light-full{\n    border: 1px solid #ffffff;\n}\n.nav-link{\n    font-size: 13px;\n}\n#gotovac-logo{\n    width: 250px;\n}\n.navbar-toggler-icon i {\n    font-size: 31px;\n}\n\n.navbar-toggler:focus {\n    outline : none;\n}\nmain {\n    min-height: 92vh\n}\nfooter {\n    background-color: rgba(0,51,102,255);\n    border-top: 0.5px solid #ffffff;\n\n}\nfooter p{\n    font-size: 13px;\n}\n.setHeight{\n    min-height: 92vh;\n}\n.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {\n    background-color: rgba(0,51,102,255) !important;\n    border-color: rgba(0,51,102,255) !important ;\n}\n.withoutStricke{\n    text-decoration: none !important;\n}\n.small-text{\n    font-size: 13px;\n}\n.file-small-text{\n    font-size: 18px !important;\n}\n.down-margin{\n    margin-top:6.8px;\n}\n\n.border-blue button {\n    font-size: 13.5px;\n}\n.border-blue label {\n    font-size: 14px;\n}\n.options{\n    padding: 150px 0px ;\n    background-color: rgba(0,51,102,255);\n    color:#f2f2f2 ;\n    transition: 0.8s ease;\n    width: 100%;\n    cursor: pointer;\n}\n.options:hover{\n    background-color:#f2f2f2 ;\n    color:rgba(0,51,102,255) ;\n    border: 1px solid rgba(0,51,102,255);\n    transition: 1s ease;\n}\n\n.table-text-size tr th{\n    text-align: center;\n    vertical-align: middle;\n}\n.table-text-size tr td{\n    border-right: 1px solid #f2f2f2 !important;\n    text-align: center;\n    vertical-align: middle;\n}\n.search-font-size label{\n    font-size: 11px;\n    margin-left: 12px;\n}\n.search-font-size input{\n    font-size: 12px !important;\n}\n.type{\n    font-size: 11px !important;\n}\n.search-font-size ::placeholder{\n    font-size: 11px;\n}\n\n.add-form-modal ::placeholder {\n    font-size: 12px;\n}\n.add-form-modal label{\n    font-size: 12px;\n    margin-left: 12px;\n}\n.add-form-modal input{\n    font-size: 12px ;\n}\n.search-font-size-modal label{\n    font-size: 12px;\n}\n.search-font-size-modal input{\n    font-size: 12px !important;\n}\n.search-font-size-modal ::placeholder{\n    font-size: 12px;\n}\n.activation{ overflow: auto; }\n.vs__search{\n    padding:0.1rem  0.75rem !important;\n}\n\n.vs__dropdown-menu{\n    font-size: 12px !important;\n    border-top:  1.5px solid #f2f2f2 !important;\n}\n.vs__dropdown-menu li {\n   padding:4.5px 0px 4.5px 12px !important;\n}\n\n\n.vs__selected{\n    font-size: 12px !important;\n    padding-left: 7.5px !important;\n}\n.choose a{\n    text-decoration: none;\n}\n.table-cursor td{\n    cursor: pointer;\n}\n.table-cursor th{\n    cursor: default;\n}\n.fa-arrow-circle-o-right{\n    font-size: 15px;\n}\n.type-div-size{\n    width: 33.33%;\n    cursor: pointer;\n}\n.type-div-size:hover{\n    width: 33.33%;\n    /*background-color: rgba(0,51,102,255);*/\n    /*color: #ffffff;*/\n}\n\n.type-div-size span{\n    font-size: 13px;\n}\n.vm--modal {\n    height: auto !important;\n    overflow-x: auto;\n}\n.ql-editor p {\n    font-style: normal;\n    font-size: 12px;\n}\n.ql-editor , .ql-toolbar  {\n    background-color: #ffffff;\n}\n.fa-times{\n    cursor: pointer;\n}\n.vs__no-options{\n    color: #ffffff !important;\n}\n.mx-datepicker{\n    width: 100% !important;\n}\n.mx-calendar , .mx-calendar-panel-date{\n    width: 310px !important;\n}\n.mx-table-date div{\n    font-size: 14px !important;\n}\n.mx-input{\n    padding: .375rem .75rem !important;\n}\n.bg-white{\n   background-color: #ffffff;\n}\n.border-right-black tr td{\n    border-right: 2px solid #f2f2f2 !important;\n}\n.fc-header-toolbar , .fc-toolbar {\n    background-color:rgba(0,51,102,255) !important;\n    padding: 0px !important;\n    margin: 0px !important\n}\n.fc-col-header .fc-scrollgrid-sync-inner{\n    background-color: rgba(0,51,102,255) !important;\n    color: #ffffff !important;\n    padding: 11px 0px;\n}\n.fc .fc-daygrid-day.fc-day-today {\n    background-color: #f2f2f2 !important;\n    text-transform: uppercase;\n}\n.fc-toolbar-title{\n    color: #ffffff !important;\n    padding: 10px 0px;\n    padding-left: 10px;\n    text-transform: uppercase;\n}\n.fc-button , .fc-button-primary{\n    background-color: #f2f2f2 !important;\n    color: rgba(0,51,102,255) !important;\n    text-transform: uppercase !important;\n\n}\n.fc-col-header-cell-cushion{\n    text-transform: uppercase !important;\n}\n.fc-scrollgrid-sync-table .fc-scrollgrid-sync-inner:hover{\n    background-color: #bfbfbf !important;\n    color: #ffffff !important;\n    cursor: pointer;\n}\n.type-div-size-back{\n    width: 100% !important;\n    cursor: pointer;\n}\n.type-div-size-back span{\n    font-size: 14px !important;\n}\n.error-danger{\n    text-transform: uppercase;\n    font-size:11px;\n}\n.page-item .number  {\n    color: rgba(0,51,102,255) !important;\n}\n.page-item.active .number  {\n    background-color: rgba(0,51,102,255) !important;\n    color: #ffffff !important;\n}\n\n.page-item:first-child .one{\n    color: rgba(0,51,102,255) !important;\n}\n.page-item:last-child .one{\n    color: rgba(0,51,102,255) !important;\n}\n.page-item .page-link{\n    padding: 0.7rem 0.85rem;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "*{\n    margin:0px;\n    padding: 0px;\n}\nbody{\n    font-family: 'Open Sans', sans-serif;\n}\n.color-blue{\n    color: rgba(0,51,102,255);\n}\n.bg-personal-light{\n    background-color: #f2f2f2\n}\n\n.text-personal-light{\n    color: #f2f2f2\n}\n.bg-blue{\n    background-color: rgba(0,51,102,255);\n}\n.border-blue{\n    border-bottom: 0.5px solid rgba(0,51,102,255);\n}\n.border-blue-full{\n    border: 0.5px solid rgba(0,51,102,255);\n}\n\n.border-light-full{\n    border: 1px solid #ffffff;\n}\n.nav-link{\n    font-size: 13px;\n}\n#gotovac-logo{\n    width: 250px;\n}\n.navbar-toggler-icon i {\n    font-size: 31px;\n}\n\n.navbar-toggler:focus {\n    outline : none;\n}\nmain {\n    min-height: 92vh\n}\nfooter {\n    background-color: rgba(0,51,102,255);\n    border-top: 0.5px solid #ffffff;\n\n}\nfooter p{\n    font-size: 13px;\n}\n.setHeight{\n    min-height: 92vh;\n}\n.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {\n    background-color: rgba(0,51,102,255) !important;\n    border-color: rgba(0,51,102,255) !important ;\n}\n.withoutStricke{\n    text-decoration: none !important;\n}\n.small-text{\n    font-size: 13px;\n}\n.file-small-text{\n    font-size: 18px !important;\n}\n.down-margin{\n    margin-top:6.8px;\n}\n\n.border-blue button {\n    font-size: 13.5px;\n}\n.border-blue label {\n    font-size: 14px;\n}\n.options{\n    padding: 150px 0px ;\n    background-color: rgba(0,51,102,255);\n    color:#f2f2f2 ;\n    transition: 0.8s ease;\n    width: 100%;\n    cursor: pointer;\n}\n.options:hover{\n    background-color:#f2f2f2 ;\n    color:rgba(0,51,102,255) ;\n    border: 1px solid rgba(0,51,102,255);\n    transition: 1s ease;\n}\n\n.table-text-size tr th{\n    text-align: center;\n    vertical-align: middle;\n}\n.table-text-size tr td{\n    border-right: 1px solid #f2f2f2 !important;\n    text-align: center;\n    vertical-align: middle;\n}\n.search-font-size label{\n    font-size: 11px;\n    margin-left: 12px;\n}\n.search-font-size input{\n    font-size: 12px !important;\n}\n.type{\n    font-size: 11px !important;\n}\n.search-font-size ::placeholder{\n    font-size: 11px;\n}\n\n.add-form-modal ::placeholder {\n    font-size: 12px;\n}\n.add-form-modal label{\n    font-size: 12px;\n    margin-left: 12px;\n}\n.add-form-modal input{\n    font-size: 12px ;\n}\n.search-font-size-modal label{\n    font-size: 12px;\n}\n.search-font-size-modal input{\n    font-size: 12px !important;\n}\n.search-font-size-modal ::placeholder{\n    font-size: 12px;\n}\n.activation{ overflow: auto; }\n.vs__search{\n    padding:0.1rem  0.75rem !important;\n}\n\n.vs__dropdown-menu{\n    font-size: 12px !important;\n    border-top:  1.5px solid #f2f2f2 !important;\n}\n.vs__dropdown-menu li {\n   padding:4.5px 0px 4.5px 12px !important;\n}\n\n\n.vs__selected{\n    font-size: 12px !important;\n    padding-left: 7.5px !important;\n}\n.choose a{\n    text-decoration: none;\n}\n.table-cursor td{\n    cursor: pointer;\n}\n.table-cursor th{\n    cursor: default;\n}\n.fa-arrow-circle-o-right{\n    font-size: 15px;\n}\n.type-div-size{\n    width: 33.33%;\n    cursor: pointer;\n}\n.type-div-size:hover{\n    width: 33.33%;\n    /*background-color: rgba(0,51,102,255);*/\n    /*color: #ffffff;*/\n}\n\n.type-div-size span{\n    font-size: 13px;\n}\n.vm--modal {\n    height: auto !important;\n    overflow-x: auto;\n}\n.ql-editor p {\n    font-style: normal;\n    font-size: 12px;\n}\n.ql-editor , .ql-toolbar  {\n    background-color: #ffffff;\n}\n.fa-times{\n    cursor: pointer;\n}\n.vs__no-options{\n    color: #ffffff !important;\n}\n.mx-datepicker{\n    width: 100% !important;\n}\n.mx-calendar , .mx-calendar-panel-date{\n    width: 310px !important;\n}\n.mx-table-date div{\n    font-size: 14px !important;\n}\n.mx-input{\n    padding: .375rem .75rem !important;\n}\n.bg-white{\n   background-color: #ffffff;\n}\n.border-right-black tr td{\n    border-right: 2px solid #f2f2f2 !important;\n}\n.fc-header-toolbar , .fc-toolbar {\n    background-color:rgba(0,51,102,255) !important;\n    padding: 0px !important;\n    margin: 0px !important\n}\n.fc-col-header .fc-scrollgrid-sync-inner{\n    background-color: rgba(0,51,102,255) !important;\n    color: #ffffff !important;\n    padding: 11px 0px;\n}\n.fc .fc-daygrid-day.fc-day-today {\n    background-color: #f2f2f2 !important;\n    text-transform: uppercase;\n}\n.fc-toolbar-title{\n    color: #ffffff !important;\n    padding: 10px 0px;\n    padding-left: 10px;\n    text-transform: uppercase;\n}\n.fc-button , .fc-button-primary{\n    background-color: #f2f2f2 !important;\n    color: rgba(0,51,102,255) !important;\n    text-transform: uppercase !important;\n\n}\n.fc-col-header-cell-cushion{\n    text-transform: uppercase !important;\n}\n.fc-scrollgrid-sync-table .fc-scrollgrid-sync-inner:hover{\n    background-color: #bfbfbf !important;\n    color: #ffffff !important;\n    cursor: pointer;\n}\n.type-div-size-back{\n    width: 100% !important;\n    cursor: pointer;\n}\n.type-div-size-back span{\n    font-size: 14px !important;\n}\n.error-danger{\n    text-transform: uppercase;\n    font-size:11px;\n}\n.page-item .number  {\n    color: rgba(0,51,102,255) !important;\n}\n.page-item.active .number  {\n    background-color: rgba(0,51,102,255) !important;\n    color: #ffffff !important;\n}\n\n.page-item:first-child .one{\n    color: rgba(0,51,102,255) !important;\n}\n.page-item:last-child .one{\n    color: rgba(0,51,102,255) !important;\n}\n.page-item .page-link{\n    padding: 0.7rem 0.85rem;\n}\n\n\n.paginationScroll {\n    overflow-x: auto;\n    white-space: nowrap;\n}\n\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

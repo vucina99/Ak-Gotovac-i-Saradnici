@@ -106,10 +106,10 @@
                                 <tr>
                                     <th></th>
                                     <th>VREME</th>
-                                    <th>BROJ U KANCELARIJI</th>
+                                    <th>INSTITUCIJA</th>
                                     <th>STRANKA 1</th>
                                     <th>STRANKA 2</th>
-                                    <th>INSTITUCIJA</th>
+                                    <th>BROJ U KANCELARIJI</th>
                                     <th>ZAPOSLENI</th>
                                     <th>IZMENI</th>
 
@@ -122,10 +122,10 @@
                                     <td @click.prevent="modalShowTrial(trial)">
                                         {{ trial.time ? trial.time.slice(0, 5) : '' }}
                                     </td>
-                                    <td @click.prevent="modalShowTrial(trial)">{{ trial.numberOffice }}</td>
+                                    <td @click.prevent="modalShowTrial(trial)">{{ trial.institution?.name }}</td>
                                     <td @click.prevent="modalShowTrial(trial)">{{ trial.prosecutor }}</td>
                                     <td @click.prevent="modalShowTrial(trial)">{{ trial.defendants }}</td>
-                                    <td @click.prevent="modalShowTrial(trial)">{{ trial.institution?.name }}</td>
+                                    <td @click.prevent="modalShowTrial(trial)">{{ trial.numberOffice }}</td>
                                     <td @click.prevent="modalShowTrial(trial)">{{ trial.user?.name }}</td>
                                     <td @click.prevent="modalEditTrial(trial, index)">
                                         <div class="w-100"><i class="fa color-blue fa fa-pencil" aria-hidden="true"></i>
@@ -134,13 +134,13 @@
                                 </tr>
                                 <tr v-if="allTrial.length < 1" class="bg-light">
 
-                                    <td colspan="7" class="text-center">
+                                    <td colspan="8" class="text-center">
                                         <vue-simple-spinner></vue-simple-spinner>
                                     </td>
                                 </tr>
                                 <tr v-if="!allTrial  " class="bg-light">
 
-                                    <td colspan="7"
+                                    <td colspan="8"
                                         class="text-center">
                                         <span>NEMA PODATAKA ZA PRIKAZ</span></td>
 
@@ -149,8 +149,11 @@
                                 </tbody>
                             </table>
                             <br>
-                            <nav aria-label="Page navigation example" v-if="paginateCount > 1 ">
-                                <ul class="pagination justify-content-center">
+
+                        </div>
+                        <div class="paginationScroll" >
+                            <nav aria-label="Page navigation example" class="w-100" v-if="paginateCount > 1 ">
+                                <ul class="pagination ">
                                     <li v-if=" page !== 0" :class="[ page == 0 ? 'disabled' : '' ,  'page-item'  ]"
                                         @click.prevent="getTrials(page - 1)">
                                         <a class="page-link one" href="#" tabindex="-1"><i class="fa fa-chevron-left"

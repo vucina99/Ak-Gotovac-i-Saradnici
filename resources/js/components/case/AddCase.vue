@@ -67,7 +67,7 @@
                                                 <div class="form-group">
                                                     <label for="number_court">BROJ U KANCELARIJI</label>
                                                     <input type="text" class="form-control"
-                                                           v-model="dataCase.number_court" id="number_court"
+                                                           v-model="dataCase.number_office" id="number_court"
                                                            placeholder="BROJ U KANCELARIJI">
                                                 </div>
                                                 <div class="form-group">
@@ -82,7 +82,7 @@
                                                     <label v-if="type == 6" for="number_office">SLUŽBENI BROJ</label>
 
                                                     <input type="text" class="form-control"
-                                                           v-model="dataCase.number_office" id="number_office"
+                                                           v-model="dataCase.number_court " id="number_office"
                                                            :placeholder="
                                                         type == 1 ? 'BROJ U SUDU' :
                                                         type == 2 ? 'BROJ U SUDU/TUŽILAŠTVU' :

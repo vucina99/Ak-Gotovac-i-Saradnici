@@ -9,6 +9,7 @@ use App\Models\Institution;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class TrialController extends Controller
@@ -83,7 +84,7 @@ class TrialController extends Controller
             $trial = $trial->where('defendants', 'LIKE', '%' . $search->person_2['defendants'] . '%');
         }
         $count = ceil($trial->count() / $numberData);
-        $trial = $trial->skip($page * $numberData)->take($numberData)->get();
+        $trial = $trial->orderBy(DB::raw('CAST(TIME(time) AS UNSIGNED)'), 'ASC')->skip($page * $numberData)->take($numberData)->get();
         return response(['data' => TrialResource::collection($trial), 'count' => $count]);
     }
 

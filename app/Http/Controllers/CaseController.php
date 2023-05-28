@@ -10,6 +10,7 @@ use App\Models\CaseFile;
 use App\Models\CaseType;
 use App\Models\Institution;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class CaseController extends Controller
@@ -60,7 +61,7 @@ class CaseController extends Controller
             $cases = $cases->where('defendants', 'LIKE', '%' . $search->person_2['defendants'] . '%');
         }
         $count = ceil($cases->count() / $numberData);
-        $cases = $cases->skip($page * $numberData)->take($numberData)->get();
+        $cases = $cases->orderBy(DB::raw('CAST(number_office AS SIGNED)'), 'ASC')->skip($page * $numberData)->take($numberData)->get();
 
         return response(['data' => CaseResource::collection($cases), 'count' => $count]);
     }

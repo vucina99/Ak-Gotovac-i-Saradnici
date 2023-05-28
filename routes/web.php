@@ -22,7 +22,10 @@ Route::get('/', function () {
     return view('index');
 })->middleware('guest');
 
-Auth::routes();
+Auth::routes(['register' => false, // Registration Routes...
+    'reset' => false, // Password Reset Routes...
+    'verify' => false, // Email Verification Routes...
+]);
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');

@@ -275,3 +275,10 @@ footer p{
 .page-item .page-link{
     padding: 0.7rem 0.85rem;
 }
+
+
+.paginationScroll {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
