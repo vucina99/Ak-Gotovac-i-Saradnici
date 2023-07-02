@@ -161,7 +161,7 @@
                                                     <tr class="bg-white " v-for="(file , key) in fileData" :key="key">
                                                         <td>{{ file.date }}</td>
                                                         <td>
-                                                            <a :href="'files/'+file.name" download="">
+                                                            <a :href="file.name" download="">
                                                                 <i class="fa text-dark fa-file-text file-small-text"
                                                                    aria-hidden="true"></i>
                                                             </a>
@@ -234,7 +234,8 @@ export default {
             axios.get('/case/get/case/' + this.caseID).then(({data}) => {
                 this.caseData = data.case
                 this.fileData = data.caseFiles
-
+                console.log("this.fileData")
+                console.log(this.fileData)
             }).catch((error) => {
                 alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora')
             })

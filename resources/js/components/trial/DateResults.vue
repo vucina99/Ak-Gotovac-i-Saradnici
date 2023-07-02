@@ -107,6 +107,7 @@
                                     <th></th>
                                     <th>VREME</th>
                                     <th>INSTITUCIJA</th>
+                                    <th>BROJ SUDNICE</th>
                                     <th>STRANKA 1</th>
                                     <th>STRANKA 2</th>
                                     <th>BROJ U KANCELARIJI</th>
@@ -123,6 +124,7 @@
                                         {{ trial.time ? trial.time.slice(0, 5) : '' }}
                                     </td>
                                     <td @click.prevent="modalShowTrial(trial)">{{ trial.institution?.name }}</td>
+                                    <td @click.prevent="modalShowTrial(trial)">{{ trial.courtroom_number }}</td>
                                     <td @click.prevent="modalShowTrial(trial)">{{ trial.prosecutor }}</td>
                                     <td @click.prevent="modalShowTrial(trial)">{{ trial.defendants }}</td>
                                     <td @click.prevent="modalShowTrial(trial)">{{ trial.numberOffice }}</td>

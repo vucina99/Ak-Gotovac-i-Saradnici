@@ -12,6 +12,7 @@ use App\Models\Institution;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class CaseController extends Controller
 {
@@ -100,7 +101,7 @@ class CaseController extends Controller
 
             foreach ($request->file('files') as $file) {
                 $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '-' . date('Y-m-d') . '-' . rand(10, 100000) . '.' . pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
-                $file->move(public_path() . '/files/', $name);
+                Storage::disk('s3')->put($name, file_get_contents($file));
 
                 $file = new CaseFile();
                 $file->name = $name;

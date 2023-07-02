@@ -20,6 +20,7 @@ class _Trial extends Model
         'note',
         'date',
         'time',
+        'courtroom_number'
     ];
 
     public function user()
@@ -53,6 +54,7 @@ class _Trial extends Model
             'note' => $request->note,
             'date' => $request->date,
             'time' => $request->time ? date('H:i', strtotime(Carbon::parse($request->time)->addHours(2))) : null,
+            'courtroom_number' => $request->courtroom_number
         ]);
 
         return response($trial->refresh(), 201);
@@ -78,6 +80,7 @@ class _Trial extends Model
             'note' => $request->note,
             'date' => $request->date,
             'time' => $request->time ? date('H:i', strtotime(Carbon::parse($request->time)->addHours(2))) : null,
+            'courtroom_number' => $request->courtroom_number
         ]);
 
         return $trial;

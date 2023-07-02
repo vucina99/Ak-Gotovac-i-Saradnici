@@ -25,6 +25,7 @@ class TrialResource extends JsonResource
             'note' => $this->note,
             'date' => $this->date,
             'time' => $this->time,
+            'courtroom_number' => $this->courtroom_number
 
         ];
     }

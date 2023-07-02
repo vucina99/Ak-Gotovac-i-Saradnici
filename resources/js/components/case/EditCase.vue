@@ -179,7 +179,7 @@
                                                     <tr class="bg-white " v-for="(file , key) in fileData" :key="key">
                                                         <td>{{ file.date }}</td>
                                                         <td>
-                                                            <a :href="'files/'+file.name" download="">
+                                                            <a :href="file.name" download="">
                                                                 <i class="fa text-dark fa-file-text file-small-text"
                                                                    aria-hidden="true"></i>
                                                             </a>

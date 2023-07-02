@@ -81,6 +81,15 @@
                                                            v-model="trialData.number_institution">
                                                 </div>
 
+
+                                                <div class="form-group ">
+
+                                                    <label for="client1">BROJ SUDNICE</label>
+
+                                                    <input type="text" class="form-control" id="courtroom_number"
+                                                           placeholder="BROJ SUDNICE" v-model="trialData.courtroom_number">
+                                                </div>
+
                                                 <div class="form-group ">
 
                                                     <label for="client1">STRANKA 1</label>
@@ -162,7 +171,8 @@ export default {
                 person_2: '',
                 date: this.date_selected,
                 time: '',
-                note: ''
+                note: '',
+                courtroom_number:''
             },
             customToolbar: [
                 [{header: [false, 1, 2, 3, 4, 5, 6]}],

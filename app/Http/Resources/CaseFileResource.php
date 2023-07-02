@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class CaseFileResource extends JsonResource
 {
@@ -16,7 +17,7 @@ class CaseFileResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'name' => $this->name ? Storage::disk('s3')->url( $this->name ) : "",
             'date' => $this->upload_date
         ];
     }

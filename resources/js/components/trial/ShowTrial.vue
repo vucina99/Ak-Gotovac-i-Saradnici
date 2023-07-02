@@ -73,6 +73,15 @@
                                                            v-model="data.numberInstitution">
                                                 </div>
 
+
+                                                <div class="form-group ">
+
+                                                    <label for="client1">BROJ SUDNICE</label>
+
+                                                    <input type="text"  disabled class="form-control" id="courtroom_number"
+                                                           placeholder="BROJ SUDNICE" v-model="data.courtroom_number">
+                                                </div>
+
                                                 <div class="form-group ">
 
                                                     <label for="client1">STRANKA 1</label>
