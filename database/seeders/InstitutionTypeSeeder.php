@@ -29,5 +29,9 @@ class InstitutionTypeSeeder extends Seeder
         DB::table('institution_types')->insert([
             'name' => 'OSIGURANJE'
         ]);
+
+        DB::table('institution_types')->insert([
+            'name' => 'JAVNI BELEŽNIK'
+        ]);
     }
 }
