@@ -29,13 +29,14 @@
                                     <div class="row">
                                         <div class="col-12"><br>
                                             <vue-confirm-dialog></vue-confirm-dialog>
-                                            <div class="w-100" v-if="caseData == null">
+                                            <div class="w-100" v-if="caseData == null || loader">
                                                 <vue-simple-spinner></vue-simple-spinner>
+                                                <br>
                                             </div>
-                                            <div v-if="success"
+                                            <div v-if="success && !loader"
                                                  class="alert error-danger alert-success alert-dismissible fade show"
                                                  role="alert">
-                                                <span><i class="fa fa-check-square" aria-hidden="true"></i> &nbsp; SLUĆAJ JE USPEŠNO DODAT</span>
+                                                <span><i class="fa fa-check-square" aria-hidden="true"></i> &nbsp; SLUĆAJ JE USPEŠNO IZMENJEN</span>
                                                 <button @click.prevent="success = false" type="button" class="close"
 
                                                 >
@@ -43,7 +44,7 @@
                                                 </button>
                                             </div>
                                             <form action="" method="post" class="add-form-modal text-left"
-                                                  v-if="caseData !== null">
+                                                  v-if="caseData !== null " :hidden="loader">
                                                 <div class="form-group search-font-size-modal" v-if="type !== 6">
                                                     <label v-if="type == 1">SUD</label>
                                                     <label v-if="type == 2">SUD / TUŽILAŠTVO</label>
@@ -95,6 +96,16 @@
                                                         type == 5 ? 'BROJ U OSIGURANJU' :
                                                         type == 6 ? 'SLUŽBENI BROJ' : ''">
                                                 </div>
+
+
+                                                <div class="form-group"  v-if="type == 6">
+                                                    <label  for="number_office">ARHIVSKI BROJ</label>
+                                                    <input type="text" class="form-control"
+                                                           v-model="caseData.archive " id="archiva"
+                                                           :placeholder="'ARHIVSKI BROJ'">
+                                                </div>
+
+
                                                 <div class="form-group ">
 
                                                     <label v-if="type == 1" for="number_office">TUŽILAC</label>
@@ -135,9 +146,9 @@
                                                 <div class="pb-3" v-if="type == 5">
                                                     <label for="fail_day">DAN NASTANKA NEZGODE</label>
                                                     <div class="input-group custom-file-button">
-                                                        <date-picker v-model="caseData.failDay"
+                                                        <date-picker  v-model="caseData.failDay"
                                                                      id="fail_day"
-                                                                     placeholder="DAN NASTANKA NEZGODE"></date-picker>
+                                                                     :placeholder="caseData.failDay ? JSON.stringify(caseData.failDay)  : 'DAN NASTANKA NEZGODE'"></date-picker>
                                                     </div>
                                                 </div>
 
@@ -170,6 +181,7 @@
                                                     class="table mt-4  table-hover table-text-size table-cursor border-right-black">
                                                     <thead class="bg-blue text-personal-light">
                                                     <tr>
+                                                        <th>IME FAJLA</th>
                                                         <th>DATUM</th>
                                                         <th>FAJL</th>
                                                         <th>OBRIŠI</th>
@@ -177,6 +189,11 @@
                                                     </thead>
                                                     <tbody>
                                                     <tr class="bg-white " v-for="(file , key) in fileData" :key="key">
+                                                        <td class="pb-0">
+                                                            <div class="form-group">
+                                                                <input type="text" class="form-control" v-model="file.path"  @keypress.enter="changeFilePath(file.id , file.path)">
+                                                            </div>
+                                                        </td>
                                                         <td>{{ file.date }}</td>
                                                         <td>
                                                             <a :href="file.name" download="">
@@ -189,7 +206,7 @@
                                                                aria-hidden="true"></i>
                                                         </td>
                                                     </tr>
-                                                    <td v-if="fileData.length < 1" colspan="3"
+                                                    <td v-if="fileData.length < 1" colspan="4"
                                                         class="text-center bg-light">
                                                         <span>NEMA PODATAKA ZA PRIKAZ</span>
                                                     </td>
@@ -240,6 +257,7 @@ export default {
     props: ['type', 'case_types', 'institutionsSerchData'],
     data() {
         return {
+            loader: true,
             data: [],
             caseID: '',
             caseData: null,
@@ -268,7 +286,23 @@ export default {
         DatePicker
 
     },
+
+    mounted(){
+        this.loader = true;
+        this.success = false;
+
+    },
     methods: {
+        changeFilePath(id, path){
+            this.success = false;
+            this.loader = true;
+            axios.patch('/case/edit-file-path/' + id, {"path": path}).then(({data}) => {
+                this.getCase();
+                this.success= true;
+            }).catch((error) => {
+                alert('POKUŠAJTE POSLE, DOŠLO JE DO GREŠKE')
+            })
+        },
         deleteCase() {
 
 
@@ -284,6 +318,7 @@ export default {
                  */
                 callback: confirm => {
                     if (confirm) {
+                        this.loader = true;
                         axios.delete('/case/delete/case/' + this.caseID).then(({data}) => {
 
 
@@ -299,7 +334,7 @@ export default {
                                 callback: confirm => {
                                     if (confirm) {
                                         this.$root.$emit('removeCaseFromArray', this.caseIndex);
-
+                                        this.loader = false;
                                         this.closeModal();
                                     }
                                 }
@@ -316,9 +351,10 @@ export default {
         },
 
         editCase() {
-
+            this.loader = true;
+            this.success= false;
             axios.patch('/case/edit/' + this.caseID, this.caseData).then(({data}) => {
-                this.success = true;
+
 
                 let case_id = data.id
                 const formData = new FormData();
@@ -338,8 +374,9 @@ export default {
                         'dataUploadedID': data.ids,
                         'case_id': this.caseID
                     }).then(({data}) => {
-
-
+                        this.getCase();
+                        this.$root.$emit('addEditedCaseInArray', {'caseData': this.caseData, 'caseIndex': this.caseIndex});
+                        this.success= true;
                     })
                         .catch((error) => {
                             alert('POKUŠAJTE POSLE, DOŠLO JE DO GREŠKE')
@@ -353,8 +390,7 @@ export default {
                 alert('POKUŠAJTE POSLE, DOŠLO JE DO GREŠKE')
             })
 
-            this.getCase();
-            this.$root.$emit('addEditedCaseInArray', {'caseData': this.caseData, 'caseIndex': this.caseIndex});
+
         },
         removeFile(fileId, index) {
 
@@ -371,11 +407,13 @@ export default {
                  */
                 callback: confirm => {
                     if (confirm) {
+                        this.loader = true;
                         axios.delete('case/remove/file/' + fileId).then(({data}) => {
                             const filter = this.fileData.filter((value, key) => {
                                 return key !== index
                             });
                             this.fileData = filter;
+                            this.loader = false;
                         }).catch((error) => {
                             alert('POKUŠAJTE POSLE, DOŠLO JE DO GREŠKE')
                         });
@@ -386,11 +424,13 @@ export default {
 
 
         getCase() {
+
             axios.get('/case/get/case/' + this.caseID).then(({data}) => {
                 this.caseData = data.case
                 this.caseData['case_type_id'] = this.type
                 this.fileData = data.caseFiles
-
+                this.loader = false;
+                console.log( data.case);
             }).catch((error) => {
                 alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora')
             })
@@ -398,6 +438,8 @@ export default {
         beforeOpenEdit(event) {
             this.caseID = event.params.caseID;
             this.caseIndex = event.params.caseIndex;
+            this.loader = true;
+            this.success = false;
             this.getCase();
         },
         closeModal() {

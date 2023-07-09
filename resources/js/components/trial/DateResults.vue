@@ -136,13 +136,13 @@
                                 </tr>
                                 <tr v-if="allTrial.length < 1" class="bg-light">
 
-                                    <td colspan="8" class="text-center">
+                                    <td colspan="9" class="text-center">
                                         <vue-simple-spinner></vue-simple-spinner>
                                     </td>
                                 </tr>
                                 <tr v-if="!allTrial  " class="bg-light">
 
-                                    <td colspan="8"
+                                    <td colspan="9"
                                         class="text-center">
                                         <span>NEMA PODATAKA ZA PRIKAZ</span></td>
 

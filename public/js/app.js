@@ -5560,6 +5560,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ['type', 'case_types', 'institutionsSerchData'],
   data: function data() {
     return {
+      loader: false,
       data: [],
       lang: 'sr',
       files: '',
@@ -5573,6 +5574,7 @@ __webpack_require__.r(__webpack_exports__);
         'fail_day': '',
         'marks': '',
         'notes': '',
+        'archive': '',
         'case_type_id': this.type
       },
       customToolbar: [[{
@@ -5613,6 +5615,8 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     addCase: function addCase() {
       var _this = this;
+      this.loader = true;
+      this.success = false;
       axios.post('/case/create/case', this.dataCase).then(function (_ref) {
         var data = _ref.data;
         _this.success = true;
@@ -5645,6 +5649,7 @@ __webpack_require__.r(__webpack_exports__);
             'case_id': case_id
           }).then(function (_ref3) {
             var data = _ref3.data;
+            _this.loader = false;
           })["catch"](function (error) {
             alert('POKUŠAJTE POSLE, DOŠLO JE DO GREŠKE');
           });
@@ -5699,6 +5704,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ['type', 'case_types', 'institutionsSerchData'],
   data: function data() {
     return {
+      loader: true,
       data: [],
       caseID: '',
       caseData: null,
@@ -5735,9 +5741,27 @@ __webpack_require__.r(__webpack_exports__);
     VueEditor: vue2_editor__WEBPACK_IMPORTED_MODULE_1__.VueEditor,
     DatePicker: vue2_datepicker__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
+  mounted: function mounted() {
+    this.loader = true;
+    this.success = false;
+  },
   methods: {
-    deleteCase: function deleteCase() {
+    changeFilePath: function changeFilePath(id, path) {
       var _this = this;
+      this.success = false;
+      this.loader = true;
+      axios.patch('/case/edit-file-path/' + id, {
+        "path": path
+      }).then(function (_ref) {
+        var data = _ref.data;
+        _this.getCase();
+        _this.success = true;
+      })["catch"](function (error) {
+        alert('POKUŠAJTE POSLE, DOŠLO JE DO GREŠKE');
+      });
+    },
+    deleteCase: function deleteCase() {
+      var _this2 = this;
       this.$confirm({
         message: 'DA LI STE SIGURNI DA ŽELITE DA OBRIŠETE SLUČAJ?',
         button: {
@@ -5750,9 +5774,10 @@ __webpack_require__.r(__webpack_exports__);
          */
         callback: function callback(confirm) {
           if (confirm) {
-            axios["delete"]('/case/delete/case/' + _this.caseID).then(function (_ref) {
-              var data = _ref.data;
-              _this.$confirm({
+            _this2.loader = true;
+            axios["delete"]('/case/delete/case/' + _this2.caseID).then(function (_ref2) {
+              var data = _ref2.data;
+              _this2.$confirm({
                 message: 'USPEŠNO BRISANJE',
                 button: {
                   yes: 'OK'
@@ -5763,8 +5788,9 @@ __webpack_require__.r(__webpack_exports__);
                  */
                 callback: function callback(confirm) {
                   if (confirm) {
-                    _this.$root.$emit('removeCaseFromArray', _this.caseIndex);
-                    _this.closeModal();
+                    _this2.$root.$emit('removeCaseFromArray', _this2.caseIndex);
+                    _this2.loader = false;
+                    _this2.closeModal();
                   }
                 }
               });
@@ -5776,27 +5802,34 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     editCase: function editCase() {
-      var _this2 = this;
-      axios.patch('/case/edit/' + this.caseID, this.caseData).then(function (_ref2) {
-        var data = _ref2.data;
-        _this2.success = true;
+      var _this3 = this;
+      this.loader = true;
+      this.success = false;
+      axios.patch('/case/edit/' + this.caseID, this.caseData).then(function (_ref3) {
+        var data = _ref3.data;
         var case_id = data.id;
         var formData = new FormData();
-        for (var i = 0; i < _this2.$refs.file.files.length; i++) {
-          var file = _this2.$refs.file.files[i];
+        for (var i = 0; i < _this3.$refs.file.files.length; i++) {
+          var file = _this3.$refs.file.files[i];
           formData.append('files[' + i + ']', file);
         }
         axios.post('/case/files/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
-        }).then(function (_ref3) {
-          var data = _ref3.data;
+        }).then(function (_ref4) {
+          var data = _ref4.data;
           axios.post('/case/update/files', {
             'dataUploadedID': data.ids,
-            'case_id': _this2.caseID
-          }).then(function (_ref4) {
-            var data = _ref4.data;
+            'case_id': _this3.caseID
+          }).then(function (_ref5) {
+            var data = _ref5.data;
+            _this3.getCase();
+            _this3.$root.$emit('addEditedCaseInArray', {
+              'caseData': _this3.caseData,
+              'caseIndex': _this3.caseIndex
+            });
+            _this3.success = true;
           })["catch"](function (error) {
             alert('POKUŠAJTE POSLE, DOŠLO JE DO GREŠKE');
           });
@@ -5804,14 +5837,9 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         alert('POKUŠAJTE POSLE, DOŠLO JE DO GREŠKE');
       });
-      this.getCase();
-      this.$root.$emit('addEditedCaseInArray', {
-        'caseData': this.caseData,
-        'caseIndex': this.caseIndex
-      });
     },
     removeFile: function removeFile(fileId, index) {
-      var _this3 = this;
+      var _this4 = this;
       this.$confirm({
         message: 'DA LI STE SIGURNI DA ŽELITE DA OBRIŠETE FAJL?',
         button: {
@@ -5824,12 +5852,14 @@ __webpack_require__.r(__webpack_exports__);
          */
         callback: function callback(confirm) {
           if (confirm) {
-            axios["delete"]('case/remove/file/' + fileId).then(function (_ref5) {
-              var data = _ref5.data;
-              var filter = _this3.fileData.filter(function (value, key) {
+            _this4.loader = true;
+            axios["delete"]('case/remove/file/' + fileId).then(function (_ref6) {
+              var data = _ref6.data;
+              var filter = _this4.fileData.filter(function (value, key) {
                 return key !== index;
               });
-              _this3.fileData = filter;
+              _this4.fileData = filter;
+              _this4.loader = false;
             })["catch"](function (error) {
               alert('POKUŠAJTE POSLE, DOŠLO JE DO GREŠKE');
             });
@@ -5838,12 +5868,14 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     getCase: function getCase() {
-      var _this4 = this;
-      axios.get('/case/get/case/' + this.caseID).then(function (_ref6) {
-        var data = _ref6.data;
-        _this4.caseData = data["case"];
-        _this4.caseData['case_type_id'] = _this4.type;
-        _this4.fileData = data.caseFiles;
+      var _this5 = this;
+      axios.get('/case/get/case/' + this.caseID).then(function (_ref7) {
+        var data = _ref7.data;
+        _this5.caseData = data["case"];
+        _this5.caseData['case_type_id'] = _this5.type;
+        _this5.fileData = data.caseFiles;
+        _this5.loader = false;
+        console.log(data["case"]);
       })["catch"](function (error) {
         alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora');
       });
@@ -5851,6 +5883,8 @@ __webpack_require__.r(__webpack_exports__);
     beforeOpenEdit: function beforeOpenEdit(event) {
       this.caseID = event.params.caseID;
       this.caseIndex = event.params.caseIndex;
+      this.loader = true;
+      this.success = false;
       this.getCase();
     },
     closeModal: function closeModal() {
@@ -6086,6 +6120,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ['type', 'case_types'],
   data: function data() {
     return {
+      loader: true,
       data: [],
       caseID: '',
       caseData: null,
@@ -6127,8 +6162,7 @@ __webpack_require__.r(__webpack_exports__);
         var data = _ref.data;
         _this.caseData = data["case"];
         _this.fileData = data.caseFiles;
-        console.log("this.fileData");
-        console.log(_this.fileData);
+        _this.loader = false;
       })["catch"](function (error) {
         alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora');
       });
@@ -6139,6 +6173,7 @@ __webpack_require__.r(__webpack_exports__);
     beforeOpen: function beforeOpen(event) {
       this.caseID = event.params.caseID;
       this.getCase();
+      this.loader = true;
     }
   }
 });
@@ -6492,6 +6527,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       data: null,
+      loader: false,
       trialIndex: -1,
       date: '',
       lang: 'sr',
@@ -6569,6 +6605,8 @@ __webpack_require__.r(__webpack_exports__);
     },
     editTrial: function editTrial() {
       var _this2 = this;
+      this.success = false;
+      this.loader = true;
       axios.patch('/trial/edit/trial/' + this.data.id, this.data).then(function (_ref2) {
         var data = _ref2.data;
         _this2.success = true;
@@ -6576,6 +6614,7 @@ __webpack_require__.r(__webpack_exports__);
           'trialData': data,
           'trialIndex': _this2.trialIndex
         });
+        _this2.loader = false;
       })["catch"](function (error) {
         alert('POKUŠAJTE POSLE, DOŠLO JE DO GREŠKE');
       });
@@ -6593,6 +6632,7 @@ __webpack_require__.r(__webpack_exports__);
       this.data = JSON.parse(JSON.stringify(event.params.data));
       this.trialIndex = event.params.index;
       this.data.time = new Date(this.data.date + ' ' + this.data.time);
+      this.success = false;
     },
     closeModal: function closeModal() {
       this.$modal.hide('edit-trial-modal');
@@ -7362,7 +7402,9 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col-12"
-  }, [_c("br"), _vm._v(" "), _vm.success ? _c("div", {
+  }, [_c("br"), _vm._v(" "), _vm.loader ? _c("div", {
+    staticClass: "w-100"
+  }, [_c("vue-simple-spinner"), _vm._v(" "), _c("br")], 1) : _vm._e(), _vm._v(" "), _vm.success && !_vm.loader ? _c("div", {
     staticClass: "alert error-danger alert-success alert-dismissible fade show",
     attrs: {
       role: "alert"
@@ -7388,6 +7430,7 @@ var render = function render() {
     attrs: {
       action: "",
       method: "post",
+      hidden: _vm.loader,
       enctype: "multipart/form-data"
     }
   }, [_vm.type !== 6 ? _c("div", {
@@ -7482,7 +7525,35 @@ var render = function render() {
         _vm.$set(_vm.dataCase, "number_court", $event.target.value);
       }
     }
-  })]), _vm._v(" "), _c("div", {
+  })]), _vm._v(" "), _vm.type == 6 ? _c("div", {
+    staticClass: "form-group"
+  }, [_c("label", {
+    attrs: {
+      "for": "number_office"
+    }
+  }, [_vm._v("ARHIVSKI BROJ")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.dataCase.archive,
+      expression: "dataCase.archive "
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      id: "archiva",
+      placeholder: "ARHIVSKI BROJ"
+    },
+    domProps: {
+      value: _vm.dataCase.archive
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.dataCase, "archive", $event.target.value);
+      }
+    }
+  })]) : _vm._e(), _vm._v(" "), _c("div", {
     staticClass: "form-group"
   }, [_vm.type == 1 ? _c("label", {
     attrs: {
@@ -7747,9 +7818,9 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col-12"
-  }, [_c("br"), _vm._v(" "), _c("vue-confirm-dialog"), _vm._v(" "), _vm.caseData == null ? _c("div", {
+  }, [_c("br"), _vm._v(" "), _c("vue-confirm-dialog"), _vm._v(" "), _vm.caseData == null || _vm.loader ? _c("div", {
     staticClass: "w-100"
-  }, [_c("vue-simple-spinner")], 1) : _vm._e(), _vm._v(" "), _vm.success ? _c("div", {
+  }, [_c("vue-simple-spinner"), _vm._v(" "), _c("br")], 1) : _vm._e(), _vm._v(" "), _vm.success && !_vm.loader ? _c("div", {
     staticClass: "alert error-danger alert-success alert-dismissible fade show",
     attrs: {
       role: "alert"
@@ -7759,7 +7830,7 @@ var render = function render() {
     attrs: {
       "aria-hidden": "true"
     }
-  }), _vm._v("   SLUĆAJ JE USPEŠNO DODAT")]), _vm._v(" "), _c("button", {
+  }), _vm._v("   SLUĆAJ JE USPEŠNO IZMENJEN")]), _vm._v(" "), _c("button", {
     staticClass: "close",
     attrs: {
       type: "button"
@@ -7774,7 +7845,8 @@ var render = function render() {
     staticClass: "add-form-modal text-left",
     attrs: {
       action: "",
-      method: "post"
+      method: "post",
+      hidden: _vm.loader
     }
   }, [_vm.type !== 6 ? _c("div", {
     staticClass: "form-group search-font-size-modal"
@@ -7868,7 +7940,35 @@ var render = function render() {
         _vm.$set(_vm.caseData, "numberInstitution", $event.target.value);
       }
     }
-  })]), _vm._v(" "), _c("div", {
+  })]), _vm._v(" "), _vm.type == 6 ? _c("div", {
+    staticClass: "form-group"
+  }, [_c("label", {
+    attrs: {
+      "for": "number_office"
+    }
+  }, [_vm._v("ARHIVSKI BROJ")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.caseData.archive,
+      expression: "caseData.archive "
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      id: "archiva",
+      placeholder: "ARHIVSKI BROJ"
+    },
+    domProps: {
+      value: _vm.caseData.archive
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.caseData, "archive", $event.target.value);
+      }
+    }
+  })]) : _vm._e(), _vm._v(" "), _c("div", {
     staticClass: "form-group"
   }, [_vm.type == 1 ? _c("label", {
     attrs: {
@@ -7967,7 +8067,7 @@ var render = function render() {
   }, [_c("date-picker", {
     attrs: {
       id: "fail_day",
-      placeholder: "DAN NASTANKA NEZGODE"
+      placeholder: _vm.caseData.failDay ? JSON.stringify(_vm.caseData.failDay) : "DAN NASTANKA NEZGODE"
     },
     model: {
       value: _vm.caseData.failDay,
@@ -8045,11 +8145,39 @@ var render = function render() {
     staticClass: "table mt-4 table-hover table-text-size table-cursor border-right-black"
   }, [_c("thead", {
     staticClass: "bg-blue text-personal-light"
-  }, [_c("tr", [_c("th", [_vm._v("DATUM")]), _vm._v(" "), _c("th", [_vm._v("FAJL")]), _vm._v(" "), _c("th", [_vm._v("OBRIŠI")])])]), _vm._v(" "), _c("tbody", [_vm._l(_vm.fileData, function (file, key) {
+  }, [_c("tr", [_c("th", [_vm._v("IME FAJLA")]), _vm._v(" "), _c("th", [_vm._v("DATUM")]), _vm._v(" "), _c("th", [_vm._v("FAJL")]), _vm._v(" "), _c("th", [_vm._v("OBRIŠI")])])]), _vm._v(" "), _c("tbody", [_vm._l(_vm.fileData, function (file, key) {
     return _c("tr", {
       key: key,
       staticClass: "bg-white"
-    }, [_c("td", [_vm._v(_vm._s(file.date))]), _vm._v(" "), _c("td", [_c("a", {
+    }, [_c("td", {
+      staticClass: "pb-0"
+    }, [_c("div", {
+      staticClass: "form-group"
+    }, [_c("input", {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: file.path,
+        expression: "file.path"
+      }],
+      staticClass: "form-control",
+      attrs: {
+        type: "text"
+      },
+      domProps: {
+        value: file.path
+      },
+      on: {
+        keypress: function keypress($event) {
+          if (!$event.type.indexOf("key") && _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")) return null;
+          return _vm.changeFilePath(file.id, file.path);
+        },
+        input: function input($event) {
+          if ($event.target.composing) return;
+          _vm.$set(file, "path", $event.target.value);
+        }
+      }
+    })])]), _vm._v(" "), _c("td", [_vm._v(_vm._s(file.date))]), _vm._v(" "), _c("td", [_c("a", {
       attrs: {
         href: file.name,
         download: ""
@@ -8075,7 +8203,7 @@ var render = function render() {
   }), _vm._v(" "), _vm.fileData.length < 1 ? _c("td", {
     staticClass: "text-center bg-light",
     attrs: {
-      colspan: "3"
+      colspan: "4"
     }
   }, [_c("span", [_vm._v("NEMA PODATAKA ZA PRIKAZ")])]) : _vm._e()], 2)]), _vm._v(" "), _c("div", {
     staticClass: "pb-1 pt-4"
@@ -8397,7 +8525,7 @@ var render = function render() {
     attrs: {
       scope: "col"
     }
-  }, [_vm.type == 1 ? _c("span", [_vm._v("BROJ U SUDU")]) : _vm._e(), _vm._v(" "), _vm.type == 2 ? _c("span", [_vm._v("BROJ U SUDU/TUŽILAŠTVU")]) : _vm._e(), _vm._v(" "), _vm.type == 3 ? _c("span", [_vm._v("BROJ U SUDU")]) : _vm._e(), _vm._v(" "), _vm.type == 4 ? _c("span", [_vm._v("BROJ  U SUDU  /  KOD IZVRŠITELJA ")]) : _vm._e(), _vm._v(" "), _vm.type == 5 ? _c("span", [_vm._v("BROJ U OSIGURANJU")]) : _vm._e(), _vm._v(" "), _vm.type == 6 ? _c("span", [_vm._v("SLUŽBENI BROJ")]) : _vm._e()]), _vm._v(" "), _c("th", {
+  }, [_vm.type == 1 ? _c("span", [_vm._v("BROJ U SUDU")]) : _vm._e(), _vm._v(" "), _vm.type == 2 ? _c("span", [_vm._v("BROJ U SUDU/TUŽILAŠTVU")]) : _vm._e(), _vm._v(" "), _vm.type == 3 ? _c("span", [_vm._v("BROJ U SUDU")]) : _vm._e(), _vm._v(" "), _vm.type == 4 ? _c("span", [_vm._v("BROJ  U SUDU  /  KOD IZVRŠITELJA ")]) : _vm._e(), _vm._v(" "), _vm.type == 5 ? _c("span", [_vm._v("BROJ U OSIGURANJU")]) : _vm._e(), _vm._v(" "), _vm.type == 6 ? _c("span", [_vm._v("SLUŽBENI BROJ")]) : _vm._e()]), _vm._v(" "), _vm.type == 6 ? _c("th", [_vm._v("\n                                ARHIVSKI BROJ\n                            ")]) : _vm._e(), _vm._v(" "), _c("th", {
     attrs: {
       scope: "col"
     }
@@ -8443,7 +8571,14 @@ var render = function render() {
           return _vm.modalShowCase(data.id);
         }
       }
-    }, [_vm._v(_vm._s(data.numberInstitution))]), _vm._v(" "), _c("td", {
+    }, [_vm._v(_vm._s(data.numberInstitution))]), _vm._v(" "), _vm.type == 6 ? _c("td", {
+      on: {
+        click: function click($event) {
+          $event.preventDefault();
+          return _vm.modalShowCase(data.id);
+        }
+      }
+    }, [_vm._v(_vm._s(data.archive))]) : _vm._e(), _vm._v(" "), _c("td", {
       on: {
         click: function click($event) {
           $event.preventDefault();
@@ -8487,7 +8622,7 @@ var render = function render() {
   }, [_c("vue-simple-spinner")], 1) : _vm._e(), _vm._v(" "), _vm.type == 6 ? _c("td", {
     staticClass: "text-center",
     attrs: {
-      colspan: "5"
+      colspan: "6"
     }
   }, [_c("vue-simple-spinner")], 1) : _vm._e()]) : _vm._e(), _vm._v(" "), !_vm.allCases ? _c("tr", {
     staticClass: "bg-light"
@@ -8504,7 +8639,7 @@ var render = function render() {
   }, [_c("span", [_vm._v("NEMA PODATAKA ZA PRIKAZ")])]) : _vm._e(), _vm._v(" "), _vm.type == 6 ? _c("td", {
     staticClass: "text-center",
     attrs: {
-      colspan: "5"
+      colspan: "6"
     }
   }, [_c("span", [_vm._v("NEMA PODATAKA ZA PRIKAZ")])]) : _vm._e()]) : _vm._e()], 2)])]), _vm._v(" "), _c("br"), _vm._v(" "), _c("div", {
     staticClass: "paginationScroll"
@@ -8664,13 +8799,14 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col-12"
-  }, [_c("br"), _vm._v(" "), _vm.caseData == null ? _c("div", {
+  }, [_c("br"), _vm._v(" "), _vm.caseData == null || _vm.loader ? _c("div", {
     staticClass: "w-100"
   }, [_c("vue-simple-spinner")], 1) : _vm._e(), _vm._v(" "), _vm.caseData !== null ? _c("form", {
     staticClass: "add-form-modal text-left",
     attrs: {
       action: "",
-      method: "post"
+      method: "post",
+      hidden: _vm.loader
     }
   }, [_vm.type !== 6 ? _c("div", {
     staticClass: "form-group search-font-size-modal"
@@ -8767,7 +8903,35 @@ var render = function render() {
         _vm.$set(_vm.caseData, "numberInstitution", $event.target.value);
       }
     }
-  })]), _vm._v(" "), _c("div", {
+  })]), _vm._v(" "), _vm.type == 6 ? _c("div", {
+    staticClass: "form-group"
+  }, [_c("label", {
+    attrs: {
+      "for": "number_office"
+    }
+  }, [_vm._v("ARHIVSKI BROJ")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.caseData.archive,
+      expression: "caseData.archive "
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      id: "archiva",
+      placeholder: "ARHIVSKI BROJ"
+    },
+    domProps: {
+      value: _vm.caseData.archive
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.caseData, "archive", $event.target.value);
+      }
+    }
+  })]) : _vm._e(), _vm._v(" "), _c("div", {
     staticClass: "form-group"
   }, [_vm.type == 1 ? _c("label", {
     attrs: {
@@ -8869,7 +9033,7 @@ var render = function render() {
     attrs: {
       disabled: true,
       id: "fail_day",
-      placeholder: "DAN NASTANKA NEZGODE"
+      placeholder: _vm.caseData.failDay ? _vm.caseData.failDay : "DAN NASTANKA NEZGODE"
     },
     model: {
       value: _vm.caseData.failDay,
@@ -8930,11 +9094,36 @@ var render = function render() {
     staticClass: "table mt-4 table-hover table-text-size table-cursor border-right-black"
   }, [_c("thead", {
     staticClass: "bg-blue text-personal-light"
-  }, [_c("tr", [_c("th", [_vm._v("DATUM")]), _vm._v(" "), _c("th", [_vm._v("FAJL")])])]), _vm._v(" "), _c("tbody", [_vm._l(_vm.fileData, function (file, key) {
+  }, [_c("tr", [_c("th", [_vm._v("IME FAJLA")]), _vm._v(" "), _c("th", [_vm._v("DATUM")]), _vm._v(" "), _c("th", [_vm._v("FAJL")])])]), _vm._v(" "), _c("tbody", [_vm._l(_vm.fileData, function (file, key) {
     return _c("tr", {
       key: key,
       staticClass: "bg-white"
-    }, [_c("td", [_vm._v(_vm._s(file.date))]), _vm._v(" "), _c("td", [_c("a", {
+    }, [_c("td", {
+      staticClass: "pb-0"
+    }, [_c("div", {
+      staticClass: "form-group"
+    }, [_c("input", {
+      directives: [{
+        name: "model",
+        rawName: "v-model",
+        value: file.path,
+        expression: "file.path"
+      }],
+      staticClass: "form-control",
+      attrs: {
+        type: "text",
+        disabled: "true"
+      },
+      domProps: {
+        value: file.path
+      },
+      on: {
+        input: function input($event) {
+          if ($event.target.composing) return;
+          _vm.$set(file, "path", $event.target.value);
+        }
+      }
+    })])]), _vm._v(" "), _c("td", [_vm._v(_vm._s(file.date))]), _vm._v(" "), _c("td", [_c("a", {
       attrs: {
         href: file.name,
         download: ""
@@ -8948,7 +9137,7 @@ var render = function render() {
   }), _vm._v(" "), _vm.fileData.length < 1 ? _c("td", {
     staticClass: "text-center bg-light",
     attrs: {
-      colspan: "2"
+      colspan: "3"
     }
   }, [_c("span", [_vm._v("NEMA PODATAKA ZA PRIKAZ")])]) : _vm._e()], 2)])]) : _vm._e()])]), _vm._v(" "), _c("br")])])])])])]), _vm._v(" "), _c("br"), _c("br")])], 1);
 };
@@ -9607,7 +9796,7 @@ var render = function render() {
   }, [_c("td", {
     staticClass: "text-center",
     attrs: {
-      colspan: "8"
+      colspan: "9"
     }
   }, [_c("vue-simple-spinner")], 1)]) : _vm._e(), _vm._v(" "), !_vm.allTrial ? _c("tr", {
     staticClass: "bg-light"
@@ -9686,7 +9875,7 @@ var staticRenderFns = [function () {
   return _c("td", {
     staticClass: "text-center",
     attrs: {
-      colspan: "8"
+      colspan: "9"
     }
   }, [_c("span", [_vm._v("NEMA PODATAKA ZA PRIKAZ")])]);
 }, function () {
@@ -9793,9 +9982,9 @@ var render = function render() {
     staticClass: "row"
   }, [_c("div", {
     staticClass: "col-12"
-  }, [_c("br"), _vm._v(" "), _c("vue-confirm-dialog"), _vm._v(" "), _vm.data == null ? _c("div", {
+  }, [_c("br"), _vm._v(" "), _c("vue-confirm-dialog"), _vm._v(" "), _vm.data == null || _vm.loader ? _c("div", {
     staticClass: "w-100"
-  }, [_c("vue-simple-spinner")], 1) : _vm._e(), _vm._v(" "), _vm.success ? _c("div", {
+  }, [_c("vue-simple-spinner")], 1) : _vm._e(), _vm._v(" "), _vm.success && !_vm.loader ? _c("div", {
     staticClass: "alert error-danger alert-success alert-dismissible fade show",
     attrs: {
       role: "alert"
@@ -9805,7 +9994,7 @@ var render = function render() {
     attrs: {
       "aria-hidden": "true"
     }
-  }), _vm._v("   SLUĆAJ JE USPEŠNO DODAT")]), _vm._v(" "), _c("button", {
+  }), _vm._v("   SLUĆAJ JE USPEŠNO IZMENJEN")]), _vm._v(" "), _c("button", {
     staticClass: "close",
     attrs: {
       type: "button"
@@ -9820,7 +10009,8 @@ var render = function render() {
     staticClass: "add-form-modal",
     attrs: {
       action: "",
-      method: "post"
+      method: "post",
+      hidden: _vm.loader
     }
   }, [_c("div", {
     staticClass: "form-group search-font-size-modal"
@@ -18061,7 +18251,7 @@ ___CSS_LOADER_EXPORT___.i(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_u
 ___CSS_LOADER_EXPORT___.i(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_public_css_style_css__WEBPACK_IMPORTED_MODULE_2__["default"]);
 ___CSS_LOADER_EXPORT___.i(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_public_css_responsive_css__WEBPACK_IMPORTED_MODULE_3__["default"]);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\r\n\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

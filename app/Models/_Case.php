@@ -23,6 +23,7 @@ class _Case extends Model
         'mark',
         'fail_day',
         'case_type_id',
+        'archive'
     ];
 
     public function institution()
@@ -46,6 +47,7 @@ class _Case extends Model
         if ($request->institutions && $request->institutions !== null && $request->institutions !== '') {
             $institutionID = $request->institutions['id'];
         }
+
         $case = _Case::create([
             'number_office' => $request->number_office,
             'number_institution' => $request->number_court,
@@ -55,7 +57,8 @@ class _Case extends Model
             'note' => $request->notes,
             'mark' => $request->marks,
             'fail_day' => Carbon::parse($request->fail_day)->format('Y-m-d'),
-            'case_type_id' => $request->case_type_id
+            'case_type_id' => $request->case_type_id,
+            'archive' => $request->archive
         ]);
 
         return response($case->refresh(), 200);
@@ -86,7 +89,8 @@ class _Case extends Model
             'note' => $request->note,
             'mark' => $request->mark,
             'fail_day' => $request->failDay,
-            'case_type_id' => $request->case_type_id
+            'case_type_id' => $request->case_type_id,
+            'archive' => $request->archive
         ]);
 
         return response($case, 200);

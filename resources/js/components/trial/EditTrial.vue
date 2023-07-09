@@ -33,13 +33,13 @@
                                         <div class="col-12"><br>
 
                                             <vue-confirm-dialog></vue-confirm-dialog>
-                                            <div class="w-100" v-if="data == null">
+                                            <div class="w-100" v-if="data == null  || loader">
                                                 <vue-simple-spinner></vue-simple-spinner>
                                             </div>
-                                            <div v-if="success"
+                                            <div v-if="success &&  !loader"
                                                  class="alert error-danger alert-success alert-dismissible fade show"
                                                  role="alert">
-                                                <span><i class="fa fa-check-square" aria-hidden="true"></i> &nbsp; SLUĆAJ JE USPEŠNO DODAT</span>
+                                                <span><i class="fa fa-check-square" aria-hidden="true"></i> &nbsp; SLUĆAJ JE USPEŠNO IZMENJEN</span>
                                                 <button @click.prevent="success = false" type="button" class="close"
 
                                                 >
@@ -47,7 +47,7 @@
                                                 </button>
                                             </div>
 
-                                            <form action="" method="post" class="add-form-modal " v-if="data !== null">
+                                            <form action="" method="post" class="add-form-modal " :hidden="loader" v-if="data !== null">
                                                 <div class="form-group search-font-size-modal ">
                                                     <label>SUD</label>
                                                     <v-select
@@ -173,6 +173,7 @@ export default {
     data() {
         return {
             data: null,
+            loader : false,
             trialIndex: -1,
             date: '',
             lang: 'sr',
@@ -201,10 +202,6 @@ export default {
     },
     methods: {
         deleteTrial(){
-
-
-
-
 
             this.$confirm({
                 message: 'DA LI STE SIGURNI DA ŽELITE DA OBRIŠETE ROČIŠTE?',
@@ -251,10 +248,12 @@ export default {
 
         },
         editTrial(){
+            this.success = false
+            this.loader = true
             axios.patch('/trial/edit/trial/' + this.data.id, this.data).then(({data}) => {
                 this.success = true;
                 this.$root.$emit('addEditedTrialInArray', {'trialData': data, 'trialIndex': this.trialIndex});
-
+                this.loader = false
             }).catch((error) => {
                 alert('POKUŠAJTE POSLE, DOŠLO JE DO GREŠKE')
             })
@@ -272,7 +271,7 @@ export default {
             this.data = JSON.parse(JSON.stringify(event.params.data)) ;
             this.trialIndex = event.params.index
             this.data.time = new Date(this.data.date + ' ' + this.data.time) ;
-
+            this.success = false
         },
 
         closeModal() {

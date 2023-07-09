@@ -100,12 +100,13 @@ class CaseController extends Controller
         if ($request->hasfile('files')) {
 
             foreach ($request->file('files') as $file) {
-                $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '-' . date('Y-m-d') . '-' . rand(10, 100000) . '.' . pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+                $nameOriginalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '-G-' . date('Y-m-d') . '-' . rand(10, 100000) . '.' . pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
                 Storage::disk('s3')->put($name, file_get_contents($file));
 
                 $file = new CaseFile();
                 $file->name = $name;
-                $file->path = public_path() . '/files/';
+                $file->path = $nameOriginalName;
                 $file->upload_date = date('Y-m-d');
                 $file->save();
                 $data[] = $file->id;
@@ -117,6 +118,7 @@ class CaseController extends Controller
 
     public function updateFiles(Request $request)
     {
+
         if (count($request->dataUploadedID) > 0) {
             foreach ($request->dataUploadedID as $data) {
                 $file = CaseFile::find($data);
@@ -163,14 +165,45 @@ class CaseController extends Controller
         return response('Došlo je do greške', 500);
     }
 
+
+
+
+    public function updateFilePath($id, Request $request)
+    {
+
+        if (is_numeric($id)) {
+            $caseFile = CaseFile::find($id);
+
+            if (!$caseFile) {
+
+                return response('{}', 404);
+            }
+            $caseFile->path = $request->path;
+            $caseFile->save();
+
+
+
+            return response('{}', 204);
+
+        }
+
+        return response('Došlo je do greške', 500);
+    }
+
+
+
+
     public function updateCase($id, Request $request)
     {
+
         if (is_numeric($id)) {
             $case = _Case::find($id);
 
             if (!$case) {
+
                 return response('{}', 404);
             }
+
 
             $updateCase = $this->case->editCase($case, $request);
 

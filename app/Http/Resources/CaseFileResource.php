@@ -18,7 +18,8 @@ class CaseFileResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name ? Storage::disk('s3')->url( $this->name ) : "",
-            'date' => $this->upload_date
+            'date' => $this->upload_date,
+            'path' => $this->path
         ];
     }
 }

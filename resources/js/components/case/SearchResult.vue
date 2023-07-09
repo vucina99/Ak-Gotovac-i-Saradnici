@@ -149,6 +149,9 @@
                                     <span v-if="type == 5">BROJ U OSIGURANJU</span>
                                     <span v-if="type == 6">SLUŽBENI BROJ</span>
                                 </th>
+                                <th v-if="type == 6  ">
+                                    ARHIVSKI BROJ
+                                </th>
                                 <th scope="col">
                                     <span v-if="type == 1">TUŽILAC</span>
                                     <span v-if="type == 2">OŠTEĆENI</span>
@@ -180,6 +183,7 @@
                                     aria-hidden="true"></i></td>
                                 <td @click.prevent="modalShowCase(data.id)">{{ data.numberOffice }}</td>
                                 <td @click.prevent="modalShowCase(data.id)">{{ data.numberInstitution }}</td>
+                                <td @click.prevent="modalShowCase(data.id)" v-if="type == 6">{{ data.archive }}</td>
                                 <td @click.prevent="modalShowCase(data.id)">{{ data.prosecutor }}</td>
                                 <td v-if="type == 1 || type == 2 || type == 4 || type == 5  "
                                     @click.prevent="modalShowCase(data.id)">{{ data.defendants }}
@@ -202,7 +206,7 @@
                                 <td v-if="type == 3  " colspan="6" class="text-center">
                                     <vue-simple-spinner></vue-simple-spinner>
                                 </td>
-                                <td v-if="type == 6  " colspan="5" class="text-center">
+                                <td v-if="type == 6  " colspan="6" class="text-center">
                                     <vue-simple-spinner></vue-simple-spinner>
                                 </td>
                             </tr>
@@ -213,7 +217,7 @@
                                     <span>NEMA PODATAKA ZA PRIKAZ</span></td>
                                 <td v-if="type == 3  " colspan="6" class="text-center">
                                     <span>NEMA PODATAKA ZA PRIKAZ</span></td>
-                                <td v-if="type == 6  " colspan="5" class="text-center">
+                                <td v-if="type == 6  " colspan="6" class="text-center">
                                     <span>NEMA PODATAKA ZA PRIKAZ</span></td>
                             </tr>
 

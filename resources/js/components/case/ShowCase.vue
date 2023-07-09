@@ -30,11 +30,11 @@
                                 <div class="container bg-personal-light">
                                     <div class="row">
                                         <div class="col-12"><br>
-                                            <div class="w-100" v-if="caseData == null">
+                                            <div class="w-100" v-if="caseData == null || loader">
                                                 <vue-simple-spinner></vue-simple-spinner>
                                             </div>
                                             <form action="" method="post" class="add-form-modal text-left"
-                                                  v-if="caseData !== null">
+                                                  v-if="caseData !== null" :hidden="loader">
                                                 <div class="form-group search-font-size-modal" v-if="type !== 6">
                                                     <label v-if="type == 1">SUD</label>
                                                     <label v-if="type == 2">SUD / TUŽILAŠTVO</label>
@@ -87,6 +87,15 @@
                                                         type == 5 ? 'BROJ U OSIGURANJU' :
                                                         type == 6 ? 'SLUŽBENI BROJ' : ''">
                                                 </div>
+
+
+                                                <div class="form-group"  v-if="type == 6">
+                                                    <label  for="number_office">ARHIVSKI BROJ</label>
+                                                    <input type="text" class="form-control"
+                                                           v-model="caseData.archive " id="archiva"
+                                                           :placeholder="'ARHIVSKI BROJ'">
+                                                </div>
+
                                                 <div class="form-group ">
 
                                                     <label v-if="type == 1" for="number_office">TUŽILAC</label>
@@ -129,7 +138,7 @@
                                                     <div class="input-group custom-file-button">
                                                         <date-picker :disabled="true" v-model="caseData.failDay"
                                                                      id="fail_day"
-                                                                     placeholder="DAN NASTANKA NEZGODE"></date-picker>
+                                                                     :placeholder="caseData.failDay ? caseData.failDay : 'DAN NASTANKA NEZGODE'"></date-picker>
                                                     </div>
                                                 </div>
 
@@ -153,12 +162,18 @@
                                                     class="table mt-4  table-hover table-text-size table-cursor border-right-black">
                                                     <thead class="bg-blue text-personal-light">
                                                     <tr>
+                                                        <th>IME FAJLA</th>
                                                         <th>DATUM</th>
                                                         <th>FAJL</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
                                                     <tr class="bg-white " v-for="(file , key) in fileData" :key="key">
+                                                        <td class="pb-0">
+                                                            <div class="form-group">
+                                                                <input type="text" class="form-control" v-model="file.path" disabled="true" >
+                                                            </div>
+                                                        </td>
                                                         <td>{{ file.date }}</td>
                                                         <td>
                                                             <a :href="file.name" download="">
@@ -167,7 +182,7 @@
                                                             </a>
                                                         </td>
                                                     </tr>
-                                                    <td v-if="fileData.length < 1" colspan="2"
+                                                    <td v-if="fileData.length < 1" colspan="3"
                                                         class="text-center bg-light">
                                                         <span>NEMA PODATAKA ZA PRIKAZ</span>
                                                     </td>
@@ -204,6 +219,7 @@ export default {
     props: ['type', 'case_types'],
     data() {
         return {
+            loader: true,
             data: [],
             caseID: '',
             caseData: null,
@@ -229,13 +245,15 @@ export default {
         DatePicker
 
     },
+
     methods: {
+
         getCase() {
             axios.get('/case/get/case/' + this.caseID).then(({data}) => {
                 this.caseData = data.case
                 this.fileData = data.caseFiles
-                console.log("this.fileData")
-                console.log(this.fileData)
+                this.loader = false;
+
             }).catch((error) => {
                 alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora')
             })
@@ -246,6 +264,7 @@ export default {
         beforeOpen(event) {
             this.caseID = event.params.caseID;
             this.getCase();
+            this.loader = true;
         }
     }
 }

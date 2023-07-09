@@ -30,7 +30,11 @@
                                 <div class="container bg-personal-light">
                                     <div class="row">
                                         <div class="col-12"><br>
-                                            <div v-if="success"
+                                            <div class="w-100" v-if="loader">
+                                                <vue-simple-spinner></vue-simple-spinner>
+                                                <br>
+                                            </div>
+                                            <div v-if="success && !loader"
                                                  class="alert error-danger alert-success alert-dismissible fade show"
                                                  role="alert">
                                                 <span><i class="fa fa-check-square" aria-hidden="true"></i> &nbsp; SLUĆAJ JE USPEŠNO DODAT</span>
@@ -40,7 +44,7 @@
                                                     <span>&times;</span>
                                                 </button>
                                             </div>
-                                            <form action="" method="post" class="add-form-modal "
+                                            <form action="" method="post" class="add-form-modal " :hidden="loader"
                                                   enctype="multipart/form-data">
                                                 <div class="form-group search-font-size-modal " v-if="type !== 6">
                                                     <label v-if="type == 1">SUD</label>
@@ -91,6 +95,18 @@
                                                         type == 5 ? 'BROJ U OSIGURANJU' :
                                                         type == 6 ? 'SLUŽBENI BROJ' : ''">
                                                 </div>
+
+
+
+                                                <div class="form-group"  v-if="type == 6">
+                                                    <label  for="number_office">ARHIVSKI BROJ</label>
+                                                    <input type="text" class="form-control"
+                                                           v-model="dataCase.archive " id="archiva"
+                                                           :placeholder="'ARHIVSKI BROJ'">
+                                                </div>
+
+
+
                                                 <div class="form-group ">
 
                                                     <label v-if="type == 1" for="prosecutor">TUŽILAC</label>
@@ -196,6 +212,7 @@ export default {
     props: ['type', 'case_types', 'institutionsSerchData'],
     data() {
         return {
+            loader: false,
             data: [],
             lang: 'sr',
             files: '',
@@ -209,6 +226,7 @@ export default {
                 'fail_day': '',
                 'marks': '',
                 'notes': '',
+                'archive': '',
                 'case_type_id': this.type,
 
 
@@ -242,7 +260,8 @@ export default {
     methods: {
 
         addCase() {
-
+            this.loader = true
+            this.success = false
             axios.post('/case/create/case', this.dataCase).then(({data}) => {
                 this.success = true;
                 this.dataCase = {
@@ -275,7 +294,7 @@ export default {
                         'dataUploadedID': data.ids,
                         'case_id': case_id
                     }).then(({data}) => {
-
+                            this.loader = false
                     })
                         .catch((error) => {
                             alert('POKUŠAJTE POSLE, DOŠLO JE DO GREŠKE')
