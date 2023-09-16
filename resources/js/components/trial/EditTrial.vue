@@ -117,12 +117,14 @@
                                                 </div>
                                                 <div class="pb-3">
                                                     <label for="time">VREME</label>
-                                                    <div class="input-group custom-file-button">
-                                                        <date-picker v-model="data.time" id="time"
-                                                                     type="time" format="HH:mm"
-                                                                     placeholder="VREME"></date-picker>
+<!--                                                    <div class="input-group custom-file-button">-->
+<!--                                                        <date-picker v-model="data.time" id="time"-->
+<!--                                                                     type="time" format="HH:mm"-->
+<!--                                                                     placeholder="VREME"></date-picker>-->
 
-                                                    </div>
+<!--                                                    </div>-->
+                                                    <input type="text" class="form-control" id="time"
+                                                           placeholder="VREME (upisati vreme u formatu 15:05)" v-model="data.time">
                                                 </div>
 
                                                 <div class="form-group">
@@ -270,7 +272,7 @@ export default {
         beforeOpenEdit(event) {
             this.data = JSON.parse(JSON.stringify(event.params.data)) ;
             this.trialIndex = event.params.index
-            this.data.time = new Date(this.data.date + ' ' + this.data.time) ;
+            // this.data.time = new Date(this.data.date + ' ' + this.data.time) ;
             this.success = false
         },
 

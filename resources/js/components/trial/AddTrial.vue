@@ -106,12 +106,14 @@
                                                 </div>
                                                 <div class="pb-3">
                                                     <label for="time">VREME</label>
-                                                    <div class="input-group custom-file-button">
-                                                        <date-picker v-model="trialData.time" :language="lang" id="time"
-                                                                     type="time"
-                                                                     format="HH:mm" placeholder="VREME"></date-picker>
+<!--                                                    <div class="input-group custom-file-button">-->
+<!--                                                        <date-picker v-model="trialData.time" :language="lang" id="time"-->
+<!--                                                                     type="time"-->
+<!--                                                                     format="HH:mm" placeholder="VREME"></date-picker>-->
 
-                                                    </div>
+<!--                                                    </div>-->
+                                                    <input type="text" class="form-control" id="time"
+                                                           placeholder="VREME (upisati vreme u formatu 15:05)" v-model="trialData.time">
                                                 </div>
 
                                                 <div class="form-group">
@@ -200,6 +202,7 @@ export default {
     },
     methods: {
         createTrial() {
+            console.log(this.trialData);
             axios.post('/trial/create/trial', this.trialData).then(({data}) => {
                 this.success = true;
                 this.$root.$emit("addNewTrialInArray", data);

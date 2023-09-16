@@ -69,10 +69,10 @@
                                                 </v-select>
                                             </div>
 
-                                            <div class="pb-3 search-font-size">
+                                            <div class="pb-3 search-font-size" hidden>
                                                 <label for="fail_day">VREME</label>
                                                 <div class="input-group custom-file-button">
-                                                    <date-picker v-model="search.time" type="time" format="HH:mm"
+                                                    <date-picker v-model="search.time" type="time"  format="HH:mm"
                                                                  id="fail_day" placeholder="VREME"></date-picker>
                                                 </div>
                                             </div>

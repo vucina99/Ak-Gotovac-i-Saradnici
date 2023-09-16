@@ -6257,6 +6257,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     createTrial: function createTrial() {
       var _this = this;
+      console.log(this.trialData);
       axios.post('/trial/create/trial', this.trialData).then(function (_ref) {
         var data = _ref.data;
         _this.success = true;
@@ -6631,7 +6632,7 @@ __webpack_require__.r(__webpack_exports__);
     beforeOpenEdit: function beforeOpenEdit(event) {
       this.data = JSON.parse(JSON.stringify(event.params.data));
       this.trialIndex = event.params.index;
-      this.data.time = new Date(this.data.date + ' ' + this.data.time);
+      // this.data.time = new Date(this.data.date + ' ' + this.data.time) ;
       this.success = false;
     },
     closeModal: function closeModal() {
@@ -6709,7 +6710,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     beforeOpenShow: function beforeOpenShow(event) {
       this.data = JSON.parse(JSON.stringify(event.params.data));
-      this.data.time = new Date(this.data.date + ' ' + this.data.time);
     },
     closeModal: function closeModal() {
       this.$modal.hide('show-trial-modal');
@@ -9170,7 +9170,7 @@ var render = function render() {
         return _vm.modalShow();
       }
     }
-  }, [_vm._v("\n        DODAJ "), _c("i", {
+  }, [_vm._v("\n            DODAJ "), _c("i", {
     staticClass: "fa fa-plus",
     attrs: {
       "aria-hidden": "true"
@@ -9431,24 +9431,29 @@ var render = function render() {
     attrs: {
       "for": "time"
     }
-  }, [_vm._v("VREME")]), _vm._v(" "), _c("div", {
-    staticClass: "input-group custom-file-button"
-  }, [_c("date-picker", {
-    attrs: {
-      language: _vm.lang,
-      id: "time",
-      type: "time",
-      format: "HH:mm",
-      placeholder: "VREME"
-    },
-    model: {
+  }, [_vm._v("VREME")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
       value: _vm.trialData.time,
-      callback: function callback($$v) {
-        _vm.$set(_vm.trialData, "time", $$v);
-      },
       expression: "trialData.time"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      id: "time",
+      placeholder: "VREME (upisati vreme u formatu 15:05)"
+    },
+    domProps: {
+      value: _vm.trialData.time
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.trialData, "time", $event.target.value);
+      }
     }
-  })], 1)]), _vm._v(" "), _c("div", {
+  })]), _vm._v(" "), _c("div", {
     staticClass: "form-group"
   }, [_c("label", {
     attrs: {
@@ -9669,7 +9674,10 @@ var render = function render() {
       expression: "search.person_2"
     }
   })], 1), _vm._v(" "), _c("div", {
-    staticClass: "pb-3 search-font-size"
+    staticClass: "pb-3 search-font-size",
+    attrs: {
+      hidden: ""
+    }
   }, [_c("label", {
     attrs: {
       "for": "fail_day"
@@ -10190,23 +10198,29 @@ var render = function render() {
     attrs: {
       "for": "time"
     }
-  }, [_vm._v("VREME")]), _vm._v(" "), _c("div", {
-    staticClass: "input-group custom-file-button"
-  }, [_c("date-picker", {
-    attrs: {
-      id: "time",
-      type: "time",
-      format: "HH:mm",
-      placeholder: "VREME"
-    },
-    model: {
+  }, [_vm._v("VREME")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
       value: _vm.data.time,
-      callback: function callback($$v) {
-        _vm.$set(_vm.data, "time", $$v);
-      },
       expression: "data.time"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      id: "time",
+      placeholder: "VREME (upisati vreme u formatu 15:05)"
+    },
+    domProps: {
+      value: _vm.data.time
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.data, "time", $event.target.value);
+      }
     }
-  })], 1)]), _vm._v(" "), _c("div", {
+  })]), _vm._v(" "), _c("div", {
     staticClass: "form-group"
   }, [_c("label", {
     attrs: {
@@ -10247,7 +10261,7 @@ var render = function render() {
         return _vm.deleteTrial();
       }
     }
-  }, [_vm._v("\n                                                    OBRIŠI ROČIŠTE   "), _c("i", {
+  }, [_vm._v("\n                                                        OBRIŠI ROČIŠTE   "), _c("i", {
     staticClass: "fa fa-trash",
     attrs: {
       "aria-hidden": "true"
@@ -10520,24 +10534,30 @@ var render = function render() {
     attrs: {
       "for": "time"
     }
-  }, [_vm._v("VREME")]), _vm._v(" "), _c("div", {
-    staticClass: "input-group custom-file-button"
-  }, [_c("date-picker", {
-    attrs: {
-      disabled: true,
-      id: "time",
-      type: "time",
-      format: "HH:mm",
-      placeholder: "VREME"
-    },
-    model: {
+  }, [_vm._v("VREME")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
       value: _vm.data.time,
-      callback: function callback($$v) {
-        _vm.$set(_vm.data, "time", $$v);
-      },
       expression: "data.time"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      disabled: "",
+      id: "time",
+      placeholder: "VREME (upisati vreme u formatu 15:05)"
+    },
+    domProps: {
+      value: _vm.data.time
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.data, "time", $event.target.value);
+      }
     }
-  })], 1)]), _vm._v(" "), _c("div", {
+  })]), _vm._v(" "), _c("div", {
     staticClass: "form-group"
   }, [_c("label", {
     attrs: {
