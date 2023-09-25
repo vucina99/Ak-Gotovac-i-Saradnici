@@ -115,6 +115,15 @@
                                                            v-model="data.defendants"
                                                            placeholder="STRANKA 2">
                                                 </div>
+
+
+                                                <div class="form-group" >
+                                                    <label  for="archiva">P BROJ</label>
+                                                    <input type="text" class="form-control"
+                                                           v-model="data.archive " id="archiva"
+                                                           :placeholder="'P BROJ'">
+                                                </div>
+
                                                 <div class="pb-3">
                                                     <label for="time">VREME</label>
 <!--                                                    <div class="input-group custom-file-button">-->

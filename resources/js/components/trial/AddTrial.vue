@@ -104,6 +104,14 @@
                                                     <input type="text" class="form-control" id="client2"
                                                            placeholder="STRANKA 2" v-model="trialData.person_2">
                                                 </div>
+
+                                                <div class="form-group" >
+                                                    <label  for="archiva">P BROJ</label>
+                                                    <input type="text" class="form-control"
+                                                           v-model="trialData.archive " id="archiva"
+                                                           :placeholder="'P BROJ'">
+                                                </div>
+
                                                 <div class="pb-3">
                                                     <label for="time">VREME</label>
 <!--                                                    <div class="input-group custom-file-button">-->
@@ -174,7 +182,8 @@ export default {
                 date: this.date_selected,
                 time: '',
                 note: '',
-                courtroom_number:''
+                courtroom_number:'',
+                archive: ''
             },
             customToolbar: [
                 [{header: [false, 1, 2, 3, 4, 5, 6]}],

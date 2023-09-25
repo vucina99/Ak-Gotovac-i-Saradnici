@@ -23,6 +23,8 @@ class CreateTrialsTable extends Migration
             $table->integer('institution_id')->nullable();
             $table->longText('note')->nullable();
             $table->date('date')->nullable();
+            $table->string('archive')->nullable();
+
             $table->string('time')->nullable();
             $table->timestamps();
         });

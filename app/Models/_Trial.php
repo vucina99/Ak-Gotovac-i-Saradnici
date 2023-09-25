@@ -20,7 +20,8 @@ class _Trial extends Model
         'note',
         'date',
         'time',
-        'courtroom_number'
+        'courtroom_number',
+        'archive'
     ];
 
     public function user()
@@ -54,6 +55,7 @@ class _Trial extends Model
             'note' => $request->note,
             'date' => $request->date,
             'time' => $request->time,
+            'archive' => $request->archive,
             'courtroom_number' => $request->courtroom_number
         ]);
 
@@ -80,6 +82,7 @@ class _Trial extends Model
             'note' => $request->note,
             'date' => $request->date,
             'time' => $request->time,
+            'archive' => $request->archive,
             'courtroom_number' => $request->courtroom_number
         ]);
 

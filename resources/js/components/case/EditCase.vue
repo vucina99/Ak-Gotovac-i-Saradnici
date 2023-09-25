@@ -83,7 +83,7 @@
                                                         IZVRŠITELJA </label>
                                                     <label v-if="type == 5" for="number_office">BROJ U
                                                         OSIGURANJU</label>
-                                                    <label v-if="type == 6" for="number_office">SLUŽBENI BROJ</label>
+                                                    <label v-if="type == 6" for="number_office">P BROJ</label>
 
                                                     <input type="text" class="form-control"
                                                            id="number_office"
@@ -94,12 +94,12 @@
                                                         type == 3   ? 'BROJ U SUDU'  :
                                                         type == 4 ? 'BROJ  U SUDU  /  KOD IZVRŠITELJA ' :
                                                         type == 5 ? 'BROJ U OSIGURANJU' :
-                                                        type == 6 ? 'SLUŽBENI BROJ' : ''">
+                                                        type == 6 ? 'P BROJ' : ''">
                                                 </div>
 
 
                                                 <div class="form-group"  v-if="type == 6">
-                                                    <label  for="number_office">ARHIVSKI BROJ</label>
+                                                    <label  for="archiva">ARHIVSKI BROJ</label>
                                                     <input type="text" class="form-control"
                                                            v-model="caseData.archive " id="archiva"
                                                            :placeholder="'ARHIVSKI BROJ'">

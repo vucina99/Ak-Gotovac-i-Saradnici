@@ -24,6 +24,8 @@ class CreateCasesTable extends Migration
             $table->string('mark')->nullable();
             $table->date('fail_day')->nullable();
             $table->integer('case_type_id')->nullable();
+            $table->string('archive')->nullable();
+
             $table->timestamps();
         });
     }

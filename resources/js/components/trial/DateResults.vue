@@ -111,6 +111,7 @@
                                     <th>STRANKA 1</th>
                                     <th>STRANKA 2</th>
                                     <th>BROJ U KANCELARIJI</th>
+                                    <th>P BROJ</th>
                                     <th>ZAPOSLENI</th>
                                     <th>IZMENI</th>
 
@@ -128,6 +129,7 @@
                                     <td @click.prevent="modalShowTrial(trial)">{{ trial.prosecutor }}</td>
                                     <td @click.prevent="modalShowTrial(trial)">{{ trial.defendants }}</td>
                                     <td @click.prevent="modalShowTrial(trial)">{{ trial.numberOffice }}</td>
+                                    <td @click.prevent="modalShowTrial(trial)">{{ trial.archive }}</td>
                                     <td @click.prevent="modalShowTrial(trial)">{{ trial.user?.name }}</td>
                                     <td @click.prevent="modalEditTrial(trial, index)">
                                         <div class="w-100"><i class="fa color-blue fa fa-pencil" aria-hidden="true"></i>
@@ -142,7 +144,7 @@
                                 </tr>
                                 <tr v-if="!allTrial  " class="bg-light">
 
-                                    <td colspan="9"
+                                    <td colspan="10"
                                         class="text-center">
                                         <span>NEMA PODATAKA ZA PRIKAZ</span></td>
 

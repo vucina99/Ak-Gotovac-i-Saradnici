@@ -49,7 +49,7 @@
                                             <label v-if="type == 4" for="number_office">BROJ U SUDU / KOD
                                                 IZVRŠITELJA </label>
                                             <label v-if="type == 5" for="number_office">BROJ U OSIGURANJU</label>
-                                            <label v-if="type == 6" for="number_office">SLUŽBENI BROJ</label>
+                                            <label v-if="type == 6" for="number_office">P BROJ</label>
                                             <input type="text" name="number_court" id="number_court"
                                                    v-model="search.institution_number"
                                                    class="form-control" :placeholder="
@@ -58,7 +58,7 @@
                                                         type == 3   ? 'BROJ U SUDU'  :
                                                         type == 4 ? 'BROJ  U SUDU  /  KOD IZVRŠITELJA ' :
                                                         type == 5 ? 'BROJ U OSIGURANJU' :
-                                                        type == 6 ? 'SLUŽBENI BROJ' : ''">
+                                                        type == 6 ? 'P BROJ' : ''">
                                         </div>
 
                                         <div class="form-group search-font-size">
@@ -147,7 +147,7 @@
                                     <span v-if="type == 3">BROJ U SUDU</span>
                                     <span v-if="type == 4">BROJ  U SUDU  /  KOD IZVRŠITELJA </span>
                                     <span v-if="type == 5">BROJ U OSIGURANJU</span>
-                                    <span v-if="type == 6">SLUŽBENI BROJ</span>
+                                    <span v-if="type == 6">P BROJ</span>
                                 </th>
                                 <th v-if="type == 6  ">
                                     ARHIVSKI BROJ

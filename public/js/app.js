@@ -6219,7 +6219,8 @@ __webpack_require__.r(__webpack_exports__);
         date: this.date_selected,
         time: '',
         note: '',
-        courtroom_number: ''
+        courtroom_number: '',
+        archive: ''
       },
       customToolbar: [[{
         header: [false, 1, 2, 3, 4, 5, 6]
@@ -7503,7 +7504,7 @@ var render = function render() {
     attrs: {
       "for": "number_office"
     }
-  }, [_vm._v("SLUŽBENI BROJ")]) : _vm._e(), _vm._v(" "), _c("input", {
+  }, [_vm._v("P BROJ")]) : _vm._e(), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -7514,7 +7515,7 @@ var render = function render() {
     attrs: {
       type: "text",
       id: "number_office",
-      placeholder: _vm.type == 1 ? "BROJ U SUDU" : _vm.type == 2 ? "BROJ U SUDU/TUŽILAŠTVU" : _vm.type == 3 ? "BROJ U SUDU" : _vm.type == 4 ? "BROJ  U SUDU  /  KOD IZVRŠITELJA " : _vm.type == 5 ? "BROJ U OSIGURANJU" : _vm.type == 6 ? "SLUŽBENI BROJ" : ""
+      placeholder: _vm.type == 1 ? "BROJ U SUDU" : _vm.type == 2 ? "BROJ U SUDU/TUŽILAŠTVU" : _vm.type == 3 ? "BROJ U SUDU" : _vm.type == 4 ? "BROJ  U SUDU  /  KOD IZVRŠITELJA " : _vm.type == 5 ? "BROJ U OSIGURANJU" : _vm.type == 6 ? "P BROJ" : ""
     },
     domProps: {
       value: _vm.dataCase.number_court
@@ -7529,7 +7530,7 @@ var render = function render() {
     staticClass: "form-group"
   }, [_c("label", {
     attrs: {
-      "for": "number_office"
+      "for": "archiva"
     }
   }, [_vm._v("ARHIVSKI BROJ")]), _vm._v(" "), _c("input", {
     directives: [{
@@ -7918,7 +7919,7 @@ var render = function render() {
     attrs: {
       "for": "number_office"
     }
-  }, [_vm._v("SLUŽBENI BROJ")]) : _vm._e(), _vm._v(" "), _c("input", {
+  }, [_vm._v("P BROJ")]) : _vm._e(), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -7929,7 +7930,7 @@ var render = function render() {
     attrs: {
       type: "text",
       id: "number_office",
-      placeholder: _vm.type == 1 ? "BROJ U SUDU" : _vm.type == 2 ? "BROJ U SUDU/TUŽILAŠTVU" : _vm.type == 3 ? "BROJ U SUDU" : _vm.type == 4 ? "BROJ  U SUDU  /  KOD IZVRŠITELJA " : _vm.type == 5 ? "BROJ U OSIGURANJU" : _vm.type == 6 ? "SLUŽBENI BROJ" : ""
+      placeholder: _vm.type == 1 ? "BROJ U SUDU" : _vm.type == 2 ? "BROJ U SUDU/TUŽILAŠTVU" : _vm.type == 3 ? "BROJ U SUDU" : _vm.type == 4 ? "BROJ  U SUDU  /  KOD IZVRŠITELJA " : _vm.type == 5 ? "BROJ U OSIGURANJU" : _vm.type == 6 ? "P BROJ" : ""
     },
     domProps: {
       value: _vm.caseData.numberInstitution
@@ -7944,7 +7945,7 @@ var render = function render() {
     staticClass: "form-group"
   }, [_c("label", {
     attrs: {
-      "for": "number_office"
+      "for": "archiva"
     }
   }, [_vm._v("ARHIVSKI BROJ")]), _vm._v(" "), _c("input", {
     directives: [{
@@ -8347,7 +8348,7 @@ var render = function render() {
     attrs: {
       "for": "number_office"
     }
-  }, [_vm._v("SLUŽBENI BROJ")]) : _vm._e(), _vm._v(" "), _c("input", {
+  }, [_vm._v("P BROJ")]) : _vm._e(), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -8359,7 +8360,7 @@ var render = function render() {
       type: "text",
       name: "number_court",
       id: "number_court",
-      placeholder: _vm.type == 1 ? "BROJ U SUDU" : _vm.type == 2 ? "BROJ U SUDU/TUŽILAŠTVU" : _vm.type == 3 ? "BROJ U SUDU" : _vm.type == 4 ? "BROJ  U SUDU  /  KOD IZVRŠITELJA " : _vm.type == 5 ? "BROJ U OSIGURANJU" : _vm.type == 6 ? "SLUŽBENI BROJ" : ""
+      placeholder: _vm.type == 1 ? "BROJ U SUDU" : _vm.type == 2 ? "BROJ U SUDU/TUŽILAŠTVU" : _vm.type == 3 ? "BROJ U SUDU" : _vm.type == 4 ? "BROJ  U SUDU  /  KOD IZVRŠITELJA " : _vm.type == 5 ? "BROJ U OSIGURANJU" : _vm.type == 6 ? "P BROJ" : ""
     },
     domProps: {
       value: _vm.search.institution_number
@@ -8525,7 +8526,7 @@ var render = function render() {
     attrs: {
       scope: "col"
     }
-  }, [_vm.type == 1 ? _c("span", [_vm._v("BROJ U SUDU")]) : _vm._e(), _vm._v(" "), _vm.type == 2 ? _c("span", [_vm._v("BROJ U SUDU/TUŽILAŠTVU")]) : _vm._e(), _vm._v(" "), _vm.type == 3 ? _c("span", [_vm._v("BROJ U SUDU")]) : _vm._e(), _vm._v(" "), _vm.type == 4 ? _c("span", [_vm._v("BROJ  U SUDU  /  KOD IZVRŠITELJA ")]) : _vm._e(), _vm._v(" "), _vm.type == 5 ? _c("span", [_vm._v("BROJ U OSIGURANJU")]) : _vm._e(), _vm._v(" "), _vm.type == 6 ? _c("span", [_vm._v("SLUŽBENI BROJ")]) : _vm._e()]), _vm._v(" "), _vm.type == 6 ? _c("th", [_vm._v("\n                                ARHIVSKI BROJ\n                            ")]) : _vm._e(), _vm._v(" "), _c("th", {
+  }, [_vm.type == 1 ? _c("span", [_vm._v("BROJ U SUDU")]) : _vm._e(), _vm._v(" "), _vm.type == 2 ? _c("span", [_vm._v("BROJ U SUDU/TUŽILAŠTVU")]) : _vm._e(), _vm._v(" "), _vm.type == 3 ? _c("span", [_vm._v("BROJ U SUDU")]) : _vm._e(), _vm._v(" "), _vm.type == 4 ? _c("span", [_vm._v("BROJ  U SUDU  /  KOD IZVRŠITELJA ")]) : _vm._e(), _vm._v(" "), _vm.type == 5 ? _c("span", [_vm._v("BROJ U OSIGURANJU")]) : _vm._e(), _vm._v(" "), _vm.type == 6 ? _c("span", [_vm._v("P BROJ")]) : _vm._e()]), _vm._v(" "), _vm.type == 6 ? _c("th", [_vm._v("\n                                ARHIVSKI BROJ\n                            ")]) : _vm._e(), _vm._v(" "), _c("th", {
     attrs: {
       scope: "col"
     }
@@ -8880,7 +8881,7 @@ var render = function render() {
     attrs: {
       "for": "number_office"
     }
-  }, [_vm._v("SLUŽBENI BROJ")]) : _vm._e(), _vm._v(" "), _c("input", {
+  }, [_vm._v("P BROJ")]) : _vm._e(), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -8892,7 +8893,7 @@ var render = function render() {
       type: "text",
       disabled: "true",
       id: "number_office",
-      placeholder: _vm.type == 1 ? "BROJ U SUDU" : _vm.type == 2 ? "BROJ U SUDU/TUŽILAŠTVU" : _vm.type == 3 ? "BROJ U SUDU" : _vm.type == 4 ? "BROJ  U SUDU  /  KOD IZVRŠITELJA " : _vm.type == 5 ? "BROJ U OSIGURANJU" : _vm.type == 6 ? "SLUŽBENI BROJ" : ""
+      placeholder: _vm.type == 1 ? "BROJ U SUDU" : _vm.type == 2 ? "BROJ U SUDU/TUŽILAŠTVU" : _vm.type == 3 ? "BROJ U SUDU" : _vm.type == 4 ? "BROJ  U SUDU  /  KOD IZVRŠITELJA " : _vm.type == 5 ? "BROJ U OSIGURANJU" : _vm.type == 6 ? "P BROJ" : ""
     },
     domProps: {
       value: _vm.caseData.numberInstitution
@@ -8907,7 +8908,7 @@ var render = function render() {
     staticClass: "form-group"
   }, [_c("label", {
     attrs: {
-      "for": "number_office"
+      "for": "archiva"
     }
   }, [_vm._v("ARHIVSKI BROJ")]), _vm._v(" "), _c("input", {
     directives: [{
@@ -9426,6 +9427,34 @@ var render = function render() {
       }
     }
   })]), _vm._v(" "), _c("div", {
+    staticClass: "form-group"
+  }, [_c("label", {
+    attrs: {
+      "for": "archiva"
+    }
+  }, [_vm._v("P BROJ")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.trialData.archive,
+      expression: "trialData.archive "
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      id: "archiva",
+      placeholder: "P BROJ"
+    },
+    domProps: {
+      value: _vm.trialData.archive
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.trialData, "archive", $event.target.value);
+      }
+    }
+  })]), _vm._v(" "), _c("div", {
     staticClass: "pb-3"
   }, [_c("label", {
     attrs: {
@@ -9791,6 +9820,13 @@ var render = function render() {
           return _vm.modalShowTrial(trial);
         }
       }
+    }, [_vm._v(_vm._s(trial.archive))]), _vm._v(" "), _c("td", {
+      on: {
+        click: function click($event) {
+          $event.preventDefault();
+          return _vm.modalShowTrial(trial);
+        }
+      }
     }, [_vm._v(_vm._s((_trial$user = trial.user) === null || _trial$user === void 0 ? void 0 : _trial$user.name))]), _vm._v(" "), _c("td", {
       on: {
         click: function click($event) {
@@ -9865,7 +9901,7 @@ var staticRenderFns = [function () {
     _c = _vm._self._c;
   return _c("thead", {
     staticClass: "bg-blue text-personal-light"
-  }, [_c("tr", [_c("th"), _vm._v(" "), _c("th", [_vm._v("VREME")]), _vm._v(" "), _c("th", [_vm._v("INSTITUCIJA")]), _vm._v(" "), _c("th", [_vm._v("BROJ SUDNICE")]), _vm._v(" "), _c("th", [_vm._v("STRANKA 1")]), _vm._v(" "), _c("th", [_vm._v("STRANKA 2")]), _vm._v(" "), _c("th", [_vm._v("BROJ U KANCELARIJI")]), _vm._v(" "), _c("th", [_vm._v("ZAPOSLENI")]), _vm._v(" "), _c("th", [_vm._v("IZMENI")])])]);
+  }, [_c("tr", [_c("th"), _vm._v(" "), _c("th", [_vm._v("VREME")]), _vm._v(" "), _c("th", [_vm._v("INSTITUCIJA")]), _vm._v(" "), _c("th", [_vm._v("BROJ SUDNICE")]), _vm._v(" "), _c("th", [_vm._v("STRANKA 1")]), _vm._v(" "), _c("th", [_vm._v("STRANKA 2")]), _vm._v(" "), _c("th", [_vm._v("BROJ U KANCELARIJI")]), _vm._v(" "), _c("th", [_vm._v("P BROJ")]), _vm._v(" "), _c("th", [_vm._v("ZAPOSLENI")]), _vm._v(" "), _c("th", [_vm._v("IZMENI")])])]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
@@ -9883,7 +9919,7 @@ var staticRenderFns = [function () {
   return _c("td", {
     staticClass: "text-center",
     attrs: {
-      colspan: "9"
+      colspan: "10"
     }
   }, [_c("span", [_vm._v("NEMA PODATAKA ZA PRIKAZ")])]);
 }, function () {
@@ -10190,6 +10226,34 @@ var render = function render() {
       input: function input($event) {
         if ($event.target.composing) return;
         _vm.$set(_vm.data, "defendants", $event.target.value);
+      }
+    }
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "form-group"
+  }, [_c("label", {
+    attrs: {
+      "for": "archiva"
+    }
+  }, [_vm._v("P BROJ")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.data.archive,
+      expression: "data.archive "
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      id: "archiva",
+      placeholder: "P BROJ"
+    },
+    domProps: {
+      value: _vm.data.archive
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.data, "archive", $event.target.value);
       }
     }
   })]), _vm._v(" "), _c("div", {
@@ -10526,6 +10590,35 @@ var render = function render() {
       input: function input($event) {
         if ($event.target.composing) return;
         _vm.$set(_vm.data, "defendants", $event.target.value);
+      }
+    }
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "form-group"
+  }, [_c("label", {
+    attrs: {
+      "for": "archiva"
+    }
+  }, [_vm._v("P BROJ")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.data.archive,
+      expression: "data.archive "
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      disabled: true,
+      id: "archiva",
+      placeholder: "P BROJ"
+    },
+    domProps: {
+      value: _vm.data.archive
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.data, "archive", $event.target.value);
       }
     }
   })]), _vm._v(" "), _c("div", {
