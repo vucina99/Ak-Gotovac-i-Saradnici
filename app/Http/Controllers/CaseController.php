@@ -50,10 +50,10 @@ class CaseController extends Controller
             $cases = $cases->where('institution_id', $search->institution['id']);
         }
         if ($search->institution_number !== '' && $search->institution_number !== null) {
-            $cases = $cases->where('number_institution', $search->institution_number);
+            $cases = $cases->where('number_institution', 'LIKE', '%' . $search->institution_number. '%');
         }
         if ($search->number_office !== '' && $search->number_office !== null) {
-            $cases = $cases->where('number_office', $search->number_office);
+            $cases = $cases->where('number_office',  'LIKE', '%' .$search->number_office. '%');
         }
         if ($search->person_1 !== '' && $search->person_1 !== null) {
             $cases = $cases->where('prosecutor', 'LIKE', '%' . $search->person_1['prosecutor'] . '%');
