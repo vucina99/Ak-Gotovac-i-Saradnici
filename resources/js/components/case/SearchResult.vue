@@ -118,7 +118,7 @@
 
                                                 </button>
                                             </div>
-                                            <div class="w-100 mt-3  ">
+                                            <div class="w-100 mt-3  " v-if="is_admin == 2">
                                                 <add-cases :type="type" :institutionsSerchData="institutionsSerchData"
                                                            :case_types="caseTypes"></add-cases>
                                             </div>
@@ -193,7 +193,9 @@
                                     }}
                                 </td>
                                 <td @click.prevent="modalEditCase(data.id , index)">
-                                    <div class="w-100"><i class="fa color-blue fa fa-pencil" aria-hidden="true"></i>
+                                    <div class="w-100" v-if="is_admin == 2"><i class="fa color-blue fa fa-pencil" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="w-100"  v-else><i class="fa text-danger fa-solid fa-ban" aria-hidden="true"></i>
                                     </div>
                                 </td>
                             </tr>
@@ -267,6 +269,7 @@ import 'vue2-datepicker/locale/sr';
 
 export default {
     name: "SearchResult",
+    props:["is_admin"],
     components: {
         'v-select': vSelect,
         'add-cases': AddCase,
@@ -382,11 +385,15 @@ export default {
             this.getPersons();
         },
         modalShowCase(data) {
+
             this.$modal.show('show-case-modal', {'caseID': data});
         },
 
         modalEditCase(data, index) {
-            this.$modal.show('edit-case-modal', {'caseID': data, 'caseIndex': index});
+            if(this.is_admin == 2){
+                this.$modal.show('edit-case-modal', {'caseID': data, 'caseIndex': index});
+
+            }
         },
         getCaseType() {
             axios.get('/case/get/type').then(({data}) => {

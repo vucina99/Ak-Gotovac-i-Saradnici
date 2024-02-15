@@ -74,12 +74,12 @@
                                                            v-model="trialData.number_office">
                                                 </div>
 
-                                                <div class="form-group">
-                                                    <label for="number_institutions">BROJ U INSTITUCIJI</label>
-                                                    <input type="text" class="form-control" id="number_institutions"
-                                                           placeholder="BROJ U INSTITUCIJI"
-                                                           v-model="trialData.number_institution">
-                                                </div>
+<!--                                                <div class="form-group">-->
+<!--                                                    <label for="number_institutions">BROJ U INSTITUCIJI</label>-->
+<!--                                                    <input type="text" class="form-control" id="number_institutions"-->
+<!--                                                           placeholder="BROJ U INSTITUCIJI"-->
+<!--                                                           v-model="trialData.number_institution">-->
+<!--                                                </div>-->
 
 
                                                 <div class="form-group ">

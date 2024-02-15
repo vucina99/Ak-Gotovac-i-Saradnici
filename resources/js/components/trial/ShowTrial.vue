@@ -65,13 +65,13 @@
                                                            placeholder="BROJ U KANCELARIJI">
                                                 </div>
 
-                                                <div class="form-group">
-                                                    <label for="number_institutions">BROJ U INSTITUCIJI</label>
-                                                    <input type="text" class="form-control" id="number_institutions"
-                                                           placeholder="BROJ U KANCELARIJI"
-                                                           disabled
-                                                           v-model="data.numberInstitution">
-                                                </div>
+<!--                                                <div class="form-group">-->
+<!--                                                    <label for="number_institutions">BROJ U INSTITUCIJI</label>-->
+<!--                                                    <input type="text" class="form-control" id="number_institutions"-->
+<!--                                                           placeholder="BROJ U KANCELARIJI"-->
+<!--                                                           disabled-->
+<!--                                                           v-model="data.numberInstitution">-->
+<!--                                                </div>-->
 
 
                                                 <div class="form-group ">

@@ -5920,6 +5920,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "SearchResult",
+  props: ["is_admin"],
   components: {
     'v-select': (vue_select__WEBPACK_IMPORTED_MODULE_0___default()),
     'add-cases': _AddCase__WEBPACK_IMPORTED_MODULE_1__["default"],
@@ -6049,10 +6050,12 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     modalEditCase: function modalEditCase(data, index) {
-      this.$modal.show('edit-case-modal', {
-        'caseID': data,
-        'caseIndex': index
-      });
+      if (this.is_admin == 2) {
+        this.$modal.show('edit-case-modal', {
+          'caseID': data,
+          'caseIndex': index
+        });
+      }
     },
     getCaseType: function getCaseType() {
       var _this4 = this;
@@ -6384,7 +6387,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "DateResults",
-  props: ['date_selected'],
+  props: ['date_selected', 'is_admin'],
   components: {
     'v-select': (vue_select__WEBPACK_IMPORTED_MODULE_0___default()),
     DatePicker: vue2_datepicker__WEBPACK_IMPORTED_MODULE_1__["default"],
@@ -6445,10 +6448,12 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     modalEditTrial: function modalEditTrial(data, index) {
-      this.$modal.show('edit-trial-modal', {
-        'data': data,
-        'index': index
-      });
+      if (this.is_admin == 2) {
+        this.$modal.show('edit-trial-modal', {
+          'data': data,
+          'index': index
+        });
+      }
     },
     getInstitutionsForSearch: function getInstitutionsForSearch() {
       var _this2 = this;
@@ -8502,7 +8507,7 @@ var render = function render() {
     attrs: {
       "aria-hidden": "true"
     }
-  })])]), _vm._v(" "), _c("div", {
+  })])]), _vm._v(" "), _vm.is_admin == 2 ? _c("div", {
     staticClass: "w-100 mt-3"
   }, [_c("add-cases", {
     attrs: {
@@ -8510,7 +8515,7 @@ var render = function render() {
       institutionsSerchData: _vm.institutionsSerchData,
       case_types: _vm.caseTypes
     }
-  })], 1)])])])])])])], 1), _vm._v(" "), _c("div", {
+  })], 1) : _vm._e()])])])])])])], 1), _vm._v(" "), _c("div", {
     staticClass: "col-lg-8 col-sm-12 margin-top-table"
   }, [_c("div", {
     staticClass: "table-responsive"
@@ -8607,7 +8612,21 @@ var render = function render() {
           return _vm.modalEditCase(data.id, index);
         }
       }
-    }, [_vm._m(0, true)])]);
+    }, [_vm.is_admin == 2 ? _c("div", {
+      staticClass: "w-100"
+    }, [_c("i", {
+      staticClass: "fa color-blue fa fa-pencil",
+      attrs: {
+        "aria-hidden": "true"
+      }
+    })]) : _c("div", {
+      staticClass: "w-100"
+    }, [_c("i", {
+      staticClass: "fa text-danger fa-solid fa-ban",
+      attrs: {
+        "aria-hidden": "true"
+      }
+    })])])]);
   }), _vm._v(" "), _vm.allCases.length < 1 ? _c("tr", {
     staticClass: "bg-light"
   }, [_vm.type == 1 || _vm.type == 2 || _vm.type == 4 || _vm.type == 5 ? _c("td", {
@@ -8659,7 +8678,7 @@ var render = function render() {
         return _vm.getCase(_vm.page - 1);
       }
     }
-  }, [_vm._m(1)]) : _vm._e(), _vm._v(" "), _vm._l(_vm.paginateCount, function (index) {
+  }, [_vm._m(0)]) : _vm._e(), _vm._v(" "), _vm._l(_vm.paginateCount, function (index) {
     return _c("li", {
       key: index,
       "class": [_vm.page == index - 1 ? "active" : "", "page-item"],
@@ -8683,20 +8702,9 @@ var render = function render() {
         return _vm.getCase(_vm.page + 1);
       }
     }
-  }, [_vm._m(2)]) : _vm._e()], 2)]) : _vm._e()])])])])]);
+  }, [_vm._m(1)]) : _vm._e()], 2)]) : _vm._e()])])])])]);
 };
 var staticRenderFns = [function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("div", {
-    staticClass: "w-100"
-  }, [_c("i", {
-    staticClass: "fa color-blue fa fa-pencil",
-    attrs: {
-      "aria-hidden": "true"
-    }
-  })]);
-}, function () {
   var _vm = this,
     _c = _vm._self._c;
   return _c("a", {
@@ -9318,34 +9326,6 @@ var render = function render() {
     staticClass: "form-group"
   }, [_c("label", {
     attrs: {
-      "for": "number_institutions"
-    }
-  }, [_vm._v("BROJ U INSTITUCIJI")]), _vm._v(" "), _c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.trialData.number_institution,
-      expression: "trialData.number_institution"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      type: "text",
-      id: "number_institutions",
-      placeholder: "BROJ U INSTITUCIJI"
-    },
-    domProps: {
-      value: _vm.trialData.number_institution
-    },
-    on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.$set(_vm.trialData, "number_institution", $event.target.value);
-      }
-    }
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "form-group"
-  }, [_c("label", {
-    attrs: {
       "for": "client1"
     }
   }, [_vm._v("BROJ SUDNICE")]), _vm._v(" "), _c("input", {
@@ -9744,14 +9724,14 @@ var render = function render() {
     attrs: {
       "aria-hidden": "true"
     }
-  })])]), _vm._v(" "), _c("div", {
+  })])]), _vm._v(" "), _vm.is_admin == 2 ? _c("div", {
     staticClass: "w-100 mt-3"
   }, [_c("add-trial", {
     attrs: {
       date_selected: _vm.date_selected,
       institutions_serchData: _vm.institutionsSerchData
     }
-  })], 1)])])])])])])]), _vm._v(" "), _c("div", {
+  })], 1) : _vm._e()])])])])])])]), _vm._v(" "), _c("div", {
     staticClass: "col-lg-8 col-sm-12 margin-top-table"
   }, [_c("div", {
     staticClass: "table-responsive"
@@ -9834,7 +9814,21 @@ var render = function render() {
           return _vm.modalEditTrial(trial, index);
         }
       }
-    }, [_vm._m(2, true)])]);
+    }, [_vm.is_admin == 2 ? _c("div", {
+      staticClass: "w-100"
+    }, [_c("i", {
+      staticClass: "fa color-blue fa fa-pencil",
+      attrs: {
+        "aria-hidden": "true"
+      }
+    })]) : _c("div", {
+      staticClass: "w-100"
+    }, [_c("i", {
+      staticClass: "fa text-danger fa-solid fa-ban",
+      attrs: {
+        "aria-hidden": "true"
+      }
+    })])])]);
   }), _vm._v(" "), _vm.allTrial.length < 1 ? _c("tr", {
     staticClass: "bg-light"
   }, [_c("td", {
@@ -9844,7 +9838,7 @@ var render = function render() {
     }
   }, [_c("vue-simple-spinner")], 1)]) : _vm._e(), _vm._v(" "), !_vm.allTrial ? _c("tr", {
     staticClass: "bg-light"
-  }, [_vm._m(3)]) : _vm._e()], 2)]), _vm._v(" "), _c("br")]), _vm._v(" "), _c("div", {
+  }, [_vm._m(2)]) : _vm._e()], 2)]), _vm._v(" "), _c("br")]), _vm._v(" "), _c("div", {
     staticClass: "paginationScroll"
   }, [_vm.paginateCount > 1 ? _c("nav", {
     staticClass: "w-100",
@@ -9861,7 +9855,7 @@ var render = function render() {
         return _vm.getTrials(_vm.page - 1);
       }
     }
-  }, [_vm._m(4)]) : _vm._e(), _vm._v(" "), _vm._l(_vm.paginateCount, function (index) {
+  }, [_vm._m(3)]) : _vm._e(), _vm._v(" "), _vm._l(_vm.paginateCount, function (index) {
     return _c("li", {
       key: index,
       "class": [_vm.page == index - 1 ? "active" : "", "page-item"],
@@ -9885,7 +9879,7 @@ var render = function render() {
         return _vm.getTrials(_vm.page + 1);
       }
     }
-  }, [_vm._m(5)]) : _vm._e()], 2)]) : _vm._e()])])])])])]);
+  }, [_vm._m(4)]) : _vm._e()], 2)]) : _vm._e()])])])])])]);
 };
 var staticRenderFns = [function () {
   var _vm = this,
@@ -9902,17 +9896,6 @@ var staticRenderFns = [function () {
   return _c("thead", {
     staticClass: "bg-blue text-personal-light"
   }, [_c("tr", [_c("th"), _vm._v(" "), _c("th", [_vm._v("VREME")]), _vm._v(" "), _c("th", [_vm._v("INSTITUCIJA")]), _vm._v(" "), _c("th", [_vm._v("BROJ SUDNICE")]), _vm._v(" "), _c("th", [_vm._v("STRANKA 1")]), _vm._v(" "), _c("th", [_vm._v("STRANKA 2")]), _vm._v(" "), _c("th", [_vm._v("BROJ U KANCELARIJI")]), _vm._v(" "), _c("th", [_vm._v("P BROJ")]), _vm._v(" "), _c("th", [_vm._v("ZAPOSLENI")]), _vm._v(" "), _c("th", [_vm._v("IZMENI")])])]);
-}, function () {
-  var _vm = this,
-    _c = _vm._self._c;
-  return _c("div", {
-    staticClass: "w-100"
-  }, [_c("i", {
-    staticClass: "fa color-blue fa fa-pencil",
-    attrs: {
-      "aria-hidden": "true"
-    }
-  })]);
 }, function () {
   var _vm = this,
     _c = _vm._self._c;
@@ -10114,34 +10097,6 @@ var render = function render() {
       input: function input($event) {
         if ($event.target.composing) return;
         _vm.$set(_vm.data, "numberOffice", $event.target.value);
-      }
-    }
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "form-group"
-  }, [_c("label", {
-    attrs: {
-      "for": "number_institutions"
-    }
-  }, [_vm._v("BROJ U INSTITUCIJI")]), _vm._v(" "), _c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.data.numberInstitution,
-      expression: "data.numberInstitution"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      type: "text",
-      id: "number_institutions",
-      placeholder: "BROJ U KANCELARIJI"
-    },
-    domProps: {
-      value: _vm.data.numberInstitution
-    },
-    on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.$set(_vm.data, "numberInstitution", $event.target.value);
       }
     }
   })]), _vm._v(" "), _c("div", {
@@ -10474,35 +10429,6 @@ var render = function render() {
       input: function input($event) {
         if ($event.target.composing) return;
         _vm.$set(_vm.data, "numberOffice", $event.target.value);
-      }
-    }
-  })]), _vm._v(" "), _c("div", {
-    staticClass: "form-group"
-  }, [_c("label", {
-    attrs: {
-      "for": "number_institutions"
-    }
-  }, [_vm._v("BROJ U INSTITUCIJI")]), _vm._v(" "), _c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.data.numberInstitution,
-      expression: "data.numberInstitution"
-    }],
-    staticClass: "form-control",
-    attrs: {
-      type: "text",
-      id: "number_institutions",
-      placeholder: "BROJ U KANCELARIJI",
-      disabled: ""
-    },
-    domProps: {
-      value: _vm.data.numberInstitution
-    },
-    on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.$set(_vm.data, "numberInstitution", $event.target.value);
       }
     }
   })]), _vm._v(" "), _c("div", {
@@ -18364,7 +18290,7 @@ ___CSS_LOADER_EXPORT___.i(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_u
 ___CSS_LOADER_EXPORT___.i(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_public_css_style_css__WEBPACK_IMPORTED_MODULE_2__["default"]);
 ___CSS_LOADER_EXPORT___.i(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_public_css_responsive_css__WEBPACK_IMPORTED_MODULE_3__["default"]);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\r\n\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -18424,7 +18350,7 @@ ___CSS_LOADER_EXPORT___.i(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_u
 ___CSS_LOADER_EXPORT___.i(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_public_css_style_css__WEBPACK_IMPORTED_MODULE_3__["default"]);
 ___CSS_LOADER_EXPORT___.i(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_public_css_responsive_css__WEBPACK_IMPORTED_MODULE_4__["default"]);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

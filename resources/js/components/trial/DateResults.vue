@@ -83,7 +83,7 @@
                                                         PRETRAGA <i class="fa fa-search" aria-hidden="true"></i>
                                                     </button>
                                                 </div>
-                                                <div class="w-100 mt-3  ">
+                                                <div class="w-100 mt-3  " v-if="is_admin == 2" >
                                                     <add-trial :date_selected="date_selected"
                                                                :institutions_serchData="institutionsSerchData"></add-trial>
                                                 </div>
@@ -132,7 +132,9 @@
                                     <td @click.prevent="modalShowTrial(trial)">{{ trial.archive }}</td>
                                     <td @click.prevent="modalShowTrial(trial)">{{ trial.user?.name }}</td>
                                     <td @click.prevent="modalEditTrial(trial, index)">
-                                        <div class="w-100"><i class="fa color-blue fa fa-pencil" aria-hidden="true"></i>
+                                        <div class="w-100" v-if="is_admin == 2"><i class="fa color-blue fa fa-pencil"  aria-hidden="true"></i>
+                                        </div>
+                                        <div class="w-100"  v-else><i class="fa text-danger fa-solid fa-ban" aria-hidden="true"></i>
                                         </div>
                                     </td>
                                 </tr>
@@ -196,7 +198,7 @@ import ShowTrial from "./ShowTrial";
 
 export default {
     name: "DateResults",
-    props: ['date_selected'],
+    props: ['date_selected' , 'is_admin'],
     components: {
         'v-select': vSelect,
         DatePicker,
@@ -255,7 +257,9 @@ export default {
             this.$modal.show('show-trial-modal', {'data': data});
         },
         modalEditTrial(data , index) {
-            this.$modal.show('edit-trial-modal', {'data': data , 'index' : index});
+            if(this.is_admin == 2){
+                this.$modal.show('edit-trial-modal', {'data': data , 'index' : index});
+            }
         },
         getInstitutionsForSearch() {
             axios.get('/trial/get/institutions').then(({data}) => {

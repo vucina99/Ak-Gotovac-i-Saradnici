@@ -8,14 +8,14 @@ Route::group(['prefix' => 'case'], function () {
     Route::post('/get/cases', [CaseController::class, 'getCases']);
     Route::post('/get/institutions', [CaseController::class, 'getInstitutions']);
     Route::post('/get/persons', [CaseController::class, 'getPersons']);
-    Route::post('/create/case', [CaseController::class, 'createCase']);
-    Route::post('/files/upload', [CaseController::class, 'filesUpload']);
-    Route::post('/update/files', [CaseController::class, 'updateFiles']);
+    Route::post('/create/case', [CaseController::class, 'createCase'])->middleware("adminHttp");
+    Route::post('/files/upload', [CaseController::class, 'filesUpload'])->middleware("adminHttp");
+    Route::post('/update/files', [CaseController::class, 'updateFiles'])->middleware("adminHttp");
     Route::get('/get/case/{id}', [CaseController::class, 'getCaseById']);
-    Route::delete('/remove/file/{id}', [CaseController::class, 'removeFile']);
-    Route::patch('/edit/{id}', [CaseController::class, 'updateCase']);
-    Route::delete('/delete/case/{id}', [CaseController::class, 'deleteCase']);
+    Route::delete('/remove/file/{id}', [CaseController::class, 'removeFile'])->middleware("adminHttp");
+    Route::patch('/edit/{id}', [CaseController::class, 'updateCase'])->middleware("adminHttp");
+    Route::delete('/delete/case/{id}', [CaseController::class, 'deleteCase'])->middleware("adminHttp");
 
-    Route::patch('/edit-file-path/{id}', [CaseController::class, 'updateFilePath']);
+    Route::patch('/edit-file-path/{id}', [CaseController::class, 'updateFilePath'])->middleware("adminHttp");
 
 });

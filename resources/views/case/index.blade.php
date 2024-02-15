@@ -3,7 +3,7 @@
 @section('content')
 
 
-    <search-result></search-result>
+    <search-result :is_admin="{{Auth::user()->role_id}}"></search-result>
 
 
 
