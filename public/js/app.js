@@ -5943,7 +5943,8 @@ __webpack_require__.r(__webpack_exports__);
         institution_number: '',
         number_office: '',
         person_1: '',
-        person_2: ''
+        person_2: '',
+        archive: ''
       }
     };
   },
@@ -5963,7 +5964,8 @@ __webpack_require__.r(__webpack_exports__);
         institution_number: '',
         number_office: '',
         person_1: '',
-        person_2: ''
+        person_2: '',
+        archive: ''
       };
     },
     getPersons: function getPersons() {
@@ -6037,7 +6039,8 @@ __webpack_require__.r(__webpack_exports__);
         institution_number: '',
         number_office: '',
         person_1: '',
-        person_2: ''
+        person_2: '',
+        archive: ''
       };
       this.page = 0;
       this.getCase();
@@ -8477,7 +8480,36 @@ var render = function render() {
       },
       expression: "search.person_2"
     }
-  })], 1) : _vm._e(), _vm._v(" "), _c("div", {
+  })], 1) : _vm._e(), _vm._v(" "), _vm.type == 6 ? _c("div", {
+    staticClass: "form-group search-font-size"
+  }, [_c("label", {
+    attrs: {
+      "for": "archive_number"
+    }
+  }, [_vm._v("ARHIVSKI BROJ")]), _vm._v(" "), _c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.search.archive,
+      expression: "search.archive"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "text",
+      name: "archive_number",
+      id: "archive_number",
+      placeholder: "ARHIVSKI BROJ"
+    },
+    domProps: {
+      value: _vm.search.archive
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.search, "archive", $event.target.value);
+      }
+    }
+  })]) : _vm._e(), _vm._v(" "), _c("div", {
     staticClass: "pt-3"
   }, [_c("div", {
     staticClass: "w-100 d-flex justify-content-between"

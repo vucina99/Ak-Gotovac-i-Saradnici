@@ -107,6 +107,18 @@
                                                         type == 5 ? 'ŠTETNIK' :''">
                                             </v-select>
                                         </div>
+
+
+
+
+                                        <div class="form-group search-font-size" v-if="type == 6">
+
+                                            <label  for="archive_number">ARHIVSKI BROJ</label>
+                                            <input type="text" name="archive_number" id="archive_number"
+                                                   v-model="search.archive"
+                                                   class="form-control" placeholder="ARHIVSKI BROJ">
+                                        </div>
+
                                         <div class="pt-3">
                                             <div class="w-100 d-flex justify-content-between">
                                                 <button class="btn btn-primary w-50 mr-1" @click.prevent="getCase()">
@@ -292,7 +304,8 @@ export default {
                 institution_number: '',
                 number_office: '',
                 person_1: '',
-                person_2: ''
+                person_2: '',
+                archive: ''
             }
         }
     },
@@ -313,7 +326,8 @@ export default {
                 institution_number: '',
                 number_office: '',
                 person_1: '',
-                person_2: ''
+                person_2: '',
+                archive: ''
             }
         },
         getPersons() {
@@ -377,7 +391,8 @@ export default {
                 institution_number: '',
                 number_office: '',
                 person_1: '',
-                person_2: ''
+                person_2: '',
+                archive: ''
             }
             this.page = 0;
             this.getCase();

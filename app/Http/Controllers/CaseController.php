@@ -61,6 +61,10 @@ class CaseController extends Controller
         if ($search->person_2 !== '' && $search->person_2 !== null) {
             $cases = $cases->where('defendants', 'LIKE', '%' . $search->person_2['defendants'] . '%');
         }
+        if ($search->archive !== '' && $search->archive !== null) {
+            $cases = $cases->where('archive',  'LIKE', '%' .$search->archive. '%');
+        }
+
         $count = ceil($cases->count() / $numberData);
         $cases = $cases->orderBy(DB::raw('CAST(number_office AS SIGNED)'), 'ASC')->skip($page * $numberData)->take($numberData)->get();
 
