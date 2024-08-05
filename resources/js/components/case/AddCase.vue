@@ -195,7 +195,40 @@
                 </div>
             </div>
             <br><br>
+
+            <button type="button" hidden="hidden" class="btn btn-primary" ref="showAllNames" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                sakriveno dugme
+            </button>
+
+
+
         </modal>
+
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-danger" id="exampleModalLabel">Već postojeći nazivi</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div v-for="(name, index) in allSimilarNames">
+                            <p class="text-center p-0" style="font-size: 14px !important;">
+                                {{ name }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" ref="closeModal" data-bs-dismiss="modal" hidden="hidden">Close</button>
+                        <button type="button" @click="addNewCase()" class="btn btn-primary">Sačuvaj</button>
+                        <button type="button" @click="cancelNewCase()" class="btn btn-danger">Odustani</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </template>
@@ -217,6 +250,7 @@ export default {
             lang: 'sr',
             files: '',
             success: false,
+            allSimilarNames : [],
             dataCase: {
                 'institutions': '',
                 'number_court': '',
@@ -258,11 +292,35 @@ export default {
         }
     },
     methods: {
-
+        cancelNewCase(){
+            this.loader = false
+            this.$refs.closeModal.click();
+            this.success = false
+        },
         addCase() {
+
+            this.loader = true
+            this.success = false
+            axios.post('/case/check/existing/name', this.dataCase).then(({data}) => {
+                if(data.allNames.length > 0){
+                    this.allSimilarNames = data.allNames;
+                    this.$refs.showAllNames.click();
+                }else{
+                    this.allSimilarNames = [];
+                    this.addNewCase();
+                }
+                this.loader = false
+
+            }).catch((error) => {
+                this.cancelNewCase();
+                alert('POKUŠAJTE POSLE, DOŠLO JE DO GREŠKE')
+            })
+        },
+        addNewCase(){
             this.loader = true
             this.success = false
             axios.post('/case/create/case', this.dataCase).then(({data}) => {
+                this.$refs.closeModal.click();
                 this.success = true;
                 this.dataCase = {
                     'institutions': '',
@@ -320,8 +378,6 @@ export default {
                 'marks': '',
                 'notes': '',
                 'case_type_id': this.type,
-
-
             }
             this.$modal.show('add-case-modal');
         },

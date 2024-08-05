@@ -18,4 +18,6 @@ Route::group(['prefix' => 'case'], function () {
 
     Route::patch('/edit-file-path/{id}', [CaseController::class, 'updateFilePath'])->middleware("adminHttp");
 
+    Route::post('/check/existing/name', [CaseController::class, 'checkExistingName'])->middleware("adminHttp");
+
 });

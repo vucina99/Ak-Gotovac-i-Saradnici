@@ -5565,6 +5565,7 @@ __webpack_require__.r(__webpack_exports__);
       lang: 'sr',
       files: '',
       success: false,
+      allSimilarNames: [],
       dataCase: {
         'institutions': '',
         'number_court': '',
@@ -5613,14 +5614,39 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    cancelNewCase: function cancelNewCase() {
+      this.loader = false;
+      this.$refs.closeModal.click();
+      this.success = false;
+    },
     addCase: function addCase() {
       var _this = this;
       this.loader = true;
       this.success = false;
-      axios.post('/case/create/case', this.dataCase).then(function (_ref) {
+      axios.post('/case/check/existing/name', this.dataCase).then(function (_ref) {
         var data = _ref.data;
-        _this.success = true;
-        _this.dataCase = {
+        if (data.allNames.length > 0) {
+          _this.allSimilarNames = data.allNames;
+          _this.$refs.showAllNames.click();
+        } else {
+          _this.allSimilarNames = [];
+          _this.addNewCase();
+        }
+        _this.loader = false;
+      })["catch"](function (error) {
+        _this.cancelNewCase();
+        alert('POKUŠAJTE POSLE, DOŠLO JE DO GREŠKE');
+      });
+    },
+    addNewCase: function addNewCase() {
+      var _this2 = this;
+      this.loader = true;
+      this.success = false;
+      axios.post('/case/create/case', this.dataCase).then(function (_ref2) {
+        var data = _ref2.data;
+        _this2.$refs.closeModal.click();
+        _this2.success = true;
+        _this2.dataCase = {
           'institutions': '',
           'number_court': '',
           'number_office': '',
@@ -5629,27 +5655,27 @@ __webpack_require__.r(__webpack_exports__);
           'fail_day': '',
           'marks': '',
           'notes': '',
-          'case_type_id': _this.type
+          'case_type_id': _this2.type
         };
         var case_id = data.id;
         var formData = new FormData();
-        _this.$root.$emit("addNewCaseInArray", data);
-        for (var i = 0; i < _this.$refs.file.files.length; i++) {
-          var file = _this.$refs.file.files[i];
+        _this2.$root.$emit("addNewCaseInArray", data);
+        for (var i = 0; i < _this2.$refs.file.files.length; i++) {
+          var file = _this2.$refs.file.files[i];
           formData.append('files[' + i + ']', file);
         }
         axios.post('/case/files/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
-        }).then(function (_ref2) {
-          var data = _ref2.data;
+        }).then(function (_ref3) {
+          var data = _ref3.data;
           axios.post('/case/update/files', {
             'dataUploadedID': data.ids,
             'case_id': case_id
-          }).then(function (_ref3) {
-            var data = _ref3.data;
-            _this.loader = false;
+          }).then(function (_ref4) {
+            var data = _ref4.data;
+            _this2.loader = false;
           })["catch"](function (error) {
             alert('POKUŠAJTE POSLE, DOŠLO JE DO GREŠKE');
           });
@@ -7750,9 +7776,87 @@ var render = function render() {
     attrs: {
       "aria-hidden": "true"
     }
-  })])])])])])])])])])])]), _vm._v(" "), _c("br"), _c("br")])], 1);
+  })])])])])])])])])])])]), _vm._v(" "), _c("br"), _c("br"), _vm._v(" "), _c("button", {
+    ref: "showAllNames",
+    staticClass: "btn btn-primary",
+    attrs: {
+      type: "button",
+      hidden: "hidden",
+      "data-bs-toggle": "modal",
+      "data-bs-target": "#exampleModal"
+    }
+  }, [_vm._v("\n            sakriveno dugme\n        ")])]), _vm._v(" "), _c("div", {
+    staticClass: "modal fade",
+    attrs: {
+      id: "exampleModal",
+      tabindex: "-1",
+      "aria-labelledby": "exampleModalLabel",
+      "aria-hidden": "true"
+    }
+  }, [_c("div", {
+    staticClass: "modal-dialog"
+  }, [_c("div", {
+    staticClass: "modal-content"
+  }, [_vm._m(0), _vm._v(" "), _c("div", {
+    staticClass: "modal-body"
+  }, _vm._l(_vm.allSimilarNames, function (name, index) {
+    return _c("div", [_c("p", {
+      staticClass: "text-center p-0",
+      staticStyle: {
+        "font-size": "14px !important"
+      }
+    }, [_vm._v("\n                            " + _vm._s(name) + "\n                        ")])]);
+  }), 0), _vm._v(" "), _c("div", {
+    staticClass: "modal-footer"
+  }, [_c("button", {
+    ref: "closeModal",
+    staticClass: "btn btn-secondary",
+    attrs: {
+      type: "button",
+      "data-bs-dismiss": "modal",
+      hidden: "hidden"
+    }
+  }, [_vm._v("Close")]), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-primary",
+    attrs: {
+      type: "button"
+    },
+    on: {
+      click: function click($event) {
+        return _vm.addNewCase();
+      }
+    }
+  }, [_vm._v("Sačuvaj")]), _vm._v(" "), _c("button", {
+    staticClass: "btn btn-danger",
+    attrs: {
+      type: "button"
+    },
+    on: {
+      click: function click($event) {
+        return _vm.cancelNewCase();
+      }
+    }
+  }, [_vm._v("Odustani")])])])])])], 1);
 };
-var staticRenderFns = [];
+var staticRenderFns = [function () {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "modal-header"
+  }, [_c("h5", {
+    staticClass: "modal-title text-danger",
+    attrs: {
+      id: "exampleModalLabel"
+    }
+  }, [_vm._v("Već postojeći nazivi")]), _vm._v(" "), _c("button", {
+    staticClass: "btn-close",
+    attrs: {
+      type: "button",
+      "data-bs-dismiss": "modal",
+      "aria-label": "Close"
+    }
+  })]);
+}];
 render._withStripped = true;
 
 

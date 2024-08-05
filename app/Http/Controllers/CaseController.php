@@ -244,4 +244,11 @@ class CaseController extends Controller
 
         return response('Došlo je do greške', 500);
     }
+
+    public function checkExistingName(Request $request)
+    {
+        $name = _Case::where("prosecutor" , "LIKE" , "%$request->prosecutor%")->where("case_type_id" , $request->case_type_id)->get()->pluck("prosecutor");
+
+        return response()->json(["allNames" => $name]);
+    }
 }
