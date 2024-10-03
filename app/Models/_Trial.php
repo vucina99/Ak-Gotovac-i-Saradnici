@@ -44,7 +44,7 @@ class _Trial extends Model
         if ($request->user && $request->user !== null && $request->user !== '') {
             $userID = $request->user['id'];
         }
-
+        $date =  Carbon::parse($request->date)->format("Y-m-d");
         $trial = _Trial::create([
             'number_office' => $request->number_office,
             'number_institution' => $request->number_institution,
@@ -53,7 +53,7 @@ class _Trial extends Model
             'defendants' => $request->person_2,
             'institution_id' => $institutionID,
             'note' => $request->note,
-            'date' => $request->date,
+            'date' =>$date,
             'time' => $request->time,
             'archive' => $request->archive,
             'courtroom_number' => $request->courtroom_number
@@ -71,6 +71,7 @@ class _Trial extends Model
         if ($request->user && $request->user !== null && $request->user !== '') {
             $userID = $request->user['id'];
         }
+        $date =  Carbon::parse($request->date)->format("Y-m-d");
 
         $trial->update([
             'number_office' => $request->numberOffice,
@@ -80,7 +81,7 @@ class _Trial extends Model
             'defendants' => $request->defendants,
             'institution_id' => $institutionID,
             'note' => $request->note,
-            'date' => $request->date,
+            'date' =>$date,
             'time' => $request->time,
             'archive' => $request->archive,
             'courtroom_number' => $request->courtroom_number

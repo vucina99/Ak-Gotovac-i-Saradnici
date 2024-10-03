@@ -32,7 +32,7 @@ class TrialController extends Controller
     }
 
     public function dateResult($date)
-    {
+    {   $date = Carbon::parse($date)->format("d-m-Y");
         return view('trial.date_results', compact('date'));
     }
 
@@ -66,7 +66,8 @@ class TrialController extends Controller
         $case_type_id = $request->caseType;
         $search = (object)$request->search;
         $page = $request->page;
-        $trial = _Trial::where('date', $request->selected_date);
+        $selected_date = Carbon::parse($request->selected_date)->format("Y-m-d");
+        $trial = _Trial::where('date', $selected_date);
         if ($search->institution !== '' && $search->institution !== null) {
             $trial = $trial->where('institution_id', $search->institution['id']);
         }
@@ -91,7 +92,8 @@ class TrialController extends Controller
 
     public function getPersons(Request $request)
     {
-        $tirals = _Trial::where('date', $request->selected_date);
+        $selected_date = Carbon::parse($request->selected_date)->format("Y-m-d");
+        $tirals = _Trial::where('date', $selected_date);
         $person_1_list = (array)$tirals->select('prosecutor')->where("prosecutor", "!=", null)->distinct('prosecutor')->get()->toArray();
         $person_2_list = (array)$tirals->select('defendants')->where("defendants", "!=", null)->distinct('defendants')->get()->toArray();
         return response(['person_1_list' => $person_1_list, 'person_2_list' => $person_2_list]);
@@ -104,7 +106,7 @@ class TrialController extends Controller
             return response('slucaj ne postoji' , 404);
         }
 
-       $editedTrial =  $this->trial->edit($trial, $request);
+        $editedTrial =  $this->trial->edit($trial, $request);
 
         return response(new TrialResource($editedTrial), 200);
     }
