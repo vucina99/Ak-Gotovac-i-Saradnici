@@ -40,7 +40,7 @@ class Institution extends Model
 
     public function getAllInstitutions()
     {
-        $institutions = Institution::all();
+        $institutions =  Institution::orderBy('name')->get();
         return $institutions;
     }
 
