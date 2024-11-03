@@ -196,7 +196,7 @@
                                                         </td>
                                                         <td>{{ file.date }}</td>
                                                         <td>
-                                                            <a :href="file.name" download="">
+                                                            <a :href="file.name" download="" target="_blank" rel="noopener noreferrer">
                                                                 <i class="fa text-dark fa-file-text file-small-text"
                                                                    aria-hidden="true"></i>
                                                             </a>

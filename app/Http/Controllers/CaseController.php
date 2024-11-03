@@ -9,10 +9,12 @@ use App\Models\_Case;
 use App\Models\CaseFile;
 use App\Models\CaseType;
 use App\Models\Institution;
+use Aws\S3\S3Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Aws\Exception\AwsException;
 
 class CaseController extends Controller
 {
@@ -100,24 +102,99 @@ class CaseController extends Controller
 
     public function filesUpload(Request $request)
     {
-        $data = [];
-        if ($request->hasfile('files')) {
+        $dataUpload = [];
+        if ($request->hasFile('files')) {
+            $filesData = []; // Akumulira podatke o fajlovima za kasniju obradu
+
+            // Kreiraj S3Client
+            $s3Client = new S3Client([
+                'version' => 'latest',
+                'region' => env('AWS_DEFAULT_REGION'),
+                'credentials' => [
+                    'key'    => env('AWS_ACCESS_KEY_ID'),
+                    'secret' => env('AWS_SECRET_ACCESS_KEY'),
+                ],
+            ]);
 
             foreach ($request->file('files') as $file) {
+                // Generiši ime fajla
                 $nameOriginalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                $name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '-G-' . date('Y-m-d') . '-' . rand(10, 100000) . '.' . pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
-                Storage::disk('s3')->put($name, file_get_contents($file));
+                $name = $nameOriginalName . '-G-' . date('Y-m-d') . '-' . rand(10, 100000) . '.' . $file->getClientOriginalExtension();
 
-                $file = new CaseFile();
-                $file->name = $name;
-                $file->path = $nameOriginalName;
-                $file->upload_date = date('Y-m-d');
-                $file->save();
-                $data[] = $file->id;
+                // Inicijalizuj multipart upload
+                $result = $s3Client->createMultipartUpload([
+                    'Bucket' => env('AWS_BUCKET'),
+                    'Key' => $name,
+                ]);
+
+                $uploadId = $result['UploadId'];
+                $parts = []; // Ovo treba biti niz
+                $partNumber = 1;
+
+                // Učitaj svaki deo
+                $filePath = $file->getRealPath();
+                $handle = fopen($filePath, 'rb');
+                $partSize = 5 * 1024 * 1024; // 5 MB po delu
+
+                while (!feof($handle)) {
+                    // Pročitaj deo fajla
+                    $data = fread($handle, $partSize);
+
+                    // Proveri da li je deo prazna
+                    if (strlen($data) === 0) {
+                        break; // Ako nema više podataka, izađi iz petlje
+                    }
+
+                    // Učitaj deo na S3
+                    $result = $s3Client->uploadPart([
+                        'Bucket' => env('AWS_BUCKET'),
+                        'Key' => $name,
+                        'UploadId' => $uploadId,
+                        'PartNumber' => $partNumber,
+                        'Body' => $data,
+                    ]);
+
+                    // Dodaj informacije o delu
+                    $parts[] = [  // Ovo treba biti niz
+                        'ETag' => $result['ETag'],
+                        'PartNumber' => $partNumber,
+                    ];
+                    $partNumber++;
+                }
+                fclose($handle);
+
+                // Završite multipart upload
+                $s3Client->completeMultipartUpload([
+                    'Bucket' => env('AWS_BUCKET'),
+                    'Key' => $name,
+                    'UploadId' => $uploadId,
+                    'MultipartUpload' => [
+                        'Parts' => $parts, // Ovo treba biti niz
+                    ],
+                ]);
+
+                // Dodaj podatke u privremeni niz
+                $filesData[] = [
+                    'name' => $name,
+                    'path' => $nameOriginalName,
+                    'upload_date' => date('Y-m-d'),
+                ];
+            }
+
+            // Sačuvaj sve fajlove u bazi odjednom
+            foreach ($filesData as $fileData) {
+                $caseFile = new CaseFile();
+                $caseFile->name = $fileData['name'];
+                $caseFile->path = $fileData['path'];
+                $caseFile->upload_date = $fileData['upload_date'];
+                $caseFile->save();
+
+                // Dodaj ID u niz
+                $dataUpload[] = $caseFile->id;
             }
         }
 
-        return response(['ids' => $data]);
+        return response(['ids' => $dataUpload]);
     }
 
     public function updateFiles(Request $request)

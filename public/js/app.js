@@ -8293,7 +8293,9 @@ var render = function render() {
     })])]), _vm._v(" "), _c("td", [_vm._v(_vm._s(file.date))]), _vm._v(" "), _c("td", [_c("a", {
       attrs: {
         href: file.name,
-        download: ""
+        download: "",
+        target: "_blank",
+        rel: "noopener noreferrer"
       }
     }, [_c("i", {
       staticClass: "fa text-dark fa-file-text file-small-text",
@@ -9271,7 +9273,9 @@ var render = function render() {
     })])]), _vm._v(" "), _c("td", [_vm._v(_vm._s(file.date))]), _vm._v(" "), _c("td", [_c("a", {
       attrs: {
         href: file.name,
-        download: ""
+        download: "",
+        target: "_blank",
+        rel: "noopener noreferrer"
       }
     }, [_c("i", {
       staticClass: "fa text-dark fa-file-text file-small-text",
