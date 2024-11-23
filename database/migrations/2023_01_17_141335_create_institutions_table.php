@@ -15,7 +15,7 @@ class CreateInstitutionsTable extends Migration
     {
         Schema::create('institutions', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();;
+            $table->string('name' , 191)->unique();;
             $table->integer('institution_type_id');
             $table->boolean('activation')->default(true);
             $table->timestamps();

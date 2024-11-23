@@ -13,9 +13,9 @@ class AddArhiveToCasesTable extends Migration
      */
     public function up()
     {
-        Schema::table('__cases', function (Blueprint $table) {
-            $table->string('archive')->nullable();
-        });
+//        Schema::table('__cases', function (Blueprint $table) {
+//            $table->string('archive')->nullable();
+//        });
     }
 
     /**

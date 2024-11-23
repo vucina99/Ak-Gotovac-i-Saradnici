@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'role_id' => 2,
-            'password' => Hash::make('GotovacAdminApp2023!')
+            'password' => Hash::make('Admintest')
         ]);
     }
 }
