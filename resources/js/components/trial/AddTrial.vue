@@ -93,17 +93,33 @@
                                                 <div class="form-group ">
 
                                                     <label for="client1">STRANKA 1</label>
+                                                    <v-select
+                                                        :options="personal1_serchData"
+                                                        id="client1"
+                                                        label="prosecutor"
+                                                        taggable
+                                                        v-model="trialData.person_1"
+                                                        @input="handleInputPerson1"
+                                                        placeholder="STRANKA 1">
+                                                    </v-select>
 
-                                                    <input type="text" class="form-control" id="client1"
-                                                           placeholder="STRANKA 1" v-model="trialData.person_1">
                                                 </div>
+
                                                 <div class="form-group ">
 
-                                                    <label for="client2">STRANKA 2</label>
+                                                    <label for="client1">STRANKA 2</label>
+                                                    <v-select
+                                                        :options="personal2_serchData"
+                                                        id="client2"
+                                                        label="defendants"
+                                                        taggable
+                                                        @input="handleInputPerson2"
+                                                        v-model="trialData.person_2"
+                                                        placeholder="STRANKA 2">
+                                                    </v-select>
 
-                                                    <input type="text" class="form-control" id="client2"
-                                                           placeholder="STRANKA 2" v-model="trialData.person_2">
                                                 </div>
+
 
                                                 <div class="form-group" >
                                                     <label  for="archiva">P BROJ</label>
@@ -166,6 +182,8 @@ export default {
     props: ['date_selected', 'institutions_serchData'],
     data() {
         return {
+            personal1_serchData: [],
+            personal2_serchData: [],
             data: [],
             content: '',
             type: 5,
@@ -208,10 +226,29 @@ export default {
     },
     created() {
         this.getUsers();
+        this.getPersons()
     },
     methods: {
+
+        handleInputPerson1(value) {
+            if (typeof value === "object" && value !== null) {
+                this.trialData.person_1 = value.prosecutor; // Postavi samo vrednost
+            } else {
+                this.trialData.person_1 = value; // Ako je tekst, samo ga postavi
+            }
+        },
+
+        handleInputPerson2(value) {
+            if (typeof value === "object" && value !== null) {
+                this.trialData.person_2 = value.defendants; // Postavi samo vrednost
+            } else {
+                this.trialData.person_2 = value; // Ako je tekst, samo ga postavi
+            }
+        },
+
         createTrial() {
-            console.log(this.trialData);
+            console.log(this.trialData.person_1);
+            console.log(this.trialData.person_2);
             axios.post('/trial/create/trial', this.trialData).then(({data}) => {
                 this.success = true;
                 this.$root.$emit("addNewTrialInArray", data);
@@ -226,6 +263,14 @@ export default {
                     time: '',
                     note: ''
                 }
+            }).catch((error) => {
+                alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora')
+            })
+        },
+        getPersons() {
+            axios.post('/trial/get/all/people', {'selected_date': this.date_selected}).then(({data}) => {
+                this.personal1_serchData = data.person_1_list;
+                this.personal2_serchData = data.person_2_list;
             }).catch((error) => {
                 alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora')
             })
@@ -255,7 +300,8 @@ export default {
                 alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora')
             })
         }
-    }
+    },
+
 }
 </script>
 

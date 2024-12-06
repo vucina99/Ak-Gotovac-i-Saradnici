@@ -9,6 +9,7 @@ Route::group(['prefix' => 'trial'], function () {
     Route::post('/create/trial', [TrialController::class, 'createTrial'])->middleware("adminHttp");;
     Route::post('/get/trials', [TrialController::class, 'getTrials']);
     Route::post('/get/persons', [TrialController::class, 'getPersons']);
+    Route::post('/get/all/people', [TrialController::class, 'getPersonsWithOutDate']);
     Route::patch('/edit/trial/{id}', [TrialController::class, 'updateTrial'])->middleware("adminHttp");;
     Route::delete('/delete/trial/{id}', [TrialController::class, 'deleteTrial'])->middleware("adminHttp");;
 

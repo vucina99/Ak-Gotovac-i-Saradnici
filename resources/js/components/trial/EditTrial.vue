@@ -100,21 +100,34 @@
                                                 <div class="form-group ">
 
                                                     <label for="client1">STRANKA 1</label>
+                                                    <v-select
+                                                        :options="personal1_serchData"
+                                                        id="client1"
+                                                        label="prosecutor"
+                                                        taggable
+                                                        v-model="data.prosecutor"
+                                                        @input="handleInputPerson1"
+                                                        placeholder="STRANKA 1">
+                                                    </v-select>
 
-                                                    <input type="text" class="form-control"
-                                                           id="client1"
-                                                           v-model="data.prosecutor"
-                                                           placeholder="STRANKA 1">
                                                 </div>
+
                                                 <div class="form-group ">
 
-                                                    <label for="client2">STRANKA 2</label>
+                                                    <label for="client1">STRANKA 2</label>
+                                                    <v-select
+                                                        :options="personal2_serchData"
+                                                        id="client2"
+                                                        label="defendants"
+                                                        taggable
+                                                        @input="handleInputPerson2"
+                                                        v-model="data.defendants"
+                                                        placeholder="STRANKA 2">
+                                                    </v-select>
 
-                                                    <input type="text" class="form-control"
-                                                           id="client2"
-                                                           v-model="data.defendants"
-                                                           placeholder="STRANKA 2">
                                                 </div>
+
+
 
 
                                                 <div class="form-group" >
@@ -183,6 +196,8 @@ export default {
     props: ['date_selected' , 'institutions_serchData'],
     data() {
         return {
+            personal1_serchData: [],
+            personal2_serchData: [],
             data: null,
             loader : false,
             trialIndex: -1,
@@ -212,6 +227,32 @@ export default {
 
     },
     methods: {
+
+        getPersons() {
+            axios.post('/trial/get/all/people', {'selected_date': this.date_selected}).then(({data}) => {
+                this.personal1_serchData = data.person_1_list;
+                this.personal2_serchData = data.person_2_list;
+            }).catch((error) => {
+                alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora')
+            })
+        },
+
+        handleInputPerson1(value) {
+            if (typeof value === "object" && value !== null) {
+                this.data.prosecutor = value.prosecutor; // Postavi samo vrednost
+            } else {
+                this.data.prosecutor = value; // Ako je tekst, samo ga postavi
+            }
+        },
+
+        handleInputPerson2(value) {
+            if (typeof value === "object" && value !== null) {
+                this.data.defendants = value.defendants; // Postavi samo vrednost
+            } else {
+                this.data.defendants = value; // Ako je tekst, samo ga postavi
+            }
+        },
+
         deleteTrial(){
 
             this.$confirm({
@@ -291,7 +332,8 @@ export default {
     },
     created() {
         this.getUsers();
-    }
+        this.getPersons()
+    },
 }
 </script>
 

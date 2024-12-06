@@ -99,6 +99,15 @@ class TrialController extends Controller
         return response(['person_1_list' => $person_1_list, 'person_2_list' => $person_2_list]);
     }
 
+
+    public function getPersonsWithOutDate(Request $request)
+    {
+        $tirals = _Trial::query();
+        $person_1_list = (array)$tirals->select('prosecutor')->where("prosecutor", "!=", null)->distinct('prosecutor')->get()->toArray();
+        $person_2_list = (array)$tirals->select('defendants')->where("defendants", "!=", null)->distinct('defendants')->get()->toArray();
+        return response(['person_1_list' => $person_1_list, 'person_2_list' => $person_2_list]);
+    }
+
     public function updateTrial(Request $request, $id){
         $trial = _Trial::find($id);
 

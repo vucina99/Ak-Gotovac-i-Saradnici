@@ -6227,6 +6227,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_select__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vue2_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue2-editor */ "./node_modules/vue2-editor/dist/vue2-editor.esm.js");
 /* harmony import */ var vue2_datepicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue2-datepicker */ "./node_modules/vue2-datepicker/index.esm.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 
 
@@ -6235,6 +6236,8 @@ __webpack_require__.r(__webpack_exports__);
   props: ['date_selected', 'institutions_serchData'],
   data: function data() {
     return {
+      personal1_serchData: [],
+      personal2_serchData: [],
       data: [],
       content: '',
       type: 5,
@@ -6286,11 +6289,27 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.getUsers();
+    this.getPersons();
   },
   methods: {
+    handleInputPerson1: function handleInputPerson1(value) {
+      if (_typeof(value) === "object" && value !== null) {
+        this.trialData.person_1 = value.prosecutor; // Postavi samo vrednost
+      } else {
+        this.trialData.person_1 = value; // Ako je tekst, samo ga postavi
+      }
+    },
+    handleInputPerson2: function handleInputPerson2(value) {
+      if (_typeof(value) === "object" && value !== null) {
+        this.trialData.person_2 = value.defendants; // Postavi samo vrednost
+      } else {
+        this.trialData.person_2 = value; // Ako je tekst, samo ga postavi
+      }
+    },
     createTrial: function createTrial() {
       var _this = this;
-      console.log(this.trialData);
+      console.log(this.trialData.person_1);
+      console.log(this.trialData.person_2);
       axios.post('/trial/create/trial', this.trialData).then(function (_ref) {
         var data = _ref.data;
         _this.success = true;
@@ -6306,6 +6325,18 @@ __webpack_require__.r(__webpack_exports__);
           time: '',
           note: ''
         };
+      })["catch"](function (error) {
+        alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora');
+      });
+    },
+    getPersons: function getPersons() {
+      var _this2 = this;
+      axios.post('/trial/get/all/people', {
+        'selected_date': this.date_selected
+      }).then(function (_ref2) {
+        var data = _ref2.data;
+        _this2.personal1_serchData = data.person_1_list;
+        _this2.personal2_serchData = data.person_2_list;
       })["catch"](function (error) {
         alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora');
       });
@@ -6328,10 +6359,10 @@ __webpack_require__.r(__webpack_exports__);
       this.$modal.hide('add-trial-modal');
     },
     getUsers: function getUsers() {
-      var _this2 = this;
-      axios.get('/trial/get/users').then(function (_ref2) {
-        var data = _ref2.data;
-        _this2.users = data;
+      var _this3 = this;
+      axios.get('/trial/get/users').then(function (_ref3) {
+        var data = _ref3.data;
+        _this3.users = data;
       })["catch"](function (error) {
         alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora');
       });
@@ -6554,6 +6585,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_select__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vue2_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue2-editor */ "./node_modules/vue2-editor/dist/vue2-editor.esm.js");
 /* harmony import */ var vue2_datepicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue2-datepicker */ "./node_modules/vue2-datepicker/index.esm.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 
 
@@ -6562,6 +6594,8 @@ __webpack_require__.r(__webpack_exports__);
   props: ['date_selected', 'institutions_serchData'],
   data: function data() {
     return {
+      personal1_serchData: [],
+      personal2_serchData: [],
       data: null,
       loader: false,
       trialIndex: -1,
@@ -6600,8 +6634,34 @@ __webpack_require__.r(__webpack_exports__);
     DatePicker: vue2_datepicker__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   methods: {
-    deleteTrial: function deleteTrial() {
+    getPersons: function getPersons() {
       var _this = this;
+      axios.post('/trial/get/all/people', {
+        'selected_date': this.date_selected
+      }).then(function (_ref) {
+        var data = _ref.data;
+        _this.personal1_serchData = data.person_1_list;
+        _this.personal2_serchData = data.person_2_list;
+      })["catch"](function (error) {
+        alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora');
+      });
+    },
+    handleInputPerson1: function handleInputPerson1(value) {
+      if (_typeof(value) === "object" && value !== null) {
+        this.data.prosecutor = value.prosecutor; // Postavi samo vrednost
+      } else {
+        this.data.prosecutor = value; // Ako je tekst, samo ga postavi
+      }
+    },
+    handleInputPerson2: function handleInputPerson2(value) {
+      if (_typeof(value) === "object" && value !== null) {
+        this.data.defendants = value.defendants; // Postavi samo vrednost
+      } else {
+        this.data.defendants = value; // Ako je tekst, samo ga postavi
+      }
+    },
+    deleteTrial: function deleteTrial() {
+      var _this2 = this;
       this.$confirm({
         message: 'DA LI STE SIGURNI DA ŽELITE DA OBRIŠETE ROČIŠTE?',
         button: {
@@ -6614,9 +6674,9 @@ __webpack_require__.r(__webpack_exports__);
          */
         callback: function callback(confirm) {
           if (confirm) {
-            axios["delete"]('/trial/delete/trial/' + _this.data.id).then(function (_ref) {
-              var data = _ref.data;
-              _this.$confirm({
+            axios["delete"]('/trial/delete/trial/' + _this2.data.id).then(function (_ref2) {
+              var data = _ref2.data;
+              _this2.$confirm({
                 message: 'USPEŠNO BRISANJE',
                 button: {
                   yes: 'OK'
@@ -6627,8 +6687,8 @@ __webpack_require__.r(__webpack_exports__);
                  */
                 callback: function callback(confirm) {
                   if (confirm) {
-                    _this.$root.$emit('removeTrialFromArray', _this.trialIndex);
-                    _this.closeModal();
+                    _this2.$root.$emit('removeTrialFromArray', _this2.trialIndex);
+                    _this2.closeModal();
                   }
                 }
               });
@@ -6640,26 +6700,26 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     editTrial: function editTrial() {
-      var _this2 = this;
+      var _this3 = this;
       this.success = false;
       this.loader = true;
-      axios.patch('/trial/edit/trial/' + this.data.id, this.data).then(function (_ref2) {
-        var data = _ref2.data;
-        _this2.success = true;
-        _this2.$root.$emit('addEditedTrialInArray', {
+      axios.patch('/trial/edit/trial/' + this.data.id, this.data).then(function (_ref3) {
+        var data = _ref3.data;
+        _this3.success = true;
+        _this3.$root.$emit('addEditedTrialInArray', {
           'trialData': data,
-          'trialIndex': _this2.trialIndex
+          'trialIndex': _this3.trialIndex
         });
-        _this2.loader = false;
+        _this3.loader = false;
       })["catch"](function (error) {
         alert('POKUŠAJTE POSLE, DOŠLO JE DO GREŠKE');
       });
     },
     getUsers: function getUsers() {
-      var _this3 = this;
-      axios.get('/trial/get/users').then(function (_ref3) {
-        var data = _ref3.data;
-        _this3.users = data;
+      var _this4 = this;
+      axios.get('/trial/get/users').then(function (_ref4) {
+        var data = _ref4.data;
+        _this4.users = data;
       })["catch"](function (error) {
         alert('Došlo je do greške, probajte ponovo ili kontaktirajte administratora');
       });
@@ -6676,6 +6736,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.getUsers();
+    this.getPersons();
   }
 });
 
@@ -9496,57 +9557,49 @@ var render = function render() {
     attrs: {
       "for": "client1"
     }
-  }, [_vm._v("STRANKA 1")]), _vm._v(" "), _c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.trialData.person_1,
-      expression: "trialData.person_1"
-    }],
-    staticClass: "form-control",
+  }, [_vm._v("STRANKA 1")]), _vm._v(" "), _c("v-select", {
     attrs: {
-      type: "text",
+      options: _vm.personal1_serchData,
       id: "client1",
+      label: "prosecutor",
+      taggable: "",
       placeholder: "STRANKA 1"
     },
-    domProps: {
-      value: _vm.trialData.person_1
-    },
     on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.$set(_vm.trialData, "person_1", $event.target.value);
-      }
+      input: _vm.handleInputPerson1
+    },
+    model: {
+      value: _vm.trialData.person_1,
+      callback: function callback($$v) {
+        _vm.$set(_vm.trialData, "person_1", $$v);
+      },
+      expression: "trialData.person_1"
     }
-  })]), _vm._v(" "), _c("div", {
+  })], 1), _vm._v(" "), _c("div", {
     staticClass: "form-group"
   }, [_c("label", {
     attrs: {
-      "for": "client2"
+      "for": "client1"
     }
-  }, [_vm._v("STRANKA 2")]), _vm._v(" "), _c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.trialData.person_2,
-      expression: "trialData.person_2"
-    }],
-    staticClass: "form-control",
+  }, [_vm._v("STRANKA 2")]), _vm._v(" "), _c("v-select", {
     attrs: {
-      type: "text",
+      options: _vm.personal2_serchData,
       id: "client2",
+      label: "defendants",
+      taggable: "",
       placeholder: "STRANKA 2"
     },
-    domProps: {
-      value: _vm.trialData.person_2
-    },
     on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.$set(_vm.trialData, "person_2", $event.target.value);
-      }
+      input: _vm.handleInputPerson2
+    },
+    model: {
+      value: _vm.trialData.person_2,
+      callback: function callback($$v) {
+        _vm.$set(_vm.trialData, "person_2", $$v);
+      },
+      expression: "trialData.person_2"
     }
-  })]), _vm._v(" "), _c("div", {
+  })], 1), _vm._v(" "), _c("div", {
     staticClass: "form-group"
   }, [_c("label", {
     attrs: {
@@ -10273,57 +10326,49 @@ var render = function render() {
     attrs: {
       "for": "client1"
     }
-  }, [_vm._v("STRANKA 1")]), _vm._v(" "), _c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.data.prosecutor,
-      expression: "data.prosecutor"
-    }],
-    staticClass: "form-control",
+  }, [_vm._v("STRANKA 1")]), _vm._v(" "), _c("v-select", {
     attrs: {
-      type: "text",
+      options: _vm.personal1_serchData,
       id: "client1",
+      label: "prosecutor",
+      taggable: "",
       placeholder: "STRANKA 1"
     },
-    domProps: {
-      value: _vm.data.prosecutor
-    },
     on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.$set(_vm.data, "prosecutor", $event.target.value);
-      }
+      input: _vm.handleInputPerson1
+    },
+    model: {
+      value: _vm.data.prosecutor,
+      callback: function callback($$v) {
+        _vm.$set(_vm.data, "prosecutor", $$v);
+      },
+      expression: "data.prosecutor"
     }
-  })]), _vm._v(" "), _c("div", {
+  })], 1), _vm._v(" "), _c("div", {
     staticClass: "form-group"
   }, [_c("label", {
     attrs: {
-      "for": "client2"
+      "for": "client1"
     }
-  }, [_vm._v("STRANKA 2")]), _vm._v(" "), _c("input", {
-    directives: [{
-      name: "model",
-      rawName: "v-model",
-      value: _vm.data.defendants,
-      expression: "data.defendants"
-    }],
-    staticClass: "form-control",
+  }, [_vm._v("STRANKA 2")]), _vm._v(" "), _c("v-select", {
     attrs: {
-      type: "text",
+      options: _vm.personal2_serchData,
       id: "client2",
+      label: "defendants",
+      taggable: "",
       placeholder: "STRANKA 2"
     },
-    domProps: {
-      value: _vm.data.defendants
-    },
     on: {
-      input: function input($event) {
-        if ($event.target.composing) return;
-        _vm.$set(_vm.data, "defendants", $event.target.value);
-      }
+      input: _vm.handleInputPerson2
+    },
+    model: {
+      value: _vm.data.defendants,
+      callback: function callback($$v) {
+        _vm.$set(_vm.data, "defendants", $$v);
+      },
+      expression: "data.defendants"
     }
-  })]), _vm._v(" "), _c("div", {
+  })], 1), _vm._v(" "), _c("div", {
     staticClass: "form-group"
   }, [_c("label", {
     attrs: {
