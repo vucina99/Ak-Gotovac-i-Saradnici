@@ -377,6 +377,8 @@ export default {
                         this.getCase();
                         this.$root.$emit('addEditedCaseInArray', {'caseData': this.caseData, 'caseIndex': this.caseIndex});
                         this.success= true;
+                        this.$refs.file.value = "";
+
                     })
                         .catch((error) => {
                             alert('POKUŠAJTE POSLE, DOŠLO JE DO GREŠKE')
